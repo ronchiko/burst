@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Instance">
+      <UniqueIdentifier>{9f56cde4-546c-4c49-bcf6-208002ad6cf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Instance">
+      <UniqueIdentifier>{4ea92a16-22bf-4c56-8db5-650660ad7ebb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Instance\Devices">
+      <UniqueIdentifier>{d1fa334b-797c-438b-a4ac-8dc58224974c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Instance\Components">
+      <UniqueIdentifier>{26082f1c-ab94-4f34-9a1a-52255177f594}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Instance\Components\SurfaceKHR">
+      <UniqueIdentifier>{59a5dd67-d74d-44b5-a633-031790b596ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Instance\Components\Swapchain">
+      <UniqueIdentifier>{afe76b4f-5429-44c6-afb3-fbfad473a85e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Shaders">
+      <UniqueIdentifier>{699fab9d-cbdb-4e29-8763-d62a8ab1efbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Instance\Components">
+      <UniqueIdentifier>{bf8cb7ed-e94a-478c-97bf-5c2e9ae350c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Instance\Components\SurfaceKHR">
+      <UniqueIdentifier>{b03df0d4-4914-4fe2-b7c7-c1ca87237f14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Instance\Components\SwapchainKHR">
+      <UniqueIdentifier>{21f122f6-5198-425c-912a-85af97bdab44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Instance\Devices">
+      <UniqueIdentifier>{61e55453-03cd-4100-9379-b8b4ae3e8e99}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="QueueFamilyHandler.h">
+      <Filter>Header Files\Instance\Devices</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicalDevice.h">
+      <Filter>Header Files\Instance\Devices</Filter>
+    </ClInclude>
+    <ClInclude Include="Validation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultQueueFamilyHandler.h">
+      <Filter>Header Files\Instance\Devices</Filter>
+    </ClInclude>
+    <ClInclude Include="Queue.h">
+      <Filter>Header Files\Instance\Devices</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>Header Files\Instance\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Vulkan.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LogicalDevice.h">
+      <Filter>Header Files\Instance\Devices</Filter>
+    </ClInclude>
+    <ClInclude Include="OpaqueInstance.h">
+      <Filter>Header Files\Instance</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentList.h">
+      <Filter>Header Files\Instance</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractComponent.h">
+      <Filter>Header Files\Instance</Filter>
+    </ClInclude>
+    <ClInclude Include="Errors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SurfaceKHR.h">
+      <Filter>Header Files\Instance\Components\SurfaceKHR</Filter>
+    </ClInclude>
+    <ClInclude Include="SurfaceKHRSupportOptions.h">
+      <Filter>Header Files\Instance\Components\SurfaceKHR</Filter>
+    </ClInclude>
+    <ClInclude Include="SwapchainKHR.h">
+      <Filter>Header Files\Instance\Components\Swapchain</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageView.h">
+      <Filter>Header Files\Instance\Components\Swapchain</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Validation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DefaultQueueFamilyHandler.cpp">
+      <Filter>Source Files\Instance\Devices</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicalDevice.cpp">
+      <Filter>Source Files\Instance\Devices</Filter>
+    </ClCompile>
+    <ClCompile Include="Queue.cpp">
+      <Filter>Source Files\Instance\Devices</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug.cpp">
+      <Filter>Source Files\Instance\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Vulkan.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LogicalDevice.cpp">
+      <Filter>Source Files\Instance\Devices</Filter>
+    </ClCompile>
+    <ClCompile Include="OpaqueInstance.cpp">
+      <Filter>Source Files\Instance</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractComponent.cpp">
+      <Filter>Source Files\Instance</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentList.cpp">
+      <Filter>Source Files\Instance</Filter>
+    </ClCompile>
+    <ClCompile Include="Errors.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SurfaceKHR.cpp">
+      <Filter>Source Files\Instance\Components\SurfaceKHR</Filter>
+    </ClCompile>
+    <ClCompile Include="SurfaceKHRSupportOptions.cpp">
+      <Filter>Source Files\Instance\Components\SurfaceKHR</Filter>
+    </ClCompile>
+    <ClCompile Include="SwapchainKHR.cpp">
+      <Filter>Source Files\Instance\Components\SwapchainKHR</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoSwapchainKHR.cpp">
+      <Filter>Source Files\Instance\Components\SwapchainKHR</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageView.cpp">
+      <Filter>Source Files\Instance\Components\SwapchainKHR</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

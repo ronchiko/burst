@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0"
+         xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+
+  <PropertyGroup>
+    <ShadersIntermidiatePath>$(OutputPath).shaders</ShadersIntermidiatePath>
+  </PropertyGroup>
+
+  <Target Name="EmbedShaders"
+          AfterTargets="GlslCompile">
+    <!-- Properties for running the targeted python script -->
+    <PropertyGroup>
+      <PythonPath>$(AppData)\..\Local\Programs\Python\Python39\python.exe</PythonPath>
+      <EmbedderPath>..\..\build\embedder\main.py</EmbedderPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <!-- The shaders embed into the program, must (have both Name and CFile metadata) -->
+      <Shader Include="$(OutputPath)Default.frag.spv">
+        <Name>FRAGMENT_SHADER</Name>
+        <CFile>Fragment.c</CFile>
+      </Shader>
+      <Shader Include="$(OutputPath)Default.vert.spv">
+        <Name>VERTEX_SHADER</Name>
+        <CFile>Vertex.c</CFile>
+    </Shader>
+    </ItemGroup>
+    
+    <!-- Generate a C file for each shader to embed -->
+    <Message Importance="high" Text="Generating Shaders C Files..."/>
+    <MakeDir Directories="$(ShadersIntermidiatePath)"/>
+    <Exec Command="$(PythonPath) $(EmbedderPath) --name %(Shader.Name) %(Shader.Identity) $(ShadersIntermidiatePath)\%(Shader.CFile)"
+          ConsoleToMsBuild="true"
+          EchoOff="false"/>
+    
+    <!-- Add generated c files to the creation list -->
+    <ItemGroup>
+      <ClCompile Include="$(ShadersIntermidiatePath)\*.c"/>
+    </ItemGroup>
+  </Target>
+  
+  <!-- Target for cleaning the C shader files -->
+  <Target Name="Clean C Shaders"
+          BeforeTargets="Clean">
+    <Message Importance="high" Text="Cleaning Generated shader files..."/>
+    <RemoveDir Directories="$(ShadersIntermidiatePath)" />
+  </Target>
+</Project>

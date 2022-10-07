@@ -1,0 +1,25 @@
+# IDE files
+.vs/
+.vscode/
+
+# VC++ files
+x64/
+x86/
+obj/
+Release/
+Debug/
+
+*.obj
+*.exe
+*.pdb
+*.idb
+*.lib
+*.dll
+
+# Glsl files
+.shaders/
+*.spv
+
+# Python files
+__pycache__/
+*.pyc
