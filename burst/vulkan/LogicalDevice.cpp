@@ -9,7 +9,7 @@ void burst::vulkan::LogicalDeviceDeleter::operator()(VkDevice device) {
 	}
 }
 
-VkDevice burst::vulkan::create_logical_device(
+vk::raii::Device burst::vulkan::create_logical_device(
 	const vk::raii::PhysicalDevice& physical_device,
 	const ComponentCreateInfo& component_create_info
 ) {
@@ -30,32 +30,15 @@ VkDevice burst::vulkan::create_logical_device(
 		static_cast<burst::u32>(component_create_info.lists.device_extensions.size());
 	create_info.ppEnabledExtensionNames = component_create_info.lists.device_extensions.data();
 
-	VkDevice device = nullptr;
-	VkResult device_creation_result = vkCreateDevice(
-		*physical_device, 
-		&create_info, 
-		burst::vulkan::NO_ALLOCATOR, 
-		&device
-	);
-
-	if (device_creation_result != VK_SUCCESS) {
-		throw burst::RuntimeError::make("Failed to create vulkan logical device, Error:", device_creation_result);
-	}
-
-	return device;
+	return physical_device.createDevice(create_info);
 }
 
-burst::vulkan::LogicalDevice::LogicalDevice(VkDevice device)	
-	: m_Device(device)
+burst::vulkan::LogicalDevice::LogicalDevice(vk::raii::Device device)	
+	: m_Device(std::move(device))
 {}
 
 burst::vulkan::Queue burst::vulkan::LogicalDevice::get_queue(u32 family_index, u32 queue_index) const {
-	VkQueue vk_queue = nullptr;
-	vkGetDeviceQueue(m_Device.get(), family_index, queue_index, &vk_queue);
+	vk::raii::Queue vk_queue = m_Device.getQueue(family_index, queue_index);
 
-	if (nullptr == vk_queue) {
-		throw burst::RuntimeError::make("No queue with family: ", family_index, ", queue: ", queue_index);
-	}
-
-	return Queue(vk_queue);
+	return Queue(*vk_queue);
 }

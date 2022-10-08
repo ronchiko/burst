@@ -3,6 +3,7 @@
 #include <set>
 
 #include <vulkan/vulkan.h>
+#include <vulkan/vulkan_raii.hpp>
 
 #include "Queue.h"
 #include "PhysicalDevice.h"
@@ -20,21 +21,25 @@ namespace burst::vulkan {
 		LogicalDeviceDeleter
 	>;
 
-	VkDevice create_logical_device(
+	vk::raii::Device create_logical_device(
 		const vk::raii::PhysicalDevice& physical_device,
 		const ComponentCreateInfo& create_info
 	);
 
 	class LogicalDevice final {
 	public:
-		LogicalDevice(VkDevice device);
+		LogicalDevice() = default;
+		explicit LogicalDevice(vk::raii::Device device);
 
 		/**
 		 * Gets a queue from the device
 		 */
 		Queue get_queue(u32 family_index, u32 queue_index = 0) const;
 
+
+		const vk::raii::Device& device() const;
+
 	private:
-		AutoLogicalDevice m_Device = nullptr;
+		vk::raii::Device m_Device = nullptr;
 	};
 }

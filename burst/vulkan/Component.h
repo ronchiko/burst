@@ -47,7 +47,7 @@ namespace burst::vulkan {
 		Window* window;
 		// Late initialize properties
 		late<vk::raii::PhysicalDevice> physical_device;
-		late<VkDevice> device;
+		late<vk::raii::Device> device;
 	};
 
 	/**

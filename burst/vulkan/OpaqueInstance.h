@@ -63,8 +63,8 @@ namespace burst::vulkan {
 				.queue_family = std::make_unique<Q>(),
 				.instance = nullptr,
 				.window = window,
-				.physical_device = nullptr,
-				.device = nullptr,
+				.physical_device = {},
+				.device = {},
 			};
 
 			VkInstance _instance = make_instance(
@@ -126,6 +126,7 @@ namespace burst::vulkan {
 				surface
 				);
 			m_PhysicalDevice = PhysicalDevice(create_info.physical_device.value());
+			create_info.physical_device = m_PhysicalDevice.device();
 
 			m_PhysicalDevice.find_queue_indecies(
 				*create_info.queue_family, 
@@ -137,14 +138,13 @@ namespace burst::vulkan {
 			instance.late_init(create_info);
 
 			m_QueueFamily = std::move(create_info.queue_family);
-						
-			m_LogicalDevice = create_info.device;
+			m_LogicalDevice = LogicalDevice(std::move(create_info.device.value()));
 			m_Instance = std::move(create_info.instance);
 		}
 		
 		vk::raii::Instance m_Instance;
-		PhysicalDevice m_PhysicalDevice = vk::raii::PhysicalDevice(nullptr);
-		LogicalDevice m_LogicalDevice = nullptr;
+		PhysicalDevice m_PhysicalDevice;
+		LogicalDevice m_LogicalDevice;
 		std::unique_ptr<QueueFamilyHandler> m_QueueFamily = nullptr;
 	};
 

@@ -30,7 +30,8 @@ namespace burst::vulkan {
 	public:
 		using Rater = decltype(&default_physical_device_rater);
 
-		PhysicalDevice(vk::raii::PhysicalDevice device);
+		PhysicalDevice() = default;
+		explicit PhysicalDevice(vk::raii::PhysicalDevice device);
 
 		/**
 		 * Selects the most suitable physical device available

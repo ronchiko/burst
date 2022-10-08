@@ -72,7 +72,7 @@ SwapchainKHR::Type burst::vulkan::SwapchainKHR::create_component(
 	const ComponentCreateInfo& create
 ) {
 	if (!create.physical_device.has_value()
-		|| nullptr == create.device) {
+		|| !create.device.has_value()) {
 		throw WaitingForLaterInitialization();
 	}
 
@@ -129,13 +129,13 @@ SwapchainKHR::Type burst::vulkan::SwapchainKHR::create_component(
 		}
 
 		VkSwapchainKHR swapchain = nullptr;
-		VkResult result = vkCreateSwapchainKHR(create.device, &create_info, NO_ALLOCATOR, &swapchain);
+		VkResult result = vkCreateSwapchainKHR(*create.device.value(), &create_info, NO_ALLOCATOR, &swapchain);
 		if (VK_SUCCESS != result) {
 			throw RuntimeError::make("Failed to create swapchain, Error: ", result);
 		}
 
 		return AutoSwapchainKHR(swapchain, {
-			create.device,
+			*create.device.value(),
 			extent,
 			format
 		});
