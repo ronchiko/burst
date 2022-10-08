@@ -76,7 +76,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL DebugMessageHandler(
 }
 
 burst::vulkan::AutoDebugMessenger burst::vulkan::create_debug_messenger(
-	VkInstance instance
+	vk::Instance instance
 ) {
 	VkDebugUtilsMessengerCreateInfoEXT create_info{};
 	create_info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
@@ -101,7 +101,7 @@ burst::vulkan::AutoDebugMessenger burst::vulkan::create_debug_messenger(
 burst::vulkan::DebugMessenger::Type burst::vulkan::DebugMessenger::create_component(
 	const ComponentCreateInfo& create_info
 ) {
-	return create_debug_messenger(create_info.instance);
+	return create_debug_messenger(*create_info.instance);
 }
 
 void burst::vulkan::DebugMessenger::add_dependencies(

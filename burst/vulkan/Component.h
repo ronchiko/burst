@@ -4,6 +4,7 @@
 #include <set>
 
 #include <vulkan/vulkan.h>
+#include <vulkan/vulkan_raii.hpp>
 #include <burst/common/Window.h>
 
 #include "QueueFamilyHandler.h"
@@ -12,8 +13,6 @@ namespace burst::vulkan {
 
 	class ComponentList;
 	class QueueFamilyHandler;
-
-	using CStrVector = std::vector<cstr>;
 
 	template<typename T>
 	struct ListComponentInfo {
@@ -43,11 +42,11 @@ namespace burst::vulkan {
 		VectorComponentInfo lists;
 		std::unique_ptr<ComponentList> components;
 		std::unique_ptr<QueueFamilyHandler> queue_family;
-		VkInstance instance;
+		vk::raii::Instance instance;
 		// Optional properties
 		Window* window;
 		// Late initialize properties
-		late<VkPhysicalDevice> physical_device;
+		late<vk::raii::PhysicalDevice> physical_device;
 		late<VkDevice> device;
 	};
 

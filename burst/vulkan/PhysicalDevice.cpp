@@ -21,12 +21,12 @@ burst::vulkan::DeviceNotFoundError::DeviceNotFoundError(burst::cstr message)
 	: StaticError(message)
 {}
 
-burst::vulkan::PhysicalDevice::PhysicalDevice(VkPhysicalDevice device) 
+burst::vulkan::PhysicalDevice::PhysicalDevice(vk::raii::PhysicalDevice device) 
 	: m_Device(device)
 {
 }
 
-VkPhysicalDevice burst::vulkan::PhysicalDevice::device() const {
+const vk::raii::PhysicalDevice& burst::vulkan::PhysicalDevice::device() const {
 	return m_Device;
 }
 
@@ -35,18 +35,14 @@ void burst::vulkan::PhysicalDevice::find_queue_indecies(
 	std::optional<VkSurfaceKHR> surface
 ) const
 {
-	u32 queue_family_count = 0;
-	vkGetPhysicalDeviceQueueFamilyProperties(m_Device, &queue_family_count, nullptr);
-
-	std::vector<VkQueueFamilyProperties> queue_families(queue_family_count);
-	vkGetPhysicalDeviceQueueFamilyProperties(m_Device, &queue_family_count, queue_families.data());
+	auto queue_families = m_Device.getQueueFamilyProperties();
 
 	u32 i = 0;
 	for (const auto& queue_family : queue_families) {
 		handler.handle_queue_family(QueueFamilyInfo{
 			.index = i,
 			.properties = queue_family,
-			.physical_device = m_Device,
+			.physical_device = *m_Device,
 			.surface = surface
 		});
 
@@ -71,47 +67,16 @@ u32 burst::vulkan::PhysicalDevice::rate(
 		return SCORE_EXCLUDE_DEVICE;
 	}
 
-	VkPhysicalDeviceProperties properties;
-	VkPhysicalDeviceFeatures features;
-
-	vkGetPhysicalDeviceProperties(m_Device, &properties);
-	vkGetPhysicalDeviceFeatures(m_Device, &features);
+	VkPhysicalDeviceProperties properties = m_Device.getProperties();
+	VkPhysicalDeviceFeatures features = m_Device.getFeatures();
 
 	return rater(properties, features);
-}
-
-std::vector<VkPhysicalDevice> burst::vulkan::PhysicalDevice::query_devices(
-	VkInstance instance
-) {
-	u32 device_count = 0;
-	vkEnumeratePhysicalDevices(instance, &device_count, nullptr);
-
-	if (device_count == 0) {
-		throw burst::vulkan::DeviceNotFoundError(
-			"Failed to find any supported GPUs."
-		);
-	}
-
-	std::vector<VkPhysicalDevice> devices(device_count);
-	vkEnumeratePhysicalDevices(instance, &device_count, devices.data());
-
-	return devices;
-}
-
-std::vector<VkExtensionProperties> burst::vulkan::PhysicalDevice::get_available_extensions() const {
-	u32 count = 0;
-	vkEnumerateDeviceExtensionProperties(m_Device, nullptr, &count, nullptr);
-
-	std::vector<VkExtensionProperties> available_extensions(count);
-	vkEnumerateDeviceExtensionProperties(m_Device, nullptr, &count, available_extensions.data());
-
-	return available_extensions;
 }
 
 bool burst::vulkan::PhysicalDevice::check_device_extensions_supported(
 	const CStrVector& _required
 ) const {
-	auto available = get_available_extensions();
+	auto available = m_Device.enumerateDeviceExtensionProperties();
 
 	std::set<std::string> required(_required.begin(), _required.end());
 	for (const auto& extension : available) {

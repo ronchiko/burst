@@ -9,13 +9,13 @@ namespace burst::vulkan {
 	struct SurfaceKHRSupportOptions
 	{
 		VkSurfaceCapabilitiesKHR capabilities;
-		std::vector<VkSurfaceFormatKHR> formats;
-		std::vector<VkPresentModeKHR> present_modes;
+		std::vector<vk::SurfaceFormatKHR> formats;
+		std::vector<vk::PresentModeKHR> present_modes;
 		
 		/**
 		 * Queries screen information about a surface 
 		 */
-		static SurfaceKHRSupportOptions query(VkSurfaceKHR surface, const PhysicalDevice& device);
+		static SurfaceKHRSupportOptions query(VkSurfaceKHR surface, const vk::PhysicalDevice& device);
 		
 		/**
 		 * Checks if the surface is valid

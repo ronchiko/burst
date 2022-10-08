@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <string>
+#include <vector>
 
 namespace burst {
 	using u8 = uint8_t;
@@ -18,4 +19,6 @@ namespace burst {
 
 	using cstr = const char*;
 	using cwstr = const wchar_t*;
+
+	using CStrVector = std::vector<cstr>;
 }

@@ -10,7 +10,7 @@ void burst::vulkan::LogicalDeviceDeleter::operator()(VkDevice device) {
 }
 
 VkDevice burst::vulkan::create_logical_device(
-	burst::vulkan::PhysicalDevice& physical_device,
+	const vk::raii::PhysicalDevice& physical_device,
 	const ComponentCreateInfo& component_create_info
 ) {
 	auto queues = component_create_info.queue_family->create_queue_creation_infos();
@@ -27,12 +27,12 @@ VkDevice burst::vulkan::create_logical_device(
 		static_cast<burst::u32>(component_create_info.lists.validation_layers.size());
 	create_info.ppEnabledLayerNames = component_create_info.lists.validation_layers.data();
 	create_info.enabledExtensionCount = 
-		static_cast<u32>(component_create_info.lists.device_extensions.size());
+		static_cast<burst::u32>(component_create_info.lists.device_extensions.size());
 	create_info.ppEnabledExtensionNames = component_create_info.lists.device_extensions.data();
 
 	VkDevice device = nullptr;
 	VkResult device_creation_result = vkCreateDevice(
-		physical_device.device(), 
+		*physical_device, 
 		&create_info, 
 		burst::vulkan::NO_ALLOCATOR, 
 		&device

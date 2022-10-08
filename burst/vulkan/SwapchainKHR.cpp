@@ -16,10 +16,10 @@ static void clamp(u32& value, u32 min, u32 max) {
 	value = std::clamp(value, min, max);
 }
 
-static VkSurfaceFormatKHR select_format(const std::vector<VkSurfaceFormatKHR>& formats) {
+static vk::SurfaceFormatKHR select_format(const std::vector<vk::SurfaceFormatKHR>& formats) {
 	for (const auto& format : formats) {
-		if (format.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR ||
-			format.format == VK_FORMAT_B8G8R8A8_SRGB) {
+		if (format.colorSpace == vk::ColorSpaceKHR::eSrgbNonlinear ||
+			format.format == vk::Format::eB8G8R8A8Srgb) {
 			return format;
 		}
 	}
@@ -28,15 +28,15 @@ static VkSurfaceFormatKHR select_format(const std::vector<VkSurfaceFormatKHR>& f
 	return formats[0];
 }
 
-static VkPresentModeKHR select_present_mode(const std::vector<VkPresentModeKHR>& modes) {
+static vk::PresentModeKHR select_present_mode(const std::vector<vk::PresentModeKHR >& modes) {
 	for (const auto& mode : modes) {
-		if (mode == VK_PRESENT_MODE_MAILBOX_KHR) {
+		if (mode == vk::PresentModeKHR::eMailbox) {
 			return mode;
 		}
 	}
 	
 	burst::log::warning("Non optimal present mode was picked for swapchain");
-	return VK_PRESENT_MODE_FIFO_KHR;
+	return vk::PresentModeKHR::eFifo;
 }
 
 static VkExtent2D select_swap_extent(
@@ -71,14 +71,14 @@ void burst::vulkan::SwapchainKHR::add_dependencies(SetComponentInfo& component_i
 SwapchainKHR::Type burst::vulkan::SwapchainKHR::create_component(
 	const ComponentCreateInfo& create
 ) {
-	if (nullptr == create.physical_device
+	if (!create.physical_device.has_value()
 		|| nullptr == create.device) {
 		throw WaitingForLaterInitialization();
 	}
 
 	try {
 		auto surface = create.components->get<SurfaceKHR>();
-		auto support_options = SurfaceKHRSupportOptions::query(surface, create.physical_device);
+		auto support_options = SurfaceKHRSupportOptions::query(surface, *create.physical_device.value());
 
 		if (!support_options.is_valid()) {
 			throw RuntimeError::make("Surface options are not valid for swapchain");
@@ -98,14 +98,14 @@ SwapchainKHR::Type burst::vulkan::SwapchainKHR::create_component(
 		create_info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
 		create_info.surface = surface;
 		create_info.minImageCount = image_count;
-		create_info.imageFormat = format.format;
-		create_info.imageColorSpace = format.colorSpace;
+		create_info.imageFormat = VkFormat(format.format);
+		create_info.imageColorSpace = VkColorSpaceKHR(format.colorSpace);
 		create_info.imageExtent = extent;
 		create_info.imageArrayLayers = 1;
 		create_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 		create_info.preTransform = support_options.capabilities.currentTransform;
 		create_info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-		create_info.presentMode = present_mode;
+		create_info.presentMode = VkPresentModeKHR(present_mode);
 		create_info.clipped = VK_TRUE;
 		create_info.oldSwapchain = nullptr;
 

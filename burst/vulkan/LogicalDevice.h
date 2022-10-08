@@ -21,7 +21,7 @@ namespace burst::vulkan {
 	>;
 
 	VkDevice create_logical_device(
-		burst::vulkan::PhysicalDevice& physical_device,
+		const vk::raii::PhysicalDevice& physical_device,
 		const ComponentCreateInfo& create_info
 	);
 

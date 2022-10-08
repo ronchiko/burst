@@ -7,6 +7,7 @@
 #include <burst/Vulkan.h>
 
 #include <vulkan/vulkan.h>
+#include <vulkan/vulkan_raii.hpp>
 
 #include "Component.h"
 #include "QueueFamilyHandler.h"
@@ -66,12 +67,13 @@ namespace burst::vulkan {
 				.device = nullptr,
 			};
 
-			create_info.instance = make_instance(
+			VkInstance _instance = make_instance(
 				name,
 				version,
 				create_info.lists.extensions,
 				create_info.lists.validation_layers
 			);
+			create_info.instance = vk::raii::Instance(vk::raii::Context(), _instance);
 
 			auto instance = OpaqueInstance<Comp...>(create_info);
 			instance.late_initialize<Q, Comp...>(create_info, instance);
@@ -79,7 +81,7 @@ namespace burst::vulkan {
 		}
 
 		inline VkInstance instance() const {
-			return m_Instance.get();
+			return *m_Instance;
 		}
 
 		inline const LogicalDevice& device() const {
@@ -97,7 +99,7 @@ namespace burst::vulkan {
 
 	protected:
 		OpaqueInstance(ComponentCreateInfo& info)
-			: m_Instance(info.instance)
+			: m_Instance(nullptr)
 			, m_PhysicalDevice(nullptr)
 			, m_LogicalDevice(nullptr)
 			, m_QueueFamily(nullptr) {}
@@ -118,31 +120,30 @@ namespace burst::vulkan {
 				surface = create_info.components->get<SurfaceKHR>();
 			} catch (const InstanceComponentNotFound&) {}
 			
-			auto physical = PhysicalDevice::select_suitable<Q>(
+			create_info.physical_device = PhysicalDevice::select_suitable<Q>(
 				create_info.instance,
 				create_info.lists.device_extensions,
 				surface
 				);
-			create_info.physical_device = physical.device();
+			m_PhysicalDevice = PhysicalDevice(create_info.physical_device.value());
 
-
-			physical.find_queue_indecies(
+			m_PhysicalDevice.find_queue_indecies(
 				*create_info.queue_family, 
 				surface
 			);
 			instance.late_init(create_info);
 
-			create_info.device = create_logical_device(physical, create_info);
+			create_info.device = create_logical_device(m_PhysicalDevice.device(), create_info);
 			instance.late_init(create_info);
 
 			m_QueueFamily = std::move(create_info.queue_family);
-			m_PhysicalDevice = create_info.physical_device;
 						
 			m_LogicalDevice = create_info.device;
+			m_Instance = std::move(create_info.instance);
 		}
 		
-		std::unique_ptr<std::remove_pointer_t<VkInstance>, InstanceDeleter> m_Instance;
-		PhysicalDevice m_PhysicalDevice = nullptr;
+		vk::raii::Instance m_Instance;
+		PhysicalDevice m_PhysicalDevice = vk::raii::PhysicalDevice(nullptr);
 		LogicalDevice m_LogicalDevice = nullptr;
 		std::unique_ptr<QueueFamilyHandler> m_QueueFamily = nullptr;
 	};

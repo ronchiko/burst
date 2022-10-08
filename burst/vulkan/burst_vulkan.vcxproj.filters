@@ -31,9 +31,6 @@
     <Filter Include="Header Files\Instance\Components\Swapchain">
       <UniqueIdentifier>{afe76b4f-5429-44c6-afb3-fbfad473a85e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Shaders">
-      <UniqueIdentifier>{699fab9d-cbdb-4e29-8763-d62a8ab1efbf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Instance\Components">
       <UniqueIdentifier>{bf8cb7ed-e94a-478c-97bf-5c2e9ae350c0}</UniqueIdentifier>
     </Filter>
@@ -45,6 +42,12 @@
     </Filter>
     <Filter Include="Source Files\Instance\Devices">
       <UniqueIdentifier>{61e55453-03cd-4100-9379-b8b4ae3e8e99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics">
+      <UniqueIdentifier>{1fd3ddd0-da2c-4542-a90c-d98f2419d94e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics">
+      <UniqueIdentifier>{699fab9d-cbdb-4e29-8763-d62a8ab1efbf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -99,6 +102,9 @@
     <ClInclude Include="ImageView.h">
       <Filter>Header Files\Instance\Components\Swapchain</Filter>
     </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Validation.cpp">
@@ -148,6 +154,9 @@
     </ClCompile>
     <ClCompile Include="ImageView.cpp">
       <Filter>Source Files\Instance\Components\SwapchainKHR</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

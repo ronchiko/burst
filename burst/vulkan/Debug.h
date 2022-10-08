@@ -4,8 +4,10 @@
 #include <vector>
 
 #include <vulkan/vulkan.h>
+#include <vulkan/vulkan_raii.hpp>
 
 #include <burst/common/Window.h>
+
 
 #include "Component.h"
 
@@ -22,7 +24,7 @@ namespace burst::vulkan {
 		DebugMessengerDeleter
 	>;
 
-	AutoDebugMessenger create_debug_messenger(VkInstance instance);
+	AutoDebugMessenger create_debug_messenger(vk::Instance instance);
 
 	struct DebugMessenger {
 		using Type = AutoDebugMessenger;

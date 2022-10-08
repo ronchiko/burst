@@ -30,21 +30,21 @@ namespace burst::vulkan {
 	public:
 		using Rater = decltype(&default_physical_device_rater);
 
-		PhysicalDevice(VkPhysicalDevice device);
+		PhysicalDevice(vk::raii::PhysicalDevice device);
 
 		/**
 		 * Selects the most suitable physical device available
 		 */
 		template<QueueFamily Q>
-		static PhysicalDevice select_suitable(
-			VkInstance instance,
+		static vk::raii::PhysicalDevice select_suitable(
+			const vk::raii::Instance& instance,
 			const CStrVector& device_extensions,
 			std::optional<VkSurfaceKHR> surface = {},
 			Rater rater = default_physical_device_rater
 		) {
-			auto devices = query_devices(instance);
+			auto devices = instance.enumeratePhysicalDevices();
 
-			std::multimap<u32, VkPhysicalDevice> rated_device;
+			std::multimap<u32, vk::raii::PhysicalDevice> rated_device;
 			for (const auto& device : devices) {
 				PhysicalDevice physical_device{ device };
 
@@ -62,13 +62,14 @@ namespace burst::vulkan {
 				throw DeviceNotFoundError("Not suitable GPU found.");
 			}
 
-			return PhysicalDevice{ device };
+			
+			return device;
 		}
 		
 		/**
 		 * Gets the vulkan physical device object owned by this object
 		 */
-		VkPhysicalDevice device() const;
+		const vk::raii::PhysicalDevice& device() const;
 
 		/**
 		 * Gets the queue indecies for this physical device
@@ -86,20 +87,10 @@ namespace burst::vulkan {
 		);
 
 		/**
-		 * Queries all existing devices for an instance
-		 */
-		static std::vector<VkPhysicalDevice> query_devices(VkInstance);
-
-		/**
-		 * Gets the available extensions for this physical device
-		 */
-		std::vector<VkExtensionProperties> get_available_extensions() const;
-
-		/**
 		 * Checks if a vector device extensions are supported
 		 */
 		bool check_device_extensions_supported(const CStrVector&) const;
 
-		VkPhysicalDevice m_Device;
+		vk::raii::PhysicalDevice m_Device;
 	};
 }

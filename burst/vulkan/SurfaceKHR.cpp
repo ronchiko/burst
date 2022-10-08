@@ -14,7 +14,7 @@ void burst::vulkan::SurfaceKHRDeleter::operator()(VkSurfaceKHR surface) {
 }
 
 static vulkan::AutoSurfaceKHR create_surface_win32(
-	VkInstance instance,
+	vk::Instance instance,
 	Window& window
 ) {
 	VkWin32SurfaceCreateInfoKHR create_info{};
@@ -45,7 +45,7 @@ burst::vulkan::SurfaceKHR::Type burst::vulkan::SurfaceKHR::create_component(
 		throw StaticError("SurfaceKHR component requires a window");
 	}
 #ifdef _WIN32
-	return create_surface_win32(create_info.instance, *create_info.window);
+	return create_surface_win32(*create_info.instance, *create_info.window);
 #else
 #error Surfaces are only supported for win32
 #endif
