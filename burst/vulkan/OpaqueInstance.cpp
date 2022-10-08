@@ -100,10 +100,3 @@ VkInstance burst::vulkan::make_instance(
 
 	return instance;
 }
-
-void burst::vulkan::InstanceDeleter::operator()(VkInstance instance)
-{
-	if (nullptr != instance) {
-		vkDestroyInstance(instance, NO_ALLOCATOR);
-	}
-}

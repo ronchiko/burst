@@ -3,12 +3,6 @@
 #include "Validation.h"
 #include "PhysicalDevice.h"
 
-void burst::vulkan::LogicalDeviceDeleter::operator()(VkDevice device) {
-	if (nullptr != device) {
-		vkDestroyDevice(device, NO_ALLOCATOR);
-	}
-}
-
 vk::raii::Device burst::vulkan::create_logical_device(
 	const vk::raii::PhysicalDevice& physical_device,
 	const ComponentCreateInfo& component_create_info

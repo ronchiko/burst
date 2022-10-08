@@ -36,11 +36,6 @@ namespace burst::vulkan {
 		const std::vector<cstr>& layers
 	);
 
-	struct InstanceDeleter {
-
-		void operator()(VkInstance instance);
-	};
-
 	template<typename... Rest>
 	class OpaqueInstance;
 

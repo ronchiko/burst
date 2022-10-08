@@ -12,15 +12,6 @@
 
 namespace burst::vulkan {
 
-	struct LogicalDeviceDeleter {
-		void operator()(VkDevice);
-	};
-
-	using AutoLogicalDevice = std::unique_ptr<
-		std::remove_pointer_t<VkDevice>,
-		LogicalDeviceDeleter
-	>;
-
 	vk::raii::Device create_logical_device(
 		const vk::raii::PhysicalDevice& physical_device,
 		const ComponentCreateInfo& create_info
