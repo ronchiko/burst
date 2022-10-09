@@ -8,7 +8,7 @@
 
 namespace burst {
 
-	enum class WindowMode {
+	ENUM WindowMode {
 		WINDOWED,
 		FULLSCREEN
 	};
@@ -23,37 +23,37 @@ namespace burst {
 	/**
 	 * @brief: Interface for creating a window
 	 */
-	class Window {
+	INTERFACE Window {
 	public:
-		virtual ~Window() = default;
+		IFACE_DESTRUCTOR(Window);
 
-		virtual bool should_quit() = 0;
+		IFACE_FUNC(bool should_quit());
 
-		virtual void render() = 0;
+		IFACE_FUNC(void render());
 
 		/**
 		 * @brief: Gets the window information about this window
 		 */
-		virtual WindowInfo info() const = 0;
+		IFACE_FUNC(WindowInfo info() const);
 
 		/**
 		 * @brief: Sets the window information about this window 
 		 */
-		virtual void info(const WindowInfo&) = 0;
+		IFACE_FUNC(void info(const WindowInfo&));
 
 		/**
 		 * Gets the vulkan requirements for this window
 		 */  
-		virtual std::vector<cstr> get_requirements() const = 0;
+		IFACE_FUNC(std::vector<cstr> get_requirements() const);
 
 		/**
 		 * Gets the window handle for this object
 		 */
-		virtual void* window_handle() const = 0;
+		IFACE_FUNC(void* window_handle() const);
 
 		/**
 		 * Gets the frame buffer for with window
 		 */
-		virtual Framebuffer& framebuffer() = 0;
+		IFACE_FUNC(Framebuffer& framebuffer());
 	};
 }

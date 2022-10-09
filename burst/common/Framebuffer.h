@@ -3,18 +3,18 @@
 #include "Types.h"
 
 namespace burst {
-	class Framebuffer {
+	INTERFACE Framebuffer{
 	public:
-		virtual ~Framebuffer() = default;
+		IFACE_DESTRUCTOR(Framebuffer);
 
 		/**
 		 * Gets the width of the framebuffer
 		 */
-		virtual u32 width() const = 0;
+		IFACE_FUNC(u32 width() const);
 
 		/**
 		 * Gets the height of the framebuffer
 		 */
-		virtual u32 height() const = 0;
+		IFACE_FUNC(u32 height() const);
 	};
 }

@@ -19,6 +19,7 @@ namespace burst {
 
 	/**
 	 * A raii class for storing pointers without knowing their original type.
+	 * (Owns a pointer without knowing its original type)
 	 */
 	class AbstractPointer {
 	public:

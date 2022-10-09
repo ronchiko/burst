@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include "Const.h"
+
 namespace burst {
 	using u8 = uint8_t;
 	using i8 = int8_t;
