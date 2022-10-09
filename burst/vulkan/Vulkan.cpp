@@ -28,5 +28,5 @@ struct burst::vulkan::_Instance {
 Instance burst::vulkan::load_default_instance(cstr name, u32 version, Window* window) {
 	auto opaque_instance = DefaultInstance::make<DefaultQueueFamilyHandler>(name, version, window);
 	
-	return Instance(new _Instance{ std::move(opaque_instance) });
+	return burst::abstract(new _Instance{ std::move(opaque_instance) });
 }

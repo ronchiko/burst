@@ -17,7 +17,7 @@ namespace burst::vulkan {
 	}
 
 	struct _Instance;
-	using Instance = AbstractPointer<_Instance*>;
+	using Instance = AbstractPointer;
 
 	/**
 	 * Loads the default instance for vulkan

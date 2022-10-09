@@ -1,55 +1,70 @@
 #pragma once
 
+#include <functional>
+
 #include "Types.h"
 #include "Concepts.h"
 
 namespace burst {
-	template<typename T>
+	template<Pointer T = void*>
+	using DeleterFunction = std::function<void(T)>;
+	
+	/**
+	 * The default deleter function.
+	 */
+	template<Pointer T>
+	void default_deleter(T pointer) {
+		delete pointer;
+	}
+
+	/**
+	 * A raii class for storing pointers without knowing their original type.
+	 */
 	class AbstractPointer {
 	public:
-		AbstractPointer(T pointer)
-			: m_Pointer(pointer)
-		{}
-
+		AbstractPointer(void* pointer, DeleterFunction<> deleter);
+		
+		AbstractPointer(nullptr_t);
 		AbstractPointer(const AbstractPointer&) = delete;
+		AbstractPointer(AbstractPointer&&) noexcept;
+
+		AbstractPointer& operator=(nullptr_t);
 		AbstractPointer& operator=(const AbstractPointer&) = delete;
+		AbstractPointer& operator=(AbstractPointer&&) noexcept;
 
-		AbstractPointer(AbstractPointer&& other) noexcept
-			: m_Pointer(other.m_Pointer) {
-			other.m_Pointer = nullptr;
+
+		~AbstractPointer();
+
+		/**
+		 * Returns the contents of the abtract pointer as a type.
+		 */
+		template<Pointer P>
+		const P as() const {
+			return static_cast<P>(m_Pointer);
 		}
 
-		AbstractPointer& operator=(AbstractPointer&& other) noexcept {
-			m_Pointer = other.m_Pointer;
-			other.m_Pointer = nullptr;
-
-			return *this;
+		/**
+		 * Returns the contents of the abstract pointer as a type.
+		 */
+		template<Pointer P>
+		P as() {
+			return static_cast<P>(m_Pointer);
 		}
 
-		~AbstractPointer() {
-			try {
-				release();
-			}
-			catch (const std::exception&) {}
-		}
-
-		AbstractPointer(nullptr_t)
-			: m_Pointer(nullptr)
-		{}
-
-		AbstractPointer& operator=(nullptr_t) {
-			release();
-		}
+		/**
+		 * Returns true if the pointer is occupied.
+		 */
+		bool occupied() const;
 
 	private:
-		void release() {
-			if (nullptr != m_Pointer) {
-				delete m_Pointer;
-				m_Pointer = nullptr;
-			}
-		}
+		void free();
 
-
-		T m_Pointer;
+		void* m_Pointer;
+		DeleterFunction<> m_Deleter;
 	};
+
+	template<Pointer T, typename D = DeleterFunction<T>>
+	AbstractPointer abstract(T pointer, D deleter = default_deleter<T>) {
+		return { pointer, deleter };
+	}
 }
