@@ -6,8 +6,20 @@
 #include <functional>
 
 #include "Types.h"
+#include "Concepts.h"
 
 namespace burst {
+
+	/**
+	 * Gives the const modifier to a type if another has the modifer.
+	 */
+	template<typename Original, typename New>
+	using KeepConst = std::conditional_t<
+		std::is_const_v<Original>,
+		std::add_const_t<New>,
+		New
+	>;
+
 	constexpr void _concat(std::stringstream&) {}
 
 	template<typename T, typename... U>
@@ -71,4 +83,45 @@ namespace burst {
 		return dest;
 	}
 
+	/**
+	 * Converts one type of iteratable to another.
+	 * 
+	 * \param source: The iterable to convert from
+	 */
+	template<IterableConstructable To, Iterable From>
+	constexpr To iter_convert(const From& source) {
+		return To(source.begin(), source.end());
+	}
+
+	/**
+	 * Moves all children of an class from a vector to a new vector.
+	 * 
+	 * \tparam E: The type of the child
+	 * \tparam T: The type of the parent
+	 * \return 
+	 */
+	template<typename E, typename T>
+	requires std::derived_from<E, T>
+	UniqueVector<E> pull_children_of(UniqueVector<T>& base) {
+		UniqueVector<E> new_vector;
+
+		for (auto item = base.begin(); item < base.end();) {
+			E* converted = dynamic_cast<E*>(item->get());
+			if (nullptr != converted) {
+				item->release();
+				
+				new_vector.push_back(std::unique_ptr<E>(converted));
+				item = base.erase(item);
+			}
+			else {
+				++item;
+			}
+		}
+
+		return new_vector;
+	}
 };
+
+
+
+

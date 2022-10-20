@@ -11,8 +11,8 @@
 namespace burst::vulkan {
 
 	enum class QueueFamilyType {
-		Graphics,
-		Present
+		Graphics = 0,
+		Present = 1
 	};
 
 	struct QueueFamilyInfo {

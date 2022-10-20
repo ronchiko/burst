@@ -12,6 +12,7 @@
 using namespace burst;
 using namespace burst::vulkan;
 
+/*
 static void clamp(u32& value, u32 min, u32 max) {
 	value = std::clamp(value, min, max);
 }
@@ -143,5 +144,19 @@ SwapchainKHR::Type burst::vulkan::SwapchainKHR::create_component(
 	catch (const InstanceComponentNotFound&) {
 		burst::log::error("No surface component on instance");
 		throw;
+	}
+}
+*/
+
+namespace burst::vulkan {
+	void SwapchainKHR::add_requirements(InstanceRequirements& requirements) const {
+		requirements.device_extensions.insert(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+	}
+
+	void SwapchainKHR::init(
+		const vk::raii::Device& device,
+		const AdditionalCreateInfo& info
+	) {
+		
 	}
 }

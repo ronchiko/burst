@@ -2,6 +2,7 @@
 
 #include <burst/Common.h>
 
+#include "burst/vulkan/Instance.h"
 
 namespace burst::vulkan {
 	constexpr burst::u32 version(u8 major, burst::u16 minor, burst::u16 patch = 0) {
@@ -15,9 +16,6 @@ namespace burst::vulkan {
 			(patch & PATCH_BITS);
 
 	}
-
-	struct _Instance;
-	using Instance = AbstractPointer;
 
 	/**
 	 * Loads the default instance for vulkan

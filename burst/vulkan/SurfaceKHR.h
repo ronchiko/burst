@@ -3,28 +3,31 @@
 #include <set>
 #include <memory>
 
-#include <vulkan/vulkan_core.h>
+#include <vulkan/vulkan_raii.hpp>
 
 #include <burst/Common.h>
 
 #include "Component.h"
+#include "InstanceComponent.h"
 
 namespace burst::vulkan {
 
-	struct SurfaceKHRDeleter {
-		VkInstance instance;
-
-		void operator()(VkSurfaceKHR surface);
-	};
-
-	using AutoSurfaceKHR = std::unique_ptr<std::remove_pointer_t<VkSurfaceKHR>, vulkan::SurfaceKHRDeleter>;
-	
-	struct SurfaceKHR {
+	class SurfaceKHR : public IInstanceComponent {
 	public:
-		using Type = AutoSurfaceKHR;
+		SurfaceKHR();
 
-		static Type create_component(const ComponentCreateInfo&);
+		IFACE_IMPL(void add_requirements(
+			InstanceRequirements& requirements
+		) const);
 
-		static void add_dependencies(ListComponentInfo<std::set<cstr>>&);
+		IFACE_IMPL(void init(
+			const vk::raii::Instance&,
+			const AdditionalCreateInfo& create_info
+		));
+
+		const vk::raii::SurfaceKHR& surface() const;
+
+	private:
+		vk::raii::SurfaceKHR m_Surface;
 	};
 }

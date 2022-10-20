@@ -34,6 +34,9 @@
     <Filter Include="Props">
       <UniqueIdentifier>{78a81023-9048-45c4-9ff2-d203beb0e8ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Types">
+      <UniqueIdentifier>{5ef93700-4a57-407a-895a-b0975c54b836}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Types.h">
@@ -84,6 +87,12 @@
     <ClInclude Include="Framebuffer.h">
       <Filter>Header Files\Window</Filter>
     </ClInclude>
+    <ClInclude Include="Const.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Error.cpp">
@@ -100,6 +109,9 @@
     </ClCompile>
     <ClCompile Include="File.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractPointer.cpp">
+      <Filter>Source Files\Types</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

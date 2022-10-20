@@ -7,14 +7,8 @@
 
 using namespace burst;
 
-void burst::vulkan::SurfaceKHRDeleter::operator()(VkSurfaceKHR surface) {
-	if (surface != nullptr) {
-		vkDestroySurfaceKHR(instance, surface, vulkan::NO_ALLOCATOR);
-	}
-}
-
-static vulkan::AutoSurfaceKHR create_surface_win32(
-	vk::Instance instance,
+static vk::raii::SurfaceKHR create_surface_win32(
+	const vk::raii::Instance& instance,
 	Window& window
 ) {
 	VkWin32SurfaceCreateInfoKHR create_info{};
@@ -24,7 +18,7 @@ static vulkan::AutoSurfaceKHR create_surface_win32(
 
 	VkSurfaceKHR surface = nullptr;
 	VkResult result = vkCreateWin32SurfaceKHR(
-		instance,
+		*instance,
 		&create_info,
 		vulkan::NO_ALLOCATOR,
 		&surface);
@@ -32,22 +26,31 @@ static vulkan::AutoSurfaceKHR create_surface_win32(
 		throw RuntimeError::make("Failed to create SurfaceKHR, Error: ", result);
 	}
 
-	return vulkan::AutoSurfaceKHR(surface, vulkan::SurfaceKHRDeleter(instance));
+	return vk::raii::SurfaceKHR(instance, surface);
 }
 
-void burst::vulkan::SurfaceKHR::add_dependencies(ListComponentInfo<std::set<cstr>>&)
-{}
+namespace burst::vulkan {
 
-burst::vulkan::SurfaceKHR::Type burst::vulkan::SurfaceKHR::create_component(
-	const ComponentCreateInfo& create_info
-) {
-	if (nullptr == create_info.window) {
-		throw StaticError("SurfaceKHR component requires a window");
-	}
+	SurfaceKHR::SurfaceKHR() : m_Surface(nullptr) {}
+
+	void SurfaceKHR::add_requirements(InstanceRequirements&) const {}
+
+	void SurfaceKHR::init(
+		const vk::raii::Instance& instance,
+		const AdditionalCreateInfo& create_info
+	) {
+		if (nullptr == create_info.window) {
+			throw StaticError("SurfaceKHR component requires a window");
+		}
+
 #ifdef _WIN32
-	return create_surface_win32(*create_info.instance, *create_info.window);
+		m_Surface = std::move(create_surface_win32(instance, *create_info.window));
 #else
 #error Surfaces are only supported for win32
 #endif
+	}
 
+	const vk::raii::SurfaceKHR& SurfaceKHR::surface() const {
+		return m_Surface;
+	}
 }

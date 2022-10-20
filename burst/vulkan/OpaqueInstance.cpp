@@ -6,6 +6,7 @@
 #include <burst/Common.h>
 
 #include "Validation.h"
+#include "Const.h"
 #include "PhysicalDevice.h"
 #include "DefaultQueueFamilyHandler.h"
 
@@ -19,6 +20,7 @@ constexpr VkApplicationInfo APPLICATION_INFO{
 	.apiVersion = VK_API_VERSION_1_1
 };
 
+/*
 std::vector<Extension> burst::vulkan::extensions() {
 	u32 extensions_count = 0;
 	VkResult result = vkEnumerateInstanceExtensionProperties(
@@ -50,7 +52,7 @@ std::vector<Extension> burst::vulkan::extensions() {
 
 /**
  * Throws an exception if not all required extensions are available
- */
+ *
 void assert_all_required_extensions_available(const std::vector<cstr>& required) 
 {
 	auto available = burst::vulkan::extensions();
@@ -100,3 +102,4 @@ VkInstance burst::vulkan::make_instance(
 
 	return instance;
 }
+*/

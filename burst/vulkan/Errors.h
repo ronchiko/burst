@@ -1,6 +1,7 @@
 #pragma once
 
 #include <burst/common/Error.h>
+#include <burst/common/Runtime.h>
 
 namespace burst::vulkan {
 	class InstanceComponentNotFound : public RuntimeError {
@@ -8,6 +9,30 @@ namespace burst::vulkan {
 		explicit InstanceComponentNotFound(size_t hash);
 
 		explicit InstanceComponentNotFound(const std::string& name);
+	};
+
+	/**
+	 * When one or more required components are missing.
+	 */
+	class MissingRequiredComponentsError : public StaticError {
+	public:
+		MissingRequiredComponentsError();
+	};
+
+	/**
+	 * When one or more required layers are missing.
+	 */
+	class MissingRequiredLayersError : public StaticError {
+	public:
+		MissingRequiredLayersError();
+	};
+
+	/**
+	 * When no GPU can be used to run the game.
+	 */
+	class NoSuitableGpuError : public StaticError {
+	public:
+		NoSuitableGpuError();
 	};
 
 	/**
@@ -25,5 +50,15 @@ namespace burst::vulkan {
 	class InstanceNotFullyInitialized : public StaticError {
 	public:
 		InstanceNotFullyInitialized();
+	};
+
+	class ComponentNotFoundError : public RuntimeError {
+	public:
+		ComponentNotFoundError(const cstr name);
+
+		template<typename T>
+		constexpr ComponentNotFoundError from() {
+			return ComponentNotFoundError(burst::name<T>());
+		}
 	};
 }

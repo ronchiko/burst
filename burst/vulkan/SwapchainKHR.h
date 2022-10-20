@@ -1,9 +1,11 @@
 #pragma once
 
-#include <vulkan/vulkan.h>
+#include <vulkan/vulkan_raii.hpp>
 
 #include "Component.h"
 #include "ImageView.h"
+
+#include "IDeviceComponent.h"
 
 namespace burst::vulkan {
 
@@ -45,15 +47,27 @@ namespace burst::vulkan {
 		std::vector<ImageView> m_ImageViews;
 	};
 
-	/**
-	 * Component class for SwapchainKHR
-	 */
-	class SwapchainKHR {
+	class SwapchainKHR : public IDeviceComponent {
 	public:
-		using Type = AutoSwapchainKHR;
+		SwapchainKHR() = default;
 
-		static void add_dependencies(ListComponentInfo<std::set<cstr>>&);
+		IFACE_IMPL(void add_requirements(
+			InstanceRequirements&
+		) const);
 
-		static Type create_component(const ComponentCreateInfo& create_info);
+		IFACE_IMPL(void init(
+			const vk::raii::Device& device,
+			const AdditionalCreateInfo& create_info
+		));
+
+	private:
+		struct Info {
+			vk::Device m_Owner;
+			vk::Extent2D m_Extent;
+			vk::SurfaceFormatKHR m_Format;
+			std::vector<vk::raii::ImageView> m_ImageViews;
+		};
+
+		vk::raii::SwapchainKHR m_Swapchain;
 	};
 }

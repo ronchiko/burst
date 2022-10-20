@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "Const.h"
 
@@ -23,4 +24,7 @@ namespace burst {
 	using cwstr = const wchar_t*;
 
 	using CStrVector = std::vector<cstr>;
+
+	template<typename T>
+	using UniqueVector = std::vector<std::unique_ptr<T>>;
 }

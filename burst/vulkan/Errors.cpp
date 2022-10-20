@@ -22,10 +22,25 @@ burst::vulkan::InstanceComponentNotFound::InstanceComponentNotFound(const std::s
 {
 }
 
+burst::vulkan::MissingRequiredComponentsError::MissingRequiredComponentsError()
+	: StaticError("Missing one or more required components") {}
+
+burst::vulkan::MissingRequiredLayersError::MissingRequiredLayersError()
+	: StaticError("Missing one or more required layers")
+{}
+
+burst::vulkan::NoSuitableGpuError::NoSuitableGpuError()
+	: StaticError("No suitable GPU found")
+{}
+
 burst::vulkan::WaitingForLaterInitialization::WaitingForLaterInitialization()
 	: StaticError("Component is waiting for later initialization")
 {}
 
 burst::vulkan::InstanceNotFullyInitialized::InstanceNotFullyInitialized()
 	: StaticError("Instance is not fully initialized")
+{}
+
+burst::vulkan::ComponentNotFoundError::ComponentNotFoundError(const cstr name) 
+	: RuntimeError(concat("Didn't find component ", name))
 {}

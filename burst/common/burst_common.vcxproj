@@ -24,6 +24,7 @@
     <ClInclude Include="CharacterInputProvider.h" />
     <ClInclude Include="Concepts.h" />
     <ClInclude Include="ConsoleLogger.h" />
+    <ClInclude Include="Const.h" />
     <ClInclude Include="Error.h" />
     <ClInclude Include="File.h" />
     <ClInclude Include="Framebuffer.h" />
@@ -33,10 +34,12 @@
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Meta.h" />
     <ClInclude Include="MouseInputProvider.h" />
+    <ClInclude Include="Runtime.h" />
     <ClInclude Include="Types.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AbstractPointer.cpp" />
     <ClCompile Include="ConsoleLogger.cpp" />
     <ClCompile Include="Error.cpp" />
     <ClCompile Include="File.cpp" />

@@ -12,7 +12,9 @@ namespace burst::log {
 
 	template<typename... T>
 	void debug(const T&... args) {
+#ifdef _DEBUG
 		log(Level::DEBUG, burst::concat(args...));
+#endif
 	}
 
 	template<typename... T>

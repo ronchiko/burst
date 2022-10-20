@@ -7,6 +7,8 @@
 #include <burst/common/Error.h>
 
 #include "Component.h"
+#include "Instance.h"
+#include "GpuComponent.h"
 #include "QueueFamilyHandler.h"
 
 namespace burst::vulkan {
@@ -94,4 +96,6 @@ namespace burst::vulkan {
 
 		vk::raii::PhysicalDevice m_Device;
 	};
+
+
 }

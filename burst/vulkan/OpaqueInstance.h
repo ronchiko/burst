@@ -15,7 +15,7 @@
 #include "ComponentList.h"
 #include "SurfaceKHR.h"
 
-namespace burst::vulkan {
+/*namespace burst::vulkan {
 	constexpr const char* ENGINE_NAME = "Burst";
 	constexpr burst::u32 ENGINE_VERSION = version(0, 1, 0);
 
@@ -26,7 +26,7 @@ namespace burst::vulkan {
 
 	/**
 	* Gets the available vulkan extensions extensions
-	*/
+	
 	std::vector<Extension> extensions();
 
 	VkInstance make_instance(
@@ -231,4 +231,4 @@ namespace burst::vulkan {
 		}
 	};
 
-}
+}*/
