@@ -73,6 +73,7 @@ namespace burst::vulkan {
 		m_Device(create_device(gpu)),
 		m_Components(extract_components(components))
 	{
+		burst::log::debug("Created vk::Device successfully");
 		for (auto& [_, component] : m_Components) {
 			component->init(m_Device, gpu, create_info);
 		}

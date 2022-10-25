@@ -50,6 +50,7 @@ namespace burst::vulkan {
 #else
 #error Surfaces are only supported for win32
 #endif
+		burst::log::debug("Loaded SurfaceKHR component");
 	}
 
 	const vk::raii::SurfaceKHR& SurfaceKHR::surface() const {

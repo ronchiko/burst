@@ -122,6 +122,8 @@ namespace burst::vulkan {
 			m_Swapchain = vk::raii::SwapchainKHR(device, swapchain_create_info);
 			m_Info.m_Format = format;
 			m_Info.m_Extent = swap_extent;
+
+			burst::log::debug("Loaded SwapchainKHR component");
 		} 
 		catch (const ComponentNotFoundError&) {
 			burst::log::error("SurfaceKHR component is required for SwapchainKHR");
