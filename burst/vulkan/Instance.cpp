@@ -101,13 +101,18 @@ static vk::raii::Instance _create_unsafe_instance(
 
 namespace burst::vulkan {
 	
-	Instance::Instance(vk::raii::Instance instance, Map map, InstanceRequirements r)
+	Instance::Instance(
+		vk::raii::Instance instance, 
+		Map map, 
+		InstanceRequirements r,
+		const AdditionalCreateInfo& create_info
+	)
 		: m_Instance(std::move(instance))
 		, m_Components(std::move(map))
 		, m_Requirements(std::move(r))
 	{
 		for (const auto& component : m_Components) {
-			component.second->init(m_Instance, AdditionalCreateInfo{});
+			component.second->init(m_Instance, create_info);
 		}
 	}
 
@@ -119,7 +124,7 @@ namespace burst::vulkan {
 		return m_Requirements;
 	}
 
-	Instance make_instance(
+	std::pair<Instance, AdditionalCreateInfo> make_instance(
 		cstr name,
 		u32 version,
 		InstanceComponentVector& components,
@@ -129,15 +134,29 @@ namespace burst::vulkan {
 		for (const auto& component : components) {
 			component->add_requirements(requirements);
 		}
-		
+
+		if (nullptr != window) {
+			auto window_requirements = window->get_requirements();
+			requirements.extensions.insert(window_requirements.begin(), window_requirements.end());
+		}
 		Instance::Map map;
 		for (auto& component : burst::pull_children_of<IInstanceComponent>(components)) {
 			const auto id = typeid(*component).hash_code();
 			map[id] = std::move(component);
 		}
 
+		AdditionalCreateInfo create_info{
+			.window = window,
+			.requirements = requirements,
+		};
+
 		auto vk_instance = _create_unsafe_instance(name, version, window, requirements);
 		burst::log::debug("Successfuly created vk::Instance");
-		return Instance(std::move(vk_instance), std::move(map), std::move(requirements));
+		return { Instance(
+			std::move(vk_instance),
+			std::move(map),
+			std::move(requirements),
+			create_info
+		), create_info };
 	}
 }

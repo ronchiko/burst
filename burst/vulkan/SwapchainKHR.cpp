@@ -3,8 +3,6 @@
 #include <algorithm>
 
 #include "Validation.h"
-#include "ComponentList.h"
-#include "QueueFamilyHandler.h"
 #include "SurfaceKHR.h"
 #include "SurfaceKHRSupportOptions.h"
 
@@ -12,7 +10,6 @@
 using namespace burst;
 using namespace burst::vulkan;
 
-/*
 static void clamp(u32& value, u32 min, u32 max) {
 	value = std::clamp(value, min, max);
 }
@@ -35,12 +32,12 @@ static vk::PresentModeKHR select_present_mode(const std::vector<vk::PresentModeK
 			return mode;
 		}
 	}
-	
+
 	burst::log::warning("Non optimal present mode was picked for swapchain");
 	return vk::PresentModeKHR::eFifo;
 }
 
-static VkExtent2D select_swap_extent(
+static vk::Extent2D select_swap_extent(
 	const VkSurfaceCapabilitiesKHR& capabilities,
 	Window& window
 ) {
@@ -48,9 +45,9 @@ static VkExtent2D select_swap_extent(
 		return capabilities.currentExtent;
 	}
 
-	VkExtent2D extent{
-		.width = window.framebuffer().width(),
-		.height = window.framebuffer().height()
+	vk::Extent2D extent{
+		window.framebuffer().width(),
+		window.framebuffer().height()
 	};
 
 	clamp(extent.width, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
@@ -59,95 +56,6 @@ static VkExtent2D select_swap_extent(
 	return extent;
 }
 
-void burst::vulkan::SwapchainKHRDeleter::operator()(VkSwapchainKHR swapchain) {
-	if (nullptr != swapchain) {
-		vkDestroySwapchainKHR(device, swapchain, NO_ALLOCATOR);
-	}
-}
-
-void burst::vulkan::SwapchainKHR::add_dependencies(SetComponentInfo& component_info) {
-	component_info.device_extensions.insert(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
-}
-
-SwapchainKHR::Type burst::vulkan::SwapchainKHR::create_component(
-	const ComponentCreateInfo& create
-) {
-	if (!create.physical_device.has_value()
-		|| !create.device.has_value()) {
-		throw WaitingForLaterInitialization();
-	}
-
-	try {
-		auto surface = create.components->get<SurfaceKHR>();
-		auto support_options = SurfaceKHRSupportOptions::query(surface, *create.physical_device.value());
-
-		if (!support_options.is_valid()) {
-			throw RuntimeError::make("Surface options are not valid for swapchain");
-		}
-
-		auto format = select_format(support_options.formats);
-		auto present_mode = select_present_mode(support_options.present_modes);
-		auto extent = select_swap_extent(support_options.capabilities, *create.window);
-
-		u32 image_count = support_options.capabilities.minImageCount + 1;
-		if (image_count > support_options.capabilities.maxImageCount &&
-			support_options.capabilities.minImageCount > 0) {
-			image_count = support_options.capabilities.maxImageCount;
-		}
-
-		VkSwapchainCreateInfoKHR create_info{};
-		create_info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-		create_info.surface = surface;
-		create_info.minImageCount = image_count;
-		create_info.imageFormat = VkFormat(format.format);
-		create_info.imageColorSpace = VkColorSpaceKHR(format.colorSpace);
-		create_info.imageExtent = extent;
-		create_info.imageArrayLayers = 1;
-		create_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-		create_info.preTransform = support_options.capabilities.currentTransform;
-		create_info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-		create_info.presentMode = VkPresentModeKHR(present_mode);
-		create_info.clipped = VK_TRUE;
-		create_info.oldSwapchain = nullptr;
-
-		auto graphics = create.queue_family->get_known_family(QueueFamilyType::Graphics);
-		auto present = create.queue_family->get_known_family(QueueFamilyType::Present);
-
-		if (!graphics.has_value() || !present.has_value()) {
-			throw RuntimeError::make("Graphics and present queue must exist");
-		}
-
-		u32 queues[] = {graphics.value(), present.value()};
-		if (graphics.value() != present.value()) {
-			create_info.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
-			create_info.queueFamilyIndexCount = 2;
-			create_info.pQueueFamilyIndices = queues;
-		}
-		else {
-			create_info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-			create_info.queueFamilyIndexCount = 0;
-			create_info.pQueueFamilyIndices = nullptr;
-		}
-
-		VkSwapchainKHR swapchain = nullptr;
-		VkResult result = vkCreateSwapchainKHR(*create.device.value(), &create_info, NO_ALLOCATOR, &swapchain);
-		if (VK_SUCCESS != result) {
-			throw RuntimeError::make("Failed to create swapchain, Error: ", result);
-		}
-
-		return AutoSwapchainKHR(swapchain, {
-			*create.device.value(),
-			extent,
-			format
-		});
-	}
-	catch (const InstanceComponentNotFound&) {
-		burst::log::error("No surface component on instance");
-		throw;
-	}
-}
-*/
-
 namespace burst::vulkan {
 	void SwapchainKHR::add_requirements(InstanceRequirements& requirements) const {
 		requirements.device_extensions.insert(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
@@ -155,8 +63,81 @@ namespace burst::vulkan {
 
 	void SwapchainKHR::init(
 		const vk::raii::Device& device,
+		const Gpu& gpu,
 		const AdditionalCreateInfo& info
 	) {
+		try {
+			auto& surface = gpu.get<SurfaceKHR>();
+			auto surface_support_options = SurfaceKHRSupportOptions::query(
+				*surface.surface(), 
+				*gpu.device()
+			);
+
+			ASSERT(nullptr != info.window, "Must have a window");
+
+			if (!surface_support_options.is_valid()) {
+				throw RuntimeError::make("Surface options are not valid for swapchain");
+			}
+
+			auto format = select_format(surface_support_options.formats);
+			auto present_mode = select_present_mode(surface_support_options.present_modes);
+			auto swap_extent = select_swap_extent(surface_support_options.capabilities, *info.window);
 		
+			u32 image_count = surface_support_options.capabilities.minImageCount + 1;
+			if (image_count > surface_support_options.capabilities.maxImageCount &&
+				surface_support_options.capabilities.minImageCount > 0) {
+				image_count = surface_support_options.capabilities.maxImageCount;
+			}
+
+			u32 queues[] = { 
+				gpu.queues()[QueueType::Graphics].value(), 
+				gpu.queues()[QueueType::Present].value()
+			};
+			
+			vk::SwapchainCreateInfoKHR swapchain_create_info(
+				vk::SwapchainCreateFlagsKHR(),
+				*surface.surface(),
+				image_count,
+				format.format,
+				format.colorSpace,
+				swap_extent,
+				1,
+				vk::ImageUsageFlagBits::eColorAttachment,
+				vk::SharingMode::eExclusive,
+				0,
+				queues,
+				surface_support_options.capabilities.currentTransform,
+				vk::CompositeAlphaFlagBitsKHR::eOpaque,
+				present_mode,
+				VK_TRUE,
+				vk::SwapchainKHR{},
+				nullptr
+			);
+
+			if (queues[0] != queues[1]) {
+				swapchain_create_info.imageSharingMode = vk::SharingMode::eConcurrent;
+				swapchain_create_info.queueFamilyIndexCount = 2;
+			}
+
+			m_Swapchain = vk::raii::SwapchainKHR(device, swapchain_create_info);
+			m_Info.m_Format = format;
+			m_Info.m_Extent = swap_extent;
+		} 
+		catch (const ComponentNotFoundError&) {
+			burst::log::error("SurfaceKHR component is required for SwapchainKHR");
+			throw MissingRequiredComponentsError("SurfaceKHR component is required for SwapchainKHR component");
+		}
+	}
+
+	const vk::raii::SwapchainKHR& SwapchainKHR::swapchain() const {
+		return m_Swapchain;
+	}
+
+	vk::Extent2D& SwapchainKHR::extent() {
+		return m_Info.m_Extent;
+	}
+
+	vk::SurfaceFormatKHR& SwapchainKHR::format() {
+		return m_Info.m_Format;
 	}
 }

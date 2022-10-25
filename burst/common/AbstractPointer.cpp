@@ -30,6 +30,12 @@ namespace burst {
 		return *this;
 	}
 
+	AbstractPointer::~AbstractPointer() {
+		try {
+			free();
+		} catch(...) {}
+	}
+
 	bool AbstractPointer::occupied() const {
 		return m_Pointer != nullptr;
 	}

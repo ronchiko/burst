@@ -18,69 +18,35 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\Vulkan.h" />
-    <ClInclude Include="Const.h" />
-    <ClInclude Include="DefaultGpuAnalyzer.h" />
-    <ClInclude Include="Device.h" />
-    <ClInclude Include="Errors.h" />
-    <ClInclude Include="Debug.h" />
-    <ClInclude Include="Gpu.h" />
-    <ClInclude Include="IDeviceComponent.h" />
-    <ClInclude Include="IInstanceDependent.h" />
-    <ClInclude Include="Instance.h" />
-    <ClInclude Include="InstanceComponent.h" />
-    <ClInclude Include="InstanceComponentsList.h" />
-    <ClInclude Include="IGpuComponent.h" />
-    <ClInclude Include="Queues.h" />
-    <ClInclude Include="SurfaceKHR.h" />
-    <ClInclude Include="SurfaceKHRSupportOptions.h" />
-    <ClInclude Include="SwapchainKHR.h" />
-    <ClInclude Include="Validation.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Debug.cpp" />
-    <ClCompile Include="DefaultGpuAnalyzer.cpp" />
-    <ClCompile Include="Device.cpp" />
-    <ClCompile Include="Errors.cpp" />
-    <ClCompile Include="Gpu.cpp" />
-    <ClCompile Include="Instance.cpp" />
-    <ClCompile Include="Queues.cpp" />
-    <ClCompile Include="SurfaceKHR.cpp" />
-    <ClCompile Include="SurfaceKHRSupportOptions.cpp" />
-    <ClCompile Include="SwapchainKHR.cpp" />
-    <ClCompile Include="Validation.cpp" />
-    <ClCompile Include="Vulkan.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{631b586d-1ab4-4740-a23a-5420b06cad0f}</ProjectGuid>
-    <RootNamespace>burst_vulkan</RootNamespace>
+    <ProjectGuid>{6a530135-2b8c-4e33-8517-1ae7aec480dd}</ProjectGuid>
+    <RootNamespace>SimpleDemo</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -104,18 +70,6 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\ronmh\source\repos\burst;$(IncludePath)</IncludePath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\Users\ronmh\source\repos\burst;$(IncludePath)</IncludePath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\ronmh\source\repos\burst;$(IncludePath)</IncludePath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\ronmh\source\repos\burst;$(IncludePath)</IncludePath>
-  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -123,18 +77,12 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;C:\Dev\burst;C:\Dev\include;C:\VulkanSDK\1.3.224.1\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Dev\burst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <Lib>
-      <AdditionalDependencies>vulkan-1.lib;glfw3.lib</AdditionalDependencies>
-    </Lib>
-    <Lib>
-      <AdditionalLibraryDirectories>C:\VulkanSDK\1.3.224.1\Lib;C:\Dev\Lib\glfw\glfw-3.3.8\bin\src\Debug;C:\VulkanSDK\1.3.224.1\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -145,7 +93,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;C:\Dev\burst;C:\Dev\include;C:\VulkanSDK\1.3.224.1\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Dev\burst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -153,12 +101,6 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <Lib>
-      <AdditionalDependencies>vulkan-1.lib;glfw3.lib</AdditionalDependencies>
-    </Lib>
-    <Lib>
-      <AdditionalLibraryDirectories>C:\VulkanSDK\1.3.224.1\Lib;C:\Dev\Lib\glfw\glfw-3.3.8\bin\src\Release;C:\VulkanSDK\1.3.224.1\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -167,20 +109,12 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;C:\Dev\burst;C:\Dev\include;C:\VulkanSDK\1.3.224.1\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Dev\burst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\VulkanSDK\1.3.224.1\Lib;C:\Dev\glfw\lib-vc2019;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <Lib>
-      <AdditionalDependencies>vulkan-1.lib;glfw3.lib</AdditionalDependencies>
-    </Lib>
-    <Lib>
-      <AdditionalLibraryDirectories>C:\VulkanSDK\1.3.224.1\Lib;C:\Dev\Lib\glfw\glfw-3.3.8\bin\src\Debug;C:\VulkanSDK\1.3.224.1\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -191,7 +125,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;C:\Dev\burst;C:\Dev\include;C:\VulkanSDK\1.3.224.1\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Dev\burst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -199,13 +133,21 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <Lib>
-      <AdditionalDependencies>vulkan-1.lib;glfw3.lib</AdditionalDependencies>
-    </Lib>
-    <Lib>
-      <AdditionalLibraryDirectories>C:\VulkanSDK\1.3.224.1\Lib;C:\Dev\Lib\glfw\glfw-3.3.8\bin\src\Release;C:\VulkanSDK\1.3.224.1\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Lib>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\burst\common\burst_common.vcxproj">
+      <Project>{a7c1fa07-8118-45d9-97ca-e8b9d3bd2ffd}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\burst\glfw\burst_glfw.vcxproj">
+      <Project>{86d6fa3b-93e4-4a23-abaf-b5a1f9c0d07e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\burst\vulkan\burst_vulkan.vcxproj">
+      <Project>{631b586d-1ab4-4740-a23a-5420b06cad0f}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

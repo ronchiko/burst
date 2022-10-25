@@ -23,7 +23,11 @@ burst::vulkan::InstanceComponentNotFound::InstanceComponentNotFound(const std::s
 }
 
 burst::vulkan::MissingRequiredComponentsError::MissingRequiredComponentsError()
-	: StaticError("Missing one or more required components") {}
+	: MissingRequiredComponentsError("Missing one or more required components") {}
+
+burst::vulkan::MissingRequiredComponentsError::MissingRequiredComponentsError(cstr message)
+	: StaticError(message) {}
+
 
 burst::vulkan::MissingRequiredLayersError::MissingRequiredLayersError()
 	: StaticError("Missing one or more required layers")

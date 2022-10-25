@@ -17,19 +17,23 @@ namespace burst::vulkan {
 	class Instance {
 	public:
 		using IComponent = std::unique_ptr<IInstanceComponent>;
-		using Map = std::unordered_map<u32, IComponent>;
+		using Map = IdMap<IComponent>;
 
 		Instance(
 			vk::raii::Instance instance,
 			Map component,
-			InstanceRequirements requirements
+			InstanceRequirements requirements,
+			const AdditionalCreateInfo& create_info
 		);
 
 		template<InstanceComponent IC>
 		IC& get() {
-			if (auto& component = m_Components.at(burst::id<IC>()); nullptr != component) {
-				return *component;
+			try {
+				if (auto& component = m_Components.at(burst::id<IC>()); nullptr != component) {
+					return *reinterpret_cast<IC*>(component.get());
+				}
 			}
+			catch (const std::out_of_range&) {}
 
 			throw ComponentNotFoundError::from<IC>();
 		}
@@ -39,21 +43,7 @@ namespace burst::vulkan {
 		 */
 		template<InstanceComponent IC>
 		const IC& get() const {
-			if (auto& component = m_Components.at(burst::id<IC>()); nullptr != component) {
-				return *component;
-			}
-			
-			throw ComponentNotFoundError::from<IC>();
-		}
-
-		template<InstanceComponent IC>
-		bool get(IC& ic) {
-			if (auto& component = m_Components.at(burst::id<IC>()); nullptr != component) {
-				ic = *component;
-				return true;
-			}
-
-			return false;
+			return const_cast<Instance*>(this)->get<IC>();
 		}
 
 		const vk::raii::Instance& instance() const;
@@ -69,7 +59,7 @@ namespace burst::vulkan {
 	/**
 	 * Creates a new instance
 	 */
-	Instance make_instance(
+	std::pair<Instance, AdditionalCreateInfo> make_instance(
 		cstr name,
 		u32 version,
 		InstanceComponentVector& components,

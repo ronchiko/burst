@@ -3,6 +3,7 @@
 #include <vulkan/vulkan_raii.hpp>
 
 #include "IInstanceDependent.h"
+#include "Gpu.h"
 
 namespace burst::vulkan {
 	
@@ -17,6 +18,7 @@ namespace burst::vulkan {
 
 		IFACE_FUNC(void init(
 			const vk::raii::Device&, 
+			const Gpu& parent,
 			const AdditionalCreateInfo&
 		));
 	};

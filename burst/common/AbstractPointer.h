@@ -13,8 +13,9 @@ namespace burst {
 	 * The default deleter function.
 	 */
 	template<Pointer T>
-	void default_deleter(T pointer) {
-		delete pointer;
+	void default_deleter(void* pointer) {
+		T typed = static_cast<T>(pointer);
+		delete typed;
 	}
 
 	/**
@@ -64,8 +65,11 @@ namespace burst {
 		DeleterFunction<> m_Deleter;
 	};
 
-	template<Pointer T, typename D = DeleterFunction<T>>
+	template<Pointer T, typename D = DeleterFunction<>>
 	AbstractPointer abstract(T pointer, D deleter = default_deleter<T>) {
-		return { pointer, deleter };
+		return AbstractPointer(
+			pointer,
+			deleter
+		);
 	}
 }

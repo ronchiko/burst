@@ -7,7 +7,6 @@
 
 #include <burst/Common.h>
 
-#include "Component.h"
 #include "InstanceComponent.h"
 
 namespace burst::vulkan {

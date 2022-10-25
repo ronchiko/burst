@@ -12,7 +12,7 @@
           AfterTargets="GlslCompile">
     <!-- Properties for running the targeted python script -->
     <PropertyGroup>
-      <PythonPath>$(AppData)\..\Local\Programs\Python\Python39\python.exe</PythonPath>
+      <PythonPath>$(AppData)\..\Local\Programs\Python\Python310\python.exe</PythonPath>
       <EmbedderPath>..\..\build\embedder\main.py</EmbedderPath>
     </PropertyGroup>
 

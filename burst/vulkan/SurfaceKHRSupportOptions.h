@@ -1,14 +1,14 @@
 #pragma once
 
-#include <vulkan/vulkan.h>
+#include <vector>
 
-#include "PhysicalDevice.h"
+#include <vulkan/vulkan.hpp>
 
 namespace burst::vulkan {
 
 	struct SurfaceKHRSupportOptions
 	{
-		VkSurfaceCapabilitiesKHR capabilities;
+		vk::SurfaceCapabilitiesKHR capabilities;
 		std::vector<vk::SurfaceFormatKHR> formats;
 		std::vector<vk::PresentModeKHR> present_modes;
 		

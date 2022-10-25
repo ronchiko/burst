@@ -7,7 +7,7 @@
 
 #include "Instance.h"
 #include "Queues.h"
-#include "GpuComponent.h"
+#include "IGpuComponent.h"
 
 namespace burst::vulkan {
 
@@ -17,13 +17,14 @@ namespace burst::vulkan {
 	class Gpu {
 	public:
 		using IComponent = std::unique_ptr<IGpuComponent>;
-		using Map = std::unordered_map<u32, IComponent>;
+		using Map = IdMap<IComponent>;
 
 		Gpu(
 			vk::raii::PhysicalDevice device, 
 			Instance& parent,
 			Map compoennts,
-			GpuQueues queues
+			GpuQueues queues,
+			const AdditionalCreateInfo& create_info
 		);
 
 		/**
@@ -55,6 +56,23 @@ namespace burst::vulkan {
 		 * The Gpu Queues.
 		 */
 		const GpuQueues& queues() const;
+
+		template<typename IC>
+		IC& get() {
+			try {
+				if (auto& component = m_Components.at(burst::id<IC>()); nullptr != component) {
+					return *reinterpret_cast<IC*>(component.get());
+				}
+			}
+			catch (const std::out_of_range&) {}
+
+			return m_Parent.get<IC>();
+		}
+
+		template<typename IC>
+		const IC& get() const {
+			return const_cast<Gpu*>(this)->get<IC>();
+		}
 
 	private:
 		Instance& m_Parent;
@@ -102,6 +120,7 @@ namespace burst::vulkan {
 	Gpu pick_best_gpu(
 		Instance& instance,
 		InstanceComponentVector& components,
-		GpuAnalyzer& rater
+		GpuAnalyzer& rater,
+		const AdditionalCreateInfo& create_info
 	);
 }

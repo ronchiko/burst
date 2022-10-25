@@ -4,6 +4,8 @@
 // #include "LogicalDevice.h"
 // #include "SwapchainKHR.h"
 
+#include <vulkan/vulkan.hpp>
+
 #include "Instance.h"
 #include "Gpu.h"
 #include "Device.h"
@@ -14,28 +16,50 @@
 #include "Debug.h"
 #endif
 #include "SurfaceKHR.h"
+#include "SwapchainKHR.h"
 
 
 using namespace burst::vulkan;
 
 using Components = InstanceComponentList<
-#ifdef _DEBUG
-	DebugMessenger,
-#endif
+	SwapchainKHR,
 	SurfaceKHR
+#ifdef _DEBUG
+	, DebugMessenger
+#endif
 >;
 
+struct VulkanState {
+	Instance instance;
+	Gpu gpu;
+	// Device device;
+};
 
-Instance burst::vulkan::load_default_instance(cstr name, u32 version, Window* window) {
+static void log_non_ideal_gpu_selection(const Gpu& gpu) {
+	switch (gpu.type())
+	{
+	case vk::PhysicalDeviceType::eIntegratedGpu:
+		burst::log::warning("Selected integrated GPU");
+		break;
+	default:
+		break;
+	}
+}
+
+burst::AbstractPointer burst::vulkan::load_default_instance(cstr name, u32 version, Window* window) {
 	auto components = Components::vector();
 
-	auto instance = make_instance(name, version, components, window);
-	
+	auto [instance, info] = make_instance(name, version, components, window);
+
 	DefaultGpuAnalyzer analyzer(instance);
-	auto gpu = pick_best_gpu(instance, components, analyzer);
+	auto gpu = pick_best_gpu(instance, components, analyzer, info);
+	log_non_ideal_gpu_selection(gpu);
+	
+	Device device(gpu, components, info);
 
-	Device device(gpu, components);
-	// auto device = make_logical_device<SwapchainKHR>(physical_device);
-
-	return instance;
+	return burst::abstract(new VulkanState{
+			std::move(instance),
+			std::move(gpu)
+			// std::move(device)
+		});
 }

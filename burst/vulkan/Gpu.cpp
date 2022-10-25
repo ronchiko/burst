@@ -1,5 +1,7 @@
 #include "Gpu.h"
 
+#include <map>
+
 #include "Errors.h"
 
 namespace burst::vulkan {
@@ -8,14 +10,15 @@ namespace burst::vulkan {
 		vk::raii::PhysicalDevice device,
 		Instance& instance,
 		Map components,
-		GpuQueues queues
+		GpuQueues queues,
+		const AdditionalCreateInfo& create_info
 	) : m_Device(device), 
 		m_Parent(instance), 
 		m_Components(std::move(components)),
 		m_Queues(queues)
 	{
 		for (auto& component : m_Components) {
-			component.second->init(device, AdditionalCreateInfo());
+			component.second->init(device, instance, create_info);
 		}
 	}
 
@@ -49,7 +52,8 @@ namespace burst::vulkan {
 	Gpu pick_best_gpu(
 		Instance& instance,
 		InstanceComponentVector& components,
-		GpuAnalyzer& rater
+		GpuAnalyzer& rater,
+		const AdditionalCreateInfo& info
 	) {
 		struct DeviceInfo {
 			vk::raii::PhysicalDevice device;
@@ -57,15 +61,15 @@ namespace burst::vulkan {
 		};
 
 		auto gpus = instance.instance().enumeratePhysicalDevices();
-		
-		std::unordered_multimap<u32, DeviceInfo> ranking;
+
+		std::multimap<u32, DeviceInfo> ranking;
 		for (const auto& _gpu : gpus) {
-			Gpu gpu(_gpu, instance, {}, {});
+			Gpu gpu(_gpu, instance, {}, {}, info);
 			
 			auto result = rater(gpu);
 			if (result.score > GpuAnalyzer::SCORE_EXCLUDE) {
 				ranking.insert(std::make_pair(
-					result.score, 
+					result.score,
 					DeviceInfo{ _gpu, result}
 				));
 			}
@@ -77,13 +81,13 @@ namespace burst::vulkan {
 		}
 
 		Gpu::Map map;
-		auto [score, gpu_info] = *ranking.begin();
+		auto [score, gpu_info] = *(--ranking.end());
 		for (auto& component : pull_children_of<IGpuComponent>(components)) {
-			u32 id = typeid(*component).hash_code();
+			uid id = typeid(*component).hash_code();
 			map[id] = std::move(component);
 		}
 
-		Gpu gpu(gpu_info.device, instance, std::move(map), gpu_info.score.queues);
+		Gpu gpu(gpu_info.device, instance, std::move(map), gpu_info.score.queues, info);
 		burst::log::info("Most suitable GPU is: ", gpu.name());
 
 		return gpu;

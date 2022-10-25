@@ -33,7 +33,9 @@ namespace burst::vulkan {
 
 	SurfaceKHR::SurfaceKHR() : m_Surface(nullptr) {}
 
-	void SurfaceKHR::add_requirements(InstanceRequirements&) const {}
+	void SurfaceKHR::add_requirements(InstanceRequirements& requirements) const {
+		requirements.extensions.insert(VK_KHR_SURFACE_EXTENSION_NAME);
+	}
 
 	void SurfaceKHR::init(
 		const vk::raii::Instance& instance,

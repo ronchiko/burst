@@ -9,3 +9,9 @@
 
 // Ease of use macros
 #define ENUM enum class
+
+
+#define ASSERT(expr, msg) if (!(expr)) { \
+	burst::log::error("Assertion Error: ("#expr ") isn't true: ", msg); \
+	throw std::exception("Assertion Error!");\
+}

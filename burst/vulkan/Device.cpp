@@ -60,16 +60,21 @@ static burst::vulkan::Device::Map extract_components(
 	for (auto& component : burst::pull_children_of<IDeviceComponent>(components)) {
 		map[typeid(*component).hash_code()] = std::move(component);
 	}
+
+	return map;
 }
 
 namespace burst::vulkan {
-	Device::Device(Gpu& gpu, InstanceComponentVector& components) :
-		m_Gpu(gpu),
+	Device::Device(
+		Gpu& gpu, 
+		InstanceComponentVector& components,
+		const AdditionalCreateInfo& create_info
+	) : m_Gpu(gpu),
 		m_Device(create_device(gpu)),
 		m_Components(extract_components(components))
 	{
 		for (auto& [_, component] : m_Components) {
-			component->init(m_Device, AdditionalCreateInfo());
+			component->init(m_Device, gpu, create_info);
 		}
 	}
 

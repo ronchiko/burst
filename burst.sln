@@ -7,11 +7,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "burst_common", "burst\commo
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "burst_glfw", "burst\glfw\burst_glfw.vcxproj", "{86D6FA3B-93E4-4A23-ABAF-B5A1F9C0D07E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BurstDemo", "..\BurstDemo\BurstDemo.vcxproj", "{07C70B43-684F-4D5E-B991-799976A15D07}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "burst_vulkan", "burst\vulkan\burst_vulkan.vcxproj", "{631B586D-1AB4-4740-A23A-5420B06CAD0F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "engine", "engine", "{98A1048F-B8D3-4B84-B6C5-D3B74F174899}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "demos", "demos", "{F3444A74-DFDE-4975-B75E-9A67A9DFA483}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimpleDemo", "demos\SimpleDemo\SimpleDemo.vcxproj", "{6A530135-2B8C-4E33-8517-1AE7AEC480DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,14 +39,6 @@ Global
 		{86D6FA3B-93E4-4A23-ABAF-B5A1F9C0D07E}.Release|x64.Build.0 = Release|x64
 		{86D6FA3B-93E4-4A23-ABAF-B5A1F9C0D07E}.Release|x86.ActiveCfg = Release|Win32
 		{86D6FA3B-93E4-4A23-ABAF-B5A1F9C0D07E}.Release|x86.Build.0 = Release|Win32
-		{07C70B43-684F-4D5E-B991-799976A15D07}.Debug|x64.ActiveCfg = Debug|x64
-		{07C70B43-684F-4D5E-B991-799976A15D07}.Debug|x64.Build.0 = Debug|x64
-		{07C70B43-684F-4D5E-B991-799976A15D07}.Debug|x86.ActiveCfg = Debug|Win32
-		{07C70B43-684F-4D5E-B991-799976A15D07}.Debug|x86.Build.0 = Debug|Win32
-		{07C70B43-684F-4D5E-B991-799976A15D07}.Release|x64.ActiveCfg = Release|x64
-		{07C70B43-684F-4D5E-B991-799976A15D07}.Release|x64.Build.0 = Release|x64
-		{07C70B43-684F-4D5E-B991-799976A15D07}.Release|x86.ActiveCfg = Release|Win32
-		{07C70B43-684F-4D5E-B991-799976A15D07}.Release|x86.Build.0 = Release|Win32
 		{631B586D-1AB4-4740-A23A-5420B06CAD0F}.Debug|x64.ActiveCfg = Debug|x64
 		{631B586D-1AB4-4740-A23A-5420B06CAD0F}.Debug|x64.Build.0 = Debug|x64
 		{631B586D-1AB4-4740-A23A-5420B06CAD0F}.Debug|x86.ActiveCfg = Debug|Win32
@@ -53,6 +47,14 @@ Global
 		{631B586D-1AB4-4740-A23A-5420B06CAD0F}.Release|x64.Build.0 = Release|x64
 		{631B586D-1AB4-4740-A23A-5420B06CAD0F}.Release|x86.ActiveCfg = Release|Win32
 		{631B586D-1AB4-4740-A23A-5420B06CAD0F}.Release|x86.Build.0 = Release|Win32
+		{6A530135-2B8C-4E33-8517-1AE7AEC480DD}.Debug|x64.ActiveCfg = Debug|x64
+		{6A530135-2B8C-4E33-8517-1AE7AEC480DD}.Debug|x64.Build.0 = Debug|x64
+		{6A530135-2B8C-4E33-8517-1AE7AEC480DD}.Debug|x86.ActiveCfg = Debug|Win32
+		{6A530135-2B8C-4E33-8517-1AE7AEC480DD}.Debug|x86.Build.0 = Debug|Win32
+		{6A530135-2B8C-4E33-8517-1AE7AEC480DD}.Release|x64.ActiveCfg = Release|x64
+		{6A530135-2B8C-4E33-8517-1AE7AEC480DD}.Release|x64.Build.0 = Release|x64
+		{6A530135-2B8C-4E33-8517-1AE7AEC480DD}.Release|x86.ActiveCfg = Release|Win32
+		{6A530135-2B8C-4E33-8517-1AE7AEC480DD}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +62,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{86D6FA3B-93E4-4A23-ABAF-B5A1F9C0D07E} = {98A1048F-B8D3-4B84-B6C5-D3B74F174899}
 		{631B586D-1AB4-4740-A23A-5420B06CAD0F} = {98A1048F-B8D3-4B84-B6C5-D3B74F174899}
+		{6A530135-2B8C-4E33-8517-1AE7AEC480DD} = {F3444A74-DFDE-4975-B75E-9A67A9DFA483}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {63AA58E1-3652-4A7E-9EE7-4A2EC6311D3A}

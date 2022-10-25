@@ -17,6 +17,8 @@ namespace burst::vulkan {
 	class MissingRequiredComponentsError : public StaticError {
 	public:
 		MissingRequiredComponentsError();
+
+		MissingRequiredComponentsError(cstr message);
 	};
 
 	/**
@@ -57,7 +59,7 @@ namespace burst::vulkan {
 		ComponentNotFoundError(const cstr name);
 
 		template<typename T>
-		constexpr ComponentNotFoundError from() {
+		constexpr static ComponentNotFoundError from() {
 			return ComponentNotFoundError(burst::name<T>());
 		}
 	};

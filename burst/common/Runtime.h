@@ -9,7 +9,7 @@ namespace burst {
 	 * Gets the id of a class.
 	 */
 	template<class T>
-	constexpr u32 id() { return typeid(T).hash_code(); }
+	constexpr uid id() { return typeid(T).hash_code(); }
 
 	/** 
 	 * Gets the name of the class

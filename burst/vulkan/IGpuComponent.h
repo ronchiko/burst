@@ -5,6 +5,7 @@
 #include <burst/Common.h>
 
 #include "IInstanceDependent.h"
+#include "Instance.h"
 
 namespace burst::vulkan {
 
@@ -14,6 +15,7 @@ namespace burst::vulkan {
 
 		IFACE_FUNC(void init(
 			const vk::raii::PhysicalDevice&, 
+			const Instance&,
 			const AdditionalCreateInfo&
 		));
 	};

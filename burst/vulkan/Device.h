@@ -7,12 +7,16 @@ namespace burst::vulkan {
 	class Device {
 	public:
 		using IComponent = std::unique_ptr<IDeviceComponent>;
-		using Map = std::unordered_map<u32, IComponent>;
+		using Map = IdMap<IComponent>;
 		
 		/**
 		 * Creates a new device.
 		 */
-		Device(Gpu& parent, InstanceComponentVector& components);
+		Device(
+			Gpu& parent, 
+			InstanceComponentVector& components,
+			const AdditionalCreateInfo& create_info
+		);
 
 		/**
 		 * The GPU that this device was created from.
