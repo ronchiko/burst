@@ -19,9 +19,6 @@
     <Filter Include="Source Files\Instance">
       <UniqueIdentifier>{4ea92a16-22bf-4c56-8db5-650660ad7ebb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Instance\Devices">
-      <UniqueIdentifier>{d1fa334b-797c-438b-a4ac-8dc58224974c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Instance\Components">
       <UniqueIdentifier>{26082f1c-ab94-4f34-9a1a-52255177f594}</UniqueIdentifier>
     </Filter>
@@ -52,99 +49,269 @@
     <Filter Include="Source Files\Instance\Instance">
       <UniqueIdentifier>{9eff5e22-7546-42cf-967b-27023d6a89d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Instance\Instance\Gpu">
+      <UniqueIdentifier>{bca0c6db-2966-43cf-8382-4f7ae47c3b3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Instance\Instance\Device">
+      <UniqueIdentifier>{8ccf9f9f-d007-4efe-a38b-bdae12cf44bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Commands">
+      <UniqueIdentifier>{6ef53ac8-4b5e-4f78-b441-2fdc47ad4c41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Commands">
+      <UniqueIdentifier>{2a1704aa-9cd8-435c-94be-8a561c219f5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Sync">
+      <UniqueIdentifier>{165a793c-6895-4d34-adaa-945087457fae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Sync">
+      <UniqueIdentifier>{511f8603-2a9e-4bd0-9083-cda7b5983523}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Validation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Debug.h">
-      <Filter>Header Files\Instance\Components</Filter>
-    </ClInclude>
     <ClInclude Include="..\Vulkan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Errors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SurfaceKHR.h">
-      <Filter>Header Files\Instance\Components\SurfaceKHR</Filter>
-    </ClInclude>
-    <ClInclude Include="SurfaceKHRSupportOptions.h">
-      <Filter>Header Files\Instance\Components\SurfaceKHR</Filter>
-    </ClInclude>
-    <ClInclude Include="SwapchainKHR.h">
-      <Filter>Header Files\Instance\Components\Swapchain</Filter>
-    </ClInclude>
-    <ClInclude Include="Instance.h">
-      <Filter>Header Files\Instance\Instance</Filter>
-    </ClInclude>
-    <ClInclude Include="InstanceComponent.h">
-      <Filter>Header Files\Instance\Instance</Filter>
-    </ClInclude>
-    <ClInclude Include="IInstanceDependent.h">
-      <Filter>Header Files\Instance\Instance</Filter>
-    </ClInclude>
     <ClInclude Include="Const.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="InstanceComponentsList.h">
-      <Filter>Header Files\Instance\Instance</Filter>
+    <ClInclude Include="Pipeline\Shaders\Shader.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="IGpuComponent.h">
-      <Filter>Header Files\Instance\Instance</Filter>
+    <ClInclude Include="Framebuffer.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Gpu.h">
-      <Filter>Header Files\Instance\Instance</Filter>
+    <ClInclude Include="Renderer\Renderer.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DefaultGpuAnalyzer.h">
-      <Filter>Header Files\Instance\Instance</Filter>
+    <ClInclude Include="Sync\Semaphore.h">
+      <Filter>Header Files\Sync</Filter>
     </ClInclude>
-    <ClInclude Include="Queues.h">
-      <Filter>Header Files\Instance\Instance</Filter>
+    <ClInclude Include="Sync\Fence.h">
+      <Filter>Header Files\Sync</Filter>
     </ClInclude>
-    <ClInclude Include="Device.h">
-      <Filter>Header Files\Instance\Instance</Filter>
+    <ClInclude Include="CommandRecordContext.h">
+      <Filter>Header Files\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="IDeviceComponent.h">
-      <Filter>Header Files\Instance\Instance</Filter>
+    <ClInclude Include="RenderContext.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Instance\Instance.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Instance\Requirement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Configuration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Instance\Gpu\Gpu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Instance\Gpu\IGpuAnalyzer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Instance\Gpu\Queues.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Instance\Gpu\IQueueLocator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Instance\Gpu\Locators\GraphicsQueueLocator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Instance\SurfaceKHR\SurfaceKHR.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Instance\SurfaceKHR\SurfaceSupportOptions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Extensions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Instance\SurfaceKHR\GpuSurface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Instance\DebugMessenger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Instance\Device\Device.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Instance\SwapchainKHR\SwapchainKHR.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Instance\SwapchainKHR\Usage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pipeline\Shaders\IShaderLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pipeline\Shaders\Loaders\BuiltinShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pipeline\Shaders\Embedded.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pipeline\Pipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pipeline\PipelineLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pipeline\IDynamicStateHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pipeline\Dynamic States\DynamicViewportHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pipeline\RenderPass\RenderPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pipeline\RenderPass\Subpass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\CommandPool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\CommandBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IVulkanWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Gfx\ImageView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Instance\SwapchainKHR\SwapchainImage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Gfx\IImage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Gfx\Dimensions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Burst.Windows.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Validation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Debug.cpp">
-      <Filter>Source Files\Instance\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Vulkan.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Errors.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SurfaceKHR.cpp">
-      <Filter>Source Files\Instance\Components\SurfaceKHR</Filter>
+    <ClCompile Include="Pipeline\Shaders\Shader.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="SurfaceKHRSupportOptions.cpp">
-      <Filter>Source Files\Instance\Components\SurfaceKHR</Filter>
+    <ClCompile Include="Framebuffer.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="SwapchainKHR.cpp">
-      <Filter>Source Files\Instance\Components\SwapchainKHR</Filter>
+    <ClCompile Include="Renderer\Renderer.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Instance.cpp">
-      <Filter>Source Files\Instance\Instance</Filter>
+    <ClCompile Include="Sync\Semaphore.cpp">
+      <Filter>Source Files\Sync</Filter>
     </ClCompile>
-    <ClCompile Include="Gpu.cpp">
-      <Filter>Source Files\Instance\Instance</Filter>
+    <ClCompile Include="Sync\Fence.cpp">
+      <Filter>Source Files\Sync</Filter>
     </ClCompile>
-    <ClCompile Include="DefaultGpuAnalyzer.cpp">
-      <Filter>Source Files\Instance\Instance</Filter>
+    <ClCompile Include="RenderContext.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Queues.cpp">
-      <Filter>Source Files\Instance\Instance</Filter>
+    <ClCompile Include="CommandRecordContext.cpp">
+      <Filter>Source Files\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="Device.cpp">
-      <Filter>Source Files\Instance\Instance</Filter>
+    <ClCompile Include="Instance\Instance.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Instance\Gpu\Gpu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Instance\Gpu\Analyzers\BasicGpuAnalyzer.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Instance\Gpu\Analyzers\BasicGpuAnalyzer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Configuration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Instance\Gpu\Locators\GraphicsQueueLocator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Instance\SurfaceKHR\SurfaceKHR.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Extensions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Instance\SurfaceKHR\GpuSurface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Instance\DebugMessenger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Instance\Device\Device.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Instance\Requirement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Instance\SwapchainKHR\SwapchainKHR.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Instance\SurfaceKHR\SurfaceSupportOptions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pipeline\Shaders\Loaders\BuiltinShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pipeline\Shaders\Embedded.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pipeline\Pipeline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pipeline\PipelineLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pipeline\RenderPass\RenderPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pipeline\RenderPass\Subpass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\CommandPool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\CommandBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Instance\SwapchainKHR\SwapchainImage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gfx\ImageView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gfx\Dimensions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Instance\SurfaceKHR\SurfaceKHR.Win32.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="Renderer\Device.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="Renderer\Gpu.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

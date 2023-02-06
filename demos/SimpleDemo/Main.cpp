@@ -1,27 +1,53 @@
+#include <iostream>
 
 #include <burst/Common.h>
 #include <burst/Glfw.h>
 #include <burst/Vulkan.h>
 
-int main() {
-	burst::log::add_logger(
-		std::make_unique<burst::log::ConsoleLogger>()
-	);
+#include <burst/Common/Optimize/Avx.h>
 
-	auto window = burst::glfw::make_window(burst::WindowInfo{
-		"My Application",
-		512,
-		512,
-		burst::WindowMode::WINDOWED
-	});
+#include <burst/common/Flags.h>
 
-	auto vulkan = burst::vulkan::load_default_instance(
-		"My Application",
-		10,
-		window.get()
-	);
+const burst::ApplicationInfo INFO{
+	"Demo App",
+	burst::Version(1),
+};
 
-	while (!window->should_quit()) {
-		window->render();
+int main()
+{
+	using namespace burst;
+
+	Vector<int> v{ 1, 2, 3, 4 };
+
+	// Initialize logger
+	log::add_logger(std::make_unique<burst::log::ConsoleLogger>());
+
+	// Create a new window with the GLFW window provider
+	log::debug("Creating window");
+	auto window = glfw::make_window(512, 512, INFO.application_name);
+
+	// Ensure the window is compatible with vulkan
+	if(nullptr == dynamic_cast<burst::vulkan::IVulkanWindow *>(window.get())) {
+		log::info("Window creator is not compatible with vulkan");
+		return 1;
 	}
+
+	//try {
+		// Create a new vulkan renderer
+		log::debug("Creating renderer");
+		auto renderer = vulkan::create_vulkan_render(
+			INFO,
+			vulkan::Configuration::create_default_configuration(),
+			*reinterpret_cast<vulkan::IVulkanWindow *>(window.get()));
+
+		log::info("Starting game mainloop! :)");
+		while(window->is_active()) {
+			renderer->render();
+			window->update();
+		}
+	/*}
+	catch (const std::exception& e) {
+		log::error(typeid(e).name(), ": ", e.what());
+	}*/
+	
 }

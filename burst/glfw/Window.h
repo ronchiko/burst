@@ -4,49 +4,75 @@
 
 #include <GLFW/glfw3.h>
 
-#include "burst/common/Types.h"
-#include "burst/common/Window.h"
+#include <burst/Common.h>
 
-#include "Framebuffer.h"
+#include "burst/vulkan/IVulkanWindow.h"
 
 namespace burst::glfw {
-	class Window : public burst::Window {
+
+	struct AdditionalWindowSettings
+	{
+		bool scalable;
+		FullscreenMode mode;
+	};
+
+	/**
+	 * The generic GLFW window implementation.
+	 */
+	class Window : public burst::vulkan::IVulkanWindow,
+				   public burst::IScalingPresentableSignaler,
+				   public burst::IFullscreenPresentableSignaler
+	{
 	public:
-		Window(
-			std::string title,
-			burst::i32 width,
-			burst::i32 height
-		);
+		static constexpr AdditionalWindowSettings DEFAULT_SETTINGS = {
+			true,
+			FullscreenMode::Windowed,
+		};
 
-		Window(const Window&) = delete;
-		Window& operator=(const Window&) = delete;
+		explicit Window(const String& title,
+			u32 width,
+			u32 height,
+			const AdditionalWindowSettings& = DEFAULT_SETTINGS);
 
-		Window(Window&&) noexcept;
-		Window& operator=(Window&&) noexcept;
+		/*	-------- IPresentable ------------------------------ */
+		virtual u32 width() const override;
 
-		virtual ~Window() override;
+		virtual u32 height() const override;
 
-		virtual bool should_quit() override;
+		virtual void update() override;
 
-		virtual void render() override;
+		/* --------- IRealtimePresntable ----------------------- */
 
-		virtual burst::WindowInfo info() const override;
+		virtual bool is_active() const override;
 
-		virtual void info(const burst::WindowInfo&) override;
+		/* --------- IWindow ----------------------------------- */
+		virtual Identifier identifier() const override;
 
-		virtual std::vector<cstr> get_requirements() const override;
+		/* --------- IVulkanWindow ----------------------------- */
+		virtual Vector<vulkan::Requirement> get_requirements() const override;
 
-		virtual void* window_handle() const override;
+		/* --------- Scaling ----------------------------------- */
+		void rescale(u32 width, u32 height);
 
-		virtual burst::Framebuffer& framebuffer() override;
+		void set_mode(FullscreenMode mode);
+
+		/* --------- Signaling ---------------------------------- */
+		ITokenPtr add_fullscreen_listener(const FullscreenCallback& callback);
+
+		ITokenPtr add_scale_listener(const ScaleCallback& callback);
 
 	private:
 		void _window_owner_guard() const;
 
-		GLFWwindow *m_Window;
-		WindowMode m_FullscreenMode = WindowMode::WINDOWED;
-		bool m_IsScalable = false;
-		std::string m_Title;
-		burst::glfw::Framebuffer m_Framebuffer;
+		struct Data;
+
+		static Unique<Data> make_window_data(
+			Uint2 scale, const String& title, const AdditionalWindowSettings& more);
+
+		void _reset();
+
+		Unique<Data> m_Data;
+		SignalList<ScaleCallback> m_ScaleCallbacks;
+		SignalList<FullscreenCallback> m_FullscreenCallbacks;
 	};
 }

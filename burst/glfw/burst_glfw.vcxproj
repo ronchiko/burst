@@ -21,8 +21,8 @@
   <ItemGroup>
     <ClInclude Include="..\Glfw.h" />
     <ClInclude Include="Error.h" />
-    <ClInclude Include="Framebuffer.h" />
     <ClInclude Include="KeyInputProvider.h" />
+    <ClInclude Include="MonitorProvider.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -32,9 +32,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Error.cpp" />
-    <ClCompile Include="Framebuffer.cpp" />
     <ClCompile Include="Glfw.cpp" />
     <ClCompile Include="KeyInputProvider.cpp" />
+    <ClCompile Include="MonitorProvider.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -108,7 +108,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;C:\Dev\burst;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;$(ProjectDir);C:\Dev\Lib\glfw\glfw-3.3.8\include;$(SolutionDir);</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -130,7 +130,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;C:\Dev\burst;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;$(ProjectDir);C:\Dev\Lib\glfw\glfw-3.3.8\include;$(SolutionDir);</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -152,7 +152,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;C:\Dev\burst;C:\Dev\include\glm;C:\VulkanSDK\1.3.224.1\Include;C:\Dev\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;$(ProjectDir);C:\Dev\Lib\glfw\glfw-3.3.8\include;$(SolutionDir);C:\Dev\include\glm;C:\VulkanSDK\1.3.224.1\Include;C:\Dev\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -176,7 +176,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;C:\Dev\burst;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;$(ProjectDir);C:\Dev\Lib\glfw\glfw-3.3.8\include;$(SolutionDir);</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

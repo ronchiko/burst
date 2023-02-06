@@ -3,7 +3,12 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+#include <span>
+#include <array>
+#include <optional>
 #include <memory>
+#include <set>
+#include <map>
 #include <unordered_map>
 
 #include <glm/glm.hpp>
@@ -11,6 +16,7 @@
 #include "Const.h"
 
 namespace burst {
+	// NOLINTBEGIN
 	// Primitive types
 	using u8 = uint8_t;
 	using i8 = int8_t;
@@ -33,24 +39,89 @@ namespace burst {
 
 	using cstr = const char*;
 	using cwstr = const wchar_t*;
-
-	using CStrVector = std::vector<cstr>;
-
-	template<typename T>
-	using UniqueVector = std::vector<std::unique_ptr<T>>;
-
-	template<typename T>
-	using IdMap = std::unordered_map<uid, T>;
+	// NOLINTEND
 
 	// Vectored types
-	using vec2 = glm::vec<2, f32, glm::defaultp>;
-	using vec3 = glm::vec<3, f32, glm::defaultp>;
-	using vec4 = glm::vec<4, f32, glm::defaultp>;
+	using Vec2 = glm::vec<2, f32, glm::defaultp>;
+	using Vec3 = glm::vec<3, f32, glm::defaultp>;
+	using Vec4 = glm::vec<4, f32, glm::defaultp>;
 
-	using int2 = glm::vec<2, i32, glm::defaultp>;
-	using int3 = glm::vec<3, i32, glm::defaultp>;
+	using Int2 = glm::vec<2, i32, glm::defaultp>;
+	using Int3 = glm::vec<3, i32, glm::defaultp>;
 
-	using mat2x2 = glm::mat<2, 2, f32, glm::defaultp>;
-	using mat3x3 = glm::mat<3, 3, f32, glm::defaultp>;
-	using mat4x4 = glm::mat<4, 4, f32, glm::defaultp>;
+	using Uint2 = glm::vec<2, u32, glm::defaultp>;
+
+	using Mat2x2 = glm::mat<2, 2, f32, glm::defaultp>;
+	using Mat3x3 = glm::mat<3, 3, f32, glm::defaultp>;
+	using Mat4x4 = glm::mat<4, 4, f32, glm::defaultp>;
+
+	template<typename T>
+	using Optional = std::optional<T>;
+
+	template<typename T>
+	using Unique = std::unique_ptr<T>;
+
+	template<typename T>
+	using Shared = std::shared_ptr<T>;
+
+	template<typename T>
+	using Ref = std::reference_wrapper<T>;
+
+	template<typename T, u32 Size>
+	using Array = std::array<T, Size>;
+
+	template<typename T>
+	using Vector = std::vector<T>;
+
+	template<typename T>
+	using List = std::list<T>;
+
+	template<typename T>
+	using Set = std::set<T>;
+
+	template<typename K, typename V>
+	using HashMap = std::unordered_map<K, V>;
+
+	template<typename K, typename V>
+	using Map = std::map<K, V>;
+
+	template<typename K, typename V>
+	using Multimap = std::multimap<K, V>;
+
+	template<typename T, typename E>
+	using Pair = std::pair<T, E>;
+
+	template<typename T>
+	using Span = std::span<T>;
+
+	using CStrVector = Vector<cstr>;
+
+	using String = std::string;
+	
+	template<typename T>
+	using UniqueVector = Vector<Unique<T>>;
+
+	template<typename T>
+	using IdMap = HashMap<uid, T>;
+
 }
+
+#include "Error.h"
+
+/**
+ * Casts an object to its non const counterpart.
+ * 
+ * \param value: The value cast
+ * 
+ * \note: Avoid using this macro unless nessacary.
+ */
+#define CONST_PROXY(value) const_cast<::std::remove_const_t<decltype(value)>>(value)
+
+/**
+ * Gets the address of the of an optional value if it has a value.
+ * 
+ * \param opt: The optional value
+ */
+#define GET_ADDRESS(opt) ((opt).has_value() ? &(opt).value() : nullptr)
+
+

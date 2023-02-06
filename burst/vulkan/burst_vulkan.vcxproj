@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -20,37 +20,94 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vulkan.h" />
+    <ClInclude Include="CommandRecordContext.h" />
+    <ClInclude Include="Commands\CommandBuffer.h" />
+    <ClInclude Include="Commands\CommandPool.h" />
+    <ClInclude Include="Configuration.h" />
     <ClInclude Include="Const.h" />
-    <ClInclude Include="DefaultGpuAnalyzer.h" />
-    <ClInclude Include="Device.h" />
     <ClInclude Include="Errors.h" />
-    <ClInclude Include="Debug.h" />
-    <ClInclude Include="Gpu.h" />
-    <ClInclude Include="IDeviceComponent.h" />
-    <ClInclude Include="IInstanceDependent.h" />
-    <ClInclude Include="Instance.h" />
-    <ClInclude Include="InstanceComponent.h" />
-    <ClInclude Include="InstanceComponentsList.h" />
-    <ClInclude Include="IGpuComponent.h" />
-    <ClInclude Include="Queues.h" />
-    <ClInclude Include="SurfaceKHR.h" />
-    <ClInclude Include="SurfaceKHRSupportOptions.h" />
-    <ClInclude Include="SwapchainKHR.h" />
-    <ClInclude Include="Validation.h" />
+    <ClInclude Include="Gfx\Dimensions.h" />
+    <ClInclude Include="Gfx\IImage.h" />
+    <ClInclude Include="Instance\DebugMessenger.h" />
+    <ClInclude Include="Instance\Device\Device.h" />
+    <ClInclude Include="Instance\Gpu\Gpu.h" />
+    <ClInclude Include="Instance\Gpu\IGpuAnalyzer.h" />
+    <ClInclude Include="Instance\Gpu\IQueueLocator.h" />
+    <ClInclude Include="Instance\Gpu\Locators\GraphicsQueueLocator.h" />
+    <ClInclude Include="Instance\Gpu\Queues.h" />
+    <ClInclude Include="Instance\Instance.h" />
+    <ClInclude Include="Instance\Requirement.h" />
+    <ClInclude Include="Instance\SurfaceKHR\GpuSurface.h" />
+    <ClInclude Include="Instance\SurfaceKHR\SurfaceKHR.h" />
+    <ClInclude Include="Instance\SurfaceKHR\SurfaceSupportOptions.h" />
+    <ClInclude Include="Instance\SwapchainKHR\SwapchainImage.h" />
+    <ClInclude Include="Instance\SwapchainKHR\SwapchainKHR.h" />
+    <ClInclude Include="Instance\SwapchainKHR\Usage.h" />
+    <ClInclude Include="IVulkanWindow.h" />
+    <ClInclude Include="Pipeline\Dynamic States\DynamicViewportHandler.h" />
+    <ClInclude Include="Pipeline\IDynamicStateHandler.h" />
+    <ClInclude Include="Gfx\ImageView.h" />
+    <ClInclude Include="Pipeline\Pipeline.h" />
+    <ClInclude Include="Pipeline\PipelineLoader.h" />
+    <ClInclude Include="Pipeline\RenderPass\RenderPass.h" />
+    <ClInclude Include="Pipeline\Shaders\Embedded.h" />
+    <ClInclude Include="Pipeline\Shaders\IShaderLoader.h" />
+    <ClInclude Include="Pipeline\Shaders\Loaders\BuiltinShader.h" />
+    <ClInclude Include="Pipeline\RenderPass\Subpass.h" />
+    <ClInclude Include="Sync\Fence.h" />
+    <ClInclude Include="Framebuffer.h" />
+    <ClInclude Include="RenderContext.h" />
+    <ClInclude Include="Renderer\Renderer.h" />
+    <ClInclude Include="Sync\Semaphore.h" />
+    <ClInclude Include="Pipeline\Shaders\Shader.h" />
+    <ClInclude Include="Utils\Burst.Windows.h" />
+    <ClInclude Include="Utils\Extensions.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Debug.cpp" />
-    <ClCompile Include="DefaultGpuAnalyzer.cpp" />
-    <ClCompile Include="Device.cpp" />
+    <ClCompile Include="CommandRecordContext.cpp" />
+    <ClCompile Include="Commands\CommandBuffer.cpp" />
+    <ClCompile Include="Commands\CommandPool.cpp" />
+    <ClCompile Include="Configuration.cpp" />
     <ClCompile Include="Errors.cpp" />
-    <ClCompile Include="Gpu.cpp" />
-    <ClCompile Include="Instance.cpp" />
-    <ClCompile Include="Queues.cpp" />
-    <ClCompile Include="SurfaceKHR.cpp" />
-    <ClCompile Include="SurfaceKHRSupportOptions.cpp" />
-    <ClCompile Include="SwapchainKHR.cpp" />
-    <ClCompile Include="Validation.cpp" />
+    <ClCompile Include="Framebuffer.cpp" />
+    <ClCompile Include="Gfx\Dimensions.cpp" />
+    <ClCompile Include="Gfx\ImageView.cpp" />
+    <ClCompile Include="Instance\DebugMessenger.cpp" />
+    <ClCompile Include="Instance\Device\Device.cpp" />
+    <ClCompile Include="Instance\Gpu\Analyzers\BasicGpuAnalyzer.cpp" />
+    <ClCompile Include="Instance\Gpu\Analyzers\BasicGpuAnalyzer.h" />
+    <ClCompile Include="Instance\Gpu\Gpu.cpp" />
+    <ClCompile Include="Instance\Gpu\Locators\GraphicsQueueLocator.cpp" />
+    <ClCompile Include="Instance\Instance.cpp" />
+    <ClCompile Include="Instance\Requirement.cpp" />
+    <ClCompile Include="Instance\SurfaceKHR\GpuSurface.cpp" />
+    <ClCompile Include="Instance\SurfaceKHR\SurfaceKHR.cpp" />
+    <ClCompile Include="Instance\SurfaceKHR\SurfaceSupportOptions.cpp" />
+    <ClCompile Include="Instance\SwapchainKHR\SwapchainImage.cpp" />
+    <ClCompile Include="Instance\SwapchainKHR\SwapchainKHR.cpp" />
+    <ClCompile Include="Pipeline\Pipeline.cpp" />
+    <ClCompile Include="Pipeline\PipelineLoader.cpp" />
+    <ClCompile Include="Pipeline\RenderPass\RenderPass.cpp" />
+    <ClCompile Include="Pipeline\Shaders\Embedded.cpp" />
+    <ClCompile Include="Pipeline\Shaders\Loaders\BuiltinShader.cpp" />
+    <ClCompile Include="Pipeline\RenderPass\Subpass.cpp" />
+    <ClCompile Include="Renderer\Renderer.cpp" />
+    <ClCompile Include="RenderContext.cpp" />
+    <ClCompile Include="Sync\Semaphore.cpp" />
+    <ClCompile Include="Pipeline\Shaders\Shader.cpp" />
+    <ClCompile Include="Utils\Extensions.cpp" />
     <ClCompile Include="Vulkan.cpp" />
+    <ClCompile Include="Sync\Fence.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\common\burst_common.vcxproj">
+      <Project>{a7c1fa07-8118-45d9-97ca-e8b9d3bd2ffd}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Instance\SurfaceKHR\SurfaceKHR.Win32.inl" />
+    <None Include="Renderer\Device.inl" />
+    <None Include="Renderer\Gpu.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -106,12 +163,20 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>C:\Users\ronmh\source\repos\burst;$(IncludePath)</IncludePath>
+    <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <EnableMicrosoftCodeAnalysis>false</EnableMicrosoftCodeAnalysis>
+    <ClangTidyChecks>*-,readability-identifier-naming</ClangTidyChecks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>C:\Users\ronmh\source\repos\burst;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\Users\ronmh\source\repos\burst;$(IncludePath)</IncludePath>
+    <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <EnableMicrosoftCodeAnalysis>false</EnableMicrosoftCodeAnalysis>
+    <ClangTidyChecks>*-,readability-identifier-naming</ClangTidyChecks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\Users\ronmh\source\repos\burst;$(IncludePath)</IncludePath>
@@ -123,7 +188,8 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;C:\Dev\burst;C:\Dev\include;C:\VulkanSDK\1.3.224.1\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;$(SolutionDir);C:\Dev\include</AdditionalIncludeDirectories>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -134,6 +200,7 @@
     </Lib>
     <Lib>
       <AdditionalLibraryDirectories>C:\VulkanSDK\1.3.224.1\Lib;C:\Dev\Lib\glfw\glfw-3.3.8\bin\src\Debug;C:\VulkanSDK\1.3.224.1\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -145,7 +212,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;C:\Dev\burst;C:\Dev\include;C:\VulkanSDK\1.3.224.1\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;$(SolutionDir);C:\Dev\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -167,7 +234,8 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;C:\Dev\burst;C:\Dev\include;C:\VulkanSDK\1.3.224.1\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;$(SolutionDir);C:\Dev\include</AdditionalIncludeDirectories>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -180,6 +248,7 @@
     </Lib>
     <Lib>
       <AdditionalLibraryDirectories>C:\VulkanSDK\1.3.224.1\Lib;C:\Dev\Lib\glfw\glfw-3.3.8\bin\src\Debug;C:\VulkanSDK\1.3.224.1\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -191,7 +260,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;C:\Dev\burst;C:\Dev\include;C:\VulkanSDK\1.3.224.1\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;$(SolutionDir);C:\Dev\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

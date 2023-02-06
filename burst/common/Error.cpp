@@ -1,13 +1,20 @@
 #include "Error.h"
 
-burst::RuntimeError::RuntimeError(const std::string& message)
-	: std::runtime_error(message)
-{}
+namespace burst {
 
-burst::StaticError::StaticError(burst::cstr message)
-	: std::exception(message)
-{}
+	RuntimeError::RuntimeError(const String& message)
+		: std::runtime_error(message)
+	{}
 
-burst::NullptrError::NullptrError(burst::cstr message) 
-	: StaticError(message)
-{}
+	StaticError::StaticError(cstr message)
+		: std::exception(message)
+	{}
+
+	NullptrError::NullptrError(cstr message)
+		: StaticError(message)
+	{}
+
+	FileNotFoundError::FileNotFoundError(const String& name)
+		: RuntimeError(concat("File not found", name))
+	{}
+}

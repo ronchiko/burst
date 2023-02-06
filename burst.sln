@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "demos", "demos", "{F3444A74
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimpleDemo", "demos\SimpleDemo\SimpleDemo.vcxproj", "{6A530135-2B8C-4E33-8517-1AE7AEC480DD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Vulkan", "Vulkan", "{35D75EA3-CCF7-47DC-A2CF-0937E40A1C3A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -61,7 +63,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{86D6FA3B-93E4-4A23-ABAF-B5A1F9C0D07E} = {98A1048F-B8D3-4B84-B6C5-D3B74F174899}
-		{631B586D-1AB4-4740-A23A-5420B06CAD0F} = {98A1048F-B8D3-4B84-B6C5-D3B74F174899}
+		{631B586D-1AB4-4740-A23A-5420B06CAD0F} = {35D75EA3-CCF7-47DC-A2CF-0937E40A1C3A}
 		{6A530135-2B8C-4E33-8517-1AE7AEC480DD} = {F3444A74-DFDE-4975-B75E-9A67A9DFA483}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

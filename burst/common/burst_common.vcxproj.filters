@@ -37,6 +37,12 @@
     <Filter Include="Source Files\Types">
       <UniqueIdentifier>{5ef93700-4a57-407a-895a-b0975c54b836}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Window">
+      <UniqueIdentifier>{c11f39d8-9b6c-402f-a449-a3c17b9fbcdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Window\Attributes">
+      <UniqueIdentifier>{2b161f6f-59bc-4b2d-8090-f247714ba384}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Types.h">
@@ -51,40 +57,37 @@
     <ClInclude Include="Log.h">
       <Filter>Header Files\Logging</Filter>
     </ClInclude>
-    <ClInclude Include="Logger.h">
+    <ClInclude Include="Logging\ILogger.h">
       <Filter>Header Files\Logging</Filter>
     </ClInclude>
-    <ClInclude Include="ConsoleLogger.h">
+    <ClInclude Include="Logging\ConsoleLogger.h">
       <Filter>Header Files\Logging</Filter>
     </ClInclude>
-    <ClInclude Include="KeyInputProvider.h">
+    <ClInclude Include="Input\Providers\IKeyInputProvider.h">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Input.h">
+    <ClInclude Include="Input\Input.h">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
-    <ClInclude Include="MouseInputProvider.h">
+    <ClInclude Include="Input\Providers\IMouseInputProvider.h">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
-    <ClInclude Include="CharacterInputProvider.h">
+    <ClInclude Include="Input\Providers\ICharacterInputProvider.h">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
     <ClInclude Include="..\Common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="File.h">
+    <ClInclude Include="Utils\File.h">
       <Filter>Header Files\Io</Filter>
     </ClInclude>
-    <ClInclude Include="AbstractPointer.h">
+    <ClInclude Include="Types\AbstractPointer.h">
       <Filter>Header Files\Types</Filter>
     </ClInclude>
     <ClInclude Include="Concepts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>Header Files\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="Framebuffer.h">
+    <ClInclude Include="Presentables\IWindow.h">
       <Filter>Header Files\Window</Filter>
     </ClInclude>
     <ClInclude Include="Const.h">
@@ -93,25 +96,103 @@
     <ClInclude Include="Runtime.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IRenderer.h">
+      <Filter>Header Files\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Mainloop.h">
+      <Filter>Header Files\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Presentables\IPresentable.h">
+      <Filter>Header Files\Window\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Presentables\IRealtimePresentable.h">
+      <Filter>Header Files\Window\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Presentables\IScalingPresentable.h">
+      <Filter>Header Files\Window\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Presentables\IFullscreenPresentable.h">
+      <Filter>Header Files\Window\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\SignalList.h">
+      <Filter>Header Files\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Monitor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\IToken.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Behavior\MemoryComparable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Buffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Optimize\Avx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\CappedStack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Behavior\EnumAccess.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Behavior\Enum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Iterators\Functions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Iterators\IndexIterator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Iterators\TiedIterator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Iterators\RangedIterable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Flags.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Address.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Print.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Error.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Log.cpp">
+    <ClCompile Include="Logging\Log.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ConsoleLogger.cpp">
+    <ClCompile Include="Logging\ConsoleLogger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Input.cpp">
+    <ClCompile Include="Input\Input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="File.cpp">
+    <ClCompile Include="Utils\File.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AbstractPointer.cpp">
+    <ClCompile Include="Types\AbstractPointer.cpp">
       <Filter>Source Files\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Mainloop.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Monitor.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +207,9 @@
     </None>
     <None Include="EmbedShaders.props">
       <Filter>Props</Filter>
+    </None>
+    <None Include="Optimize\AVX\Avx256.inl">
+      <Filter>Header Files</Filter>
     </None>
   </ItemGroup>
 </Project>

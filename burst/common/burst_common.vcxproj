@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -20,37 +20,63 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Common.h" />
-    <ClInclude Include="AbstractPointer.h" />
-    <ClInclude Include="CharacterInputProvider.h" />
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="Engine.h" />
+    <ClInclude Include="Optimize\Avx.h" />
+    <ClInclude Include="Types\AbstractPointer.h" />
+    <ClInclude Include="Input\Providers\ICharacterInputProvider.h" />
     <ClInclude Include="Concepts.h" />
-    <ClInclude Include="ConsoleLogger.h" />
+    <ClInclude Include="Logging\ConsoleLogger.h" />
     <ClInclude Include="Const.h" />
     <ClInclude Include="Error.h" />
-    <ClInclude Include="File.h" />
-    <ClInclude Include="Framebuffer.h" />
-    <ClInclude Include="Input.h" />
-    <ClInclude Include="KeyInputProvider.h" />
+    <ClInclude Include="Types\Behavior\Enum.h" />
+    <ClInclude Include="Flags.h" />
+    <ClInclude Include="Types\Iterators\Functions.h" />
+    <ClInclude Include="Types\Buffer.h" />
+    <ClInclude Include="Types\CappedStack.h" />
+    <ClInclude Include="Types\Behavior\EnumAccess.h" />
+    <ClInclude Include="Types\Behavior\MemoryComparable.h" />
+    <ClInclude Include="Types\Iterators\IndexIterator.h" />
+    <ClInclude Include="Types\Iterators\RangedIterable.h" />
+    <ClInclude Include="Types\Iterators\TiedIterator.h" />
+    <ClInclude Include="Types\Address.h" />
+    <ClInclude Include="Print.h" />
+    <ClInclude Include="Utils\File.h" />
+    <ClInclude Include="Presentables\IFullscreenPresentable.h" />
+    <ClInclude Include="Input\Input.h" />
+    <ClInclude Include="Presentables\IPresentable.h" />
+    <ClInclude Include="Presentables\IRealtimePresentable.h" />
+    <ClInclude Include="Presentables\IScalingPresentable.h" />
+    <ClInclude Include="Input\Providers\IKeyInputProvider.h" />
     <ClInclude Include="Log.h" />
-    <ClInclude Include="Logger.h" />
+    <ClInclude Include="Logging\ILogger.h" />
+    <ClInclude Include="Utils\Mainloop.h" />
     <ClInclude Include="Meta.h" />
-    <ClInclude Include="MouseInputProvider.h" />
+    <ClInclude Include="Input\Providers\IMouseInputProvider.h" />
+    <ClInclude Include="IRenderer.h" />
     <ClInclude Include="Runtime.h" />
+    <ClInclude Include="Types\IToken.h" />
+    <ClInclude Include="Types\SignalList.h" />
     <ClInclude Include="Types.h" />
-    <ClInclude Include="Window.h" />
+    <ClInclude Include="Presentables\IWindow.h" />
+    <ClInclude Include="Utils\Monitor.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AbstractPointer.cpp" />
-    <ClCompile Include="ConsoleLogger.cpp" />
+    <ClCompile Include="Types\AbstractPointer.cpp" />
+    <ClCompile Include="Logging\ConsoleLogger.cpp" />
     <ClCompile Include="Error.cpp" />
-    <ClCompile Include="File.cpp" />
-    <ClCompile Include="Input.cpp" />
-    <ClCompile Include="Log.cpp" />
+    <ClCompile Include="Utils\File.cpp" />
+    <ClCompile Include="Input\Input.cpp" />
+    <ClCompile Include="Logging\Log.cpp" />
+    <ClCompile Include="Utils\Mainloop.cpp" />
+    <ClCompile Include="Utils\Monitor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CompileShader.props" />
     <None Include="Default.frag" />
     <None Include="Default.vert" />
     <None Include="EmbedShaders.props" />
+    <None Include="Optimize\AVX\Avx256.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -104,6 +130,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClangTidyChecks>-*,readability-identifier-naming</ClangTidyChecks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClangTidyChecks>-*,readability-identifier-naming</ClangTidyChecks>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -111,7 +143,8 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;C:\Dev\burst;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;$(SolutionDir);</AdditionalIncludeDirectories>
+      <AdditionalOptions>/arch:avx %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,7 +166,8 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;C:\Dev\burst;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;$(SolutionDir);</AdditionalIncludeDirectories>
+      <AdditionalOptions>/arch:avx %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -155,7 +189,8 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;C:\Dev\burst;C:\Dev\include\glm;C:\VulkanSDK\1.3.224.1\Include;C:\Dev\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;$(SolutionDir);C:\Dev\include\glm;C:\VulkanSDK\1.3.224.1\Include;C:\Dev\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/arch:avx %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -179,7 +214,8 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;C:\Dev\burst;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;$(SolutionDir);</AdditionalIncludeDirectories>
+      <AdditionalOptions>/arch:avx %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

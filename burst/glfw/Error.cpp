@@ -2,8 +2,7 @@
 
 #include "GLFW/glfw3.h"
 
-burst::glfw::Error::Error(const std::string& message, burst::u32 code) 
+burst::glfw::GlfwError::GlfwError(const std::string& message) 
 	: burst::RuntimeError(message)
-	, m_ErrorCode(code)
 {}
 

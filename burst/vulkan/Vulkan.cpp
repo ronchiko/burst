@@ -1,65 +1,43 @@
 #include "burst/Vulkan.h"
 
-// #include "DefaultQueueFamilyHandler.h"
-// #include "LogicalDevice.h"
-// #include "SwapchainKHR.h"
-
 #include <vulkan/vulkan.hpp>
 
-#include "Instance.h"
-#include "Gpu.h"
-#include "Device.h"
+#include <burst/common/Print.h>
 
-#include "DefaultGpuAnalyzer.h"
-#include "InstanceComponentsList.h"
-#ifdef _DEBUG
-#include "Debug.h"
-#endif
-#include "SurfaceKHR.h"
-#include "SwapchainKHR.h"
+#include "Instance/Instance.h"
+#include "Instance/Gpu/Gpu.h"
 
+#include "Renderer/Renderer.h"
+#include "Utils/Extensions.h"
 
-using namespace burst::vulkan;
+namespace burst::vulkan {
 
-using Components = InstanceComponentList<
-	SwapchainKHR,
-	SurfaceKHR
-#ifdef _DEBUG
-	, DebugMessenger
-#endif
->;
+	static void log_available_extensions() {
+		std::stringstream ss;
+		ss << "Available extenions: " << std::endl
+		   << pretty_iterable(all_extensions(), "* ", 5);
 
-struct VulkanState {
-	Instance instance;
-	Gpu gpu;
-	// Device device;
-};
-
-static void log_non_ideal_gpu_selection(const Gpu& gpu) {
-	switch (gpu.type())
-	{
-	case vk::PhysicalDeviceType::eIntegratedGpu:
-		burst::log::warning("Selected integrated GPU");
-		break;
-	default:
-		break;
+		log::info(ss.str());
 	}
-}
 
-burst::AbstractPointer burst::vulkan::load_default_instance(cstr name, u32 version, Window* window) {
-	auto components = Components::vector();
+		static void log_available_layers()
+	{
+		std::stringstream ss;
+		ss << "Available layers: " << std::endl
+		   << pretty_iterable(all_layers(), "* ", 5);
 
-	auto [instance, info] = make_instance(name, version, components, window);
+		log::info(ss.str());
+	}
 
-	DefaultGpuAnalyzer analyzer(instance);
-	auto gpu = pick_best_gpu(instance, components, analyzer, info);
-	log_non_ideal_gpu_selection(gpu);
-	
-	Device device(gpu, components, info);
+	Unique<IRenderer> create_vulkan_render(const ApplicationInfo& info,
+										   const Configuration& configuration,
+										   IVulkanWindow& window)
+	{
+		log_available_extensions();
+		log_available_layers();
 
-	return burst::abstract(new VulkanState{
-			std::move(instance),
-			std::move(gpu)
-			// std::move(device)
-		});
+
+		Unique<Renderer> renderer = std::make_unique<Renderer>(info, configuration, window);
+		return renderer;
+	}
 }

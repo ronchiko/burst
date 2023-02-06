@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vulkan/vulkan.hpp>
+
 #include <burst/common/Error.h>
 #include <burst/common/Runtime.h>
 
@@ -37,23 +39,6 @@ namespace burst::vulkan {
 		NoSuitableGpuError();
 	};
 
-	/**
-	 * Thrown when a component can't initialize themselfs, and want to wait for a later 
-	 * initialization iteration (usually when waiting for logical/physical devices)
-	 */
-	class WaitingForLaterInitialization : public StaticError {
-	public:
-		WaitingForLaterInitialization();
-	};
-
-	/**
-	 * When an instance is not fully initialized after completing its creation
-	 */
-	class InstanceNotFullyInitialized : public StaticError {
-	public:
-		InstanceNotFullyInitialized();
-	};
-
 	class ComponentNotFoundError : public RuntimeError {
 	public:
 		ComponentNotFoundError(const cstr name);
@@ -62,5 +47,26 @@ namespace burst::vulkan {
 		constexpr static ComponentNotFoundError from() {
 			return ComponentNotFoundError(burst::name<T>());
 		}
+	};
+
+	class MissingRequiredQueueError : public StaticError {
+	public:
+		MissingRequiredQueueError();
+	};
+
+	class VulkanError : public RuntimeError
+	{
+	public:
+		explicit VulkanError(const std::string& message, vk::Result result);
+		explicit VulkanError(const std::string& message, VkResult result);
+	};
+
+	/**
+	 * When cant create command pool.
+	 */
+	class FailedToCreateCommandPoolError : public StaticError
+	{
+	public:
+		explicit FailedToCreateCommandPoolError(cstr msg); 
 	};
 }

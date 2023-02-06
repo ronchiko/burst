@@ -27,7 +27,7 @@
     <ClInclude Include="..\Glfw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Framebuffer.h">
+    <ClInclude Include="MonitorProvider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -44,7 +44,7 @@
     <ClCompile Include="KeyInputProvider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Framebuffer.cpp">
+    <ClCompile Include="MonitorProvider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

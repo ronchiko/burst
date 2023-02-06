@@ -6,7 +6,7 @@
 
 #include <burst/common/Types.h>
 #include <burst/common/Log.h>
-#include <burst/common/Input.h>
+#include <burst/common/Input/Input.h>
 
 enum class KeyState {
 	Free,
@@ -15,9 +15,9 @@ enum class KeyState {
 	Released
 };
 
-static KeyState g_Keys[static_cast<burst::u32>(burst::input::Key::__End__)];
+static KeyState g_Keys[static_cast<burst::u32>(burst::input::Key::ENUM_LAST)];
 
-static const std::unordered_map<int, burst::input::Key> KEY_MAPPING({
+static const burst::HashMap<int, burst::input::Key> KEY_MAPPING({
 	{ GLFW_KEY_A,				burst::input::Key::A },
 	{ GLFW_KEY_B,				burst::input::Key::B },
 	{ GLFW_KEY_C,				burst::input::Key::C },

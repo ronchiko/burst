@@ -1,34 +1,47 @@
 #pragma once
 
-#include <string>
-
-#include "Meta.h"
-#include "Logger.h"
+#include <burst/common/Meta.h>
+#include <burst/common/Logging/ILogger.h>
 
 namespace burst::log {
-	void add_logger(std::unique_ptr<burst::log::Logger> writer);
+	/**
+	 * Adds a logger to the loggers list.
+	 *
+	 * \param writer - The logger
+	 */
+	void add_logger(Unique<ILogger> logger);
 
-	void log(Level level, const std::string& message);
+	/**
+	 * Writes a log to all the registered loggers.
+	 *
+	 * \param level - The severity of the log message
+	 * \param message - The message to log
+	 */
+	void log(LogSeverity severity, const std::string& message);
 
 	template<typename... T>
-	void debug(const T&... args) {
+	void debug(const T&...args)
+	{
 #ifdef _DEBUG
-		log(Level::DEBUG, burst::concat(args...));
+		log(LogSeverity::DEBUG, burst::concat(args...));
 #endif
 	}
 
 	template<typename... T>
-	void info(const T&... args) {
-		log(Level::INFO, burst::concat(args...));
-	}
-	
-	template<typename... T>
-	void warning(const T&... args) {
-		log(Level::WARNING, burst::concat(args...));
+	void info(const T&...args)
+	{
+		log(LogSeverity::INFO, burst::concat(args...));
 	}
 
 	template<typename... T>
-	void error(const T&... args) {
-		log(Level::ERROR, burst::concat(args...));
+	void warning(const T&...args)
+	{
+		log(LogSeverity::WARNING, burst::concat(args...));
+	}
+
+	template<typename... T>
+	void error(const T&...args)
+	{
+		log(LogSeverity::ERROR, burst::concat(args...));
 	}
 }
