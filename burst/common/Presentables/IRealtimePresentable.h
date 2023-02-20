@@ -11,11 +11,11 @@ namespace burst {
 	class IRealtimePresentable : public IPresentable
 	{
 	public:
-		IFACE_DESTRUCTOR(IRealtimePresentable);
+		virtual ~IRealtimePresentable() = default;
 
 		/**
 		 * Checks if the presentable object is still active.
 		 */
-		IFACE_FUNC(bool is_active() const);
+		virtual bool is_active() const = 0;
 	};
 }

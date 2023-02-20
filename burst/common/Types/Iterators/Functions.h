@@ -29,7 +29,7 @@ namespace burst {
 	 * \param iterable: The iterable to warp
 	 * \return
 	 */
-	template<Iterable T>
+	template<burst::iterable T>
 	constexpr auto index(T& iterable) -> RangedIterable<
 		TiedIterator<IndexIterator<u32>, decltype(iterable.begin())>>
 	{
@@ -50,7 +50,7 @@ namespace burst {
 	 * 
 	 * \param iterable: The r-value iterable
 	 */
-	template<Iterable T>
+	template<burst::iterable T>
 	constexpr auto index(T&& iterable)
 	{
 		// R-Value implemenatation of the index, Move the iterable into an
@@ -93,7 +93,7 @@ namespace burst {
 	 * \param a: The first iterable
 	 * \param b: The second iterable
 	 */
-	template<Iterable A, Iterable B>
+	template<burst::iterable A, burst::iterable B>
 	constexpr auto zip(const A& a, const B& b)
 	{
 		using T = TiedIterator<decltype(a.begin()), decltype(b.begin())>;

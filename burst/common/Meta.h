@@ -15,7 +15,8 @@ namespace burst {
 	 * Gives the const modifier to a type if another has the modifer.
 	 */
 	template<typename Original, typename New>
-	using KeepConst = std::conditional_t<std::is_const_v<Original>, std::add_const_t<New>, New>;
+	using KeepConst =
+		std::conditional_t<std::is_const_v<Original>, std::add_const_t<New>, New>;
 
 	constexpr void _concat(std::stringstream&) {}
 
@@ -64,62 +65,6 @@ namespace burst {
 	}
 
 	/**
-	 * Converts one type of iteratable to another.
-	 *
-	 * \param source: The iterable to convert from
-	 */
-	template<IterableConstructable To, Iterable From>
-	constexpr To iter_convert(const From& source)
-	{
-		return To(source.begin(), source.end());
-	}
-
-	/**
-	 * Casts a vector into a different type (with static_cast)
-	 */
-	template<typename To, typename From>
-	constexpr Vector<To> vec_cast(const Vector<From>& v)
-	{
-		Vector<To> casted;
-		casted.reserve(v.size());
-
-		for (const auto& element : v) {
-			casted.push_back(static_cast<To>(element));
-		}
-
-		return casted;
-	}
-
-	/**
-	 * Moves all children of an class from a vector to a new vector.
-	 *
-	 * \tparam E: The type of the child
-	 * \tparam T: The type of the parent
-	 * \return
-	 */
-	template<typename E, typename T>
-	requires std::derived_from<E, T>
-
-	inline UniqueVector<E> pull_children_of(UniqueVector<T>& base)
-	{
-		UniqueVector<E> new_vector;
-
-		for(auto item = base.begin(); item < base.end();) {
-			E *converted = dynamic_cast<E *>(item->get());
-			if(nullptr != converted) {
-				item->release();
-
-				new_vector.push_back(Unique<E>(converted));
-				item = base.erase(item);
-			} else {
-				++item;
-			}
-		}
-
-		return new_vector;
-	}
-
-	/**
 	 * Assigns a value to a variable if the variable value is .
 	 *
 	 * \param value: The variable to assign to
@@ -127,8 +72,7 @@ namespace burst {
 	 * \param set_to: The value to set to if the values are equal
 	 */
 	template<typename T>
-	requires std::copyable<T> && std::equality_comparable<T>
-
+		requires std::copyable<T> && std::equality_comparable<T>
 	constexpr void comapre_exchange(T& value, const T& compare_to, const T& set_to)
 	{
 		if(compare_to == value) {
@@ -160,9 +104,11 @@ namespace burst {
 	 * \param len: The length of the buffers
 	 * \return: True if they identical
 	 */
-	constexpr inline bool memory_identical(const void *left, const void *right, size_t len)
+	constexpr inline bool
+	memory_identical(const void *left, const void *right, size_t len)
 	{
-		const u8 *l = static_cast<const u8 *>(left), *r = static_cast<const u8 *>(right);
+		const u8 *l = static_cast<const u8 *>(left),
+				 *r = static_cast<const u8 *>(right);
 		for(size_t i = 0; i < len; ++i, ++l, ++r) {
 			if(*l != *r) {
 				return false;
@@ -184,28 +130,53 @@ namespace burst {
 		return static_cast<U>(item);
 	}
 
-	/**
-	 * Converts a vector to vector of diffrent type.
-	 *
-	 * \param from: The array to convert from
-	 * \param convertor: The convertor function to use
-	 * \return
-	 */
-	template<typename To, typename From>
-	Vector<To> convert(const Vector<From>& from,
-		std::function<To(const From&)> convertor = default_convertor)
-	{
-		auto range = from | ::std::views::transform(convertor);
+	// Shortcut to use when you have iterable
+	template<burst::iterable From, burst::iterable To>
+	constexpr auto iterable_default_convertor =
+		default_convertor<burst::container_element_t<From>,
+						  burst::container_element_t<To>>;
 
-		return Vector<To>(range.begin(), range.end());
+	/**
+	 * Converts one type of iteratable to another.
+	 *
+	 * \param source: The iterable to convert from
+	 *
+	 * \note: Use this when trying to cast just the type of the iterator,
+	 *		  if you wish to cast the type inside the container, use burst::convert
+	 */
+	template<burst::iterable_constructible To, burst::iterable From>
+	constexpr To iter_convert(const From& source)
+	{
+		static_assert(
+			std::is_same_v<burst::container_element_t<From>,
+						   burst::container_element_t<To>>,
+			"The types of the target and result iterators must be the same");
+
+
+		return To(source.begin(), source.end());
 	}
 
-	template<typename To, typename From>
-	Vector<To> convert(Vector<From>& from,
-					   std::function<To(From&)> convertor = default_convertor)
+	/**
+	 * Converts a each element of a container into a different element, of a
+	 *different container
+	 *
+	 * \param from: The container to convert into a diffrent type
+	 * \param convertor: The function to convert each element (gets the element type
+	 *of from and returns the element type of To
+	 *
+	 * \tparam: The type to convert the vector, must follow
+	 *burst::iterable_constructible
+	 *
+	 * \return: The converted vector
+	 */
+	template<burst::iterable_constructible To, burst::iterable From>
+	To convert(const From& t,
+			   // std::function return the element of target container type and
+			   // receives a const ref of the element type of source container
+			   std::function<burst::container_element_t<To>(
+				   const burst::container_element_t<From>&)> convertor)
 	{
-		auto range = from | ::std::views::transform(convertor);
-
-		return Vector<To>(range.begin(), range.end());
+		auto range = t | ::std::views::transform(convertor);
+		return To(range.begin(), range.end());
 	}
 };

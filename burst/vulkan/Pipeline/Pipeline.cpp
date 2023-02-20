@@ -18,8 +18,19 @@ namespace burst::vulkan {
 		return loader.create();
 	}
 
-	const RenderPass& Pipeline::render_pass() const {
+	const RenderPass& Pipeline::render_pass() const
+	{
 		return m_RenderPass;
+	}
+
+	RenderPass& Pipeline::render_pass()
+	{
+		return m_RenderPass;
+	}
+
+	Pipeline::operator vk::Pipeline() const
+	{
+		return *m_Pipeline;
 	}
 
 	Pipeline::Pipeline(vk::raii::Pipeline pipeline,
@@ -30,5 +41,6 @@ namespace burst::vulkan {
 		, m_RenderPass(std::move(render_pass))
 		, m_Layout(std::move(layout))
 		, m_Data(std::move(data))
-	{}
+	{
+	}
 }

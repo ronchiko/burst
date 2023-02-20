@@ -1,6 +1,7 @@
 #include "RenderPass.h"
 
 #include <burst/common/Meta.h>
+#include <burst/common/Types/Iterators/Functions.h>
 
 using namespace vk;
 
@@ -9,7 +10,8 @@ namespace burst::vulkan {
 	RenderPass::RenderPass(const Configuration& configuration,
 						   Device& device,
 						   SwapchainKHR& swapchain)
-		: m_RenderPass(nullptr)
+		: mix::SwapchainBound(swapchain)
+		, m_RenderPass(nullptr)
 		, m_Data{}
 	{
 		_recreate_render_pass(configuration, swapchain, device);
@@ -20,25 +22,21 @@ namespace burst::vulkan {
 		return *m_RenderPass;
 	}
 
-	Vector<vk::raii::Framebuffer>
-	RenderPass::create_framebuffers(Device& device, const Vector<ImageView>& views) const
+	void RenderPass::recreate_framebuffers(Device& device)
 	{
-		return convert<vk::raii::Framebuffer, ImageView>(
-			views, [this, &device](const ImageView& view) {
-				Array<vk::ImageView, 1> image_views{ static_cast<vk::ImageView>(
-					view) };
-				const auto& dimensions = view.dimensions();
+		m_Data.images = m_Swapchain.create_images();
+		m_Data.views = convert<Vector<ImageView>>(
+			m_Data.images,
+			[&device](const auto& image) { return ImageView(device, *image); });
 
-				return static_cast<vk::raii::Device&>(device).createFramebuffer(
-					vk::FramebufferCreateInfo{
-						vk::FramebufferCreateFlags(),
-						*m_RenderPass,
-						image_views,
-						dimensions.width(),
-						dimensions.height(),
-						1,
-					});
+		m_Data.framebuffers = convert<Vector<Framebuffer>>(
+			m_Data.views, [this, &device](const auto& view) {
+				return Framebuffer(device, *this, view);
 			});
+	}
+
+	const Framebuffer& RenderPass::framebuffer_at(u32 index) const {
+		return m_Data.framebuffers[index];
 	}
 
 	void RenderPass::_recreate_render_pass(const Configuration& configuration,
@@ -77,13 +75,25 @@ namespace burst::vulkan {
 			}),
 		});
 
+		m_Data.dependencies.push_back(vk::SubpassDependency{
+			/** src_subpass = */ 0u,
+			/** dst_subpass = */ VK_SUBPASS_EXTERNAL,
+			/** src_stage_flags  */
+			vk::PipelineStageFlagBits::eColorAttachmentOutput,
+			/** dst_stage_flags = */
+			vk::PipelineStageFlagBits::eColorAttachmentOutput,
+			/** src_access_flags = */ vk::AccessFlags(),
+			/** dst_access_flags = */ vk::AccessFlagBits::eColorAttachmentWrite,
+			/** flags = */ vk::DependencyFlags(),
+		});
 
-		auto subpasses = vec_cast<SubpassDescription>(m_Data.subpasses);
-		RenderPassCreateInfo create_info{
-			RenderPassCreateFlags(),
-			m_Data.descriptions,
-			subpasses,
-		};
+
+		auto subpasses = convert<Vector<SubpassDescription>>(m_Data.subpasses, 
+			default_convertor<burst::vulkan::Subpass, SubpassDescription>);
+		RenderPassCreateInfo create_info{ RenderPassCreateFlags(),
+										  m_Data.descriptions,
+										  subpasses,
+										  m_Data.dependencies };
 
 		m_RenderPass =
 			raii::RenderPass(static_cast<raii::Device&>(device), create_info);

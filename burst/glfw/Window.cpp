@@ -96,14 +96,14 @@ namespace burst::glfw {
 
 	Vector<vulkan::Requirement> burst::glfw::Window::get_requirements() const
 	{
+		using namespace vulkan;
+
 		u32 count = 0;
 		const char **extensions = glfwGetRequiredInstanceExtensions(&count);
 
-		return convert<vulkan::Requirement, const char*>(
+		return convert<Vector<Requirement>>(
 			Vector<const char *>{ extensions, extensions + count },
-			[](const char *ext) {
-				using namespace vulkan;
-
+			[](const auto *ext) {
 				return Requirement{ RequirementType::InstanceExtension, ext };
 			});
 	}
@@ -120,7 +120,7 @@ namespace burst::glfw {
 		OPERATION_GUARD;
 
 		glfwSetWindowSize(m_Data->window.get(), w, h);
-		m_ScaleCallbacks.invoke(w, h);
+		m_ScaleCallbacks.notify(w, h);
 	}
 
 	void Window::set_mode(FullscreenMode mode)
@@ -181,14 +181,14 @@ namespace burst::glfw {
 		}
 	}
 
-	ITokenPtr Window::add_fullscreen_listener(const FullscreenCallback& callback)
+	Subscription Window::add_fullscreen_listener(FullscreenCallback *callback)
 	{
-		return m_FullscreenCallbacks.add(callback);
+		return m_FullscreenCallbacks.subscribe(callback);
 	}
 
-	ITokenPtr Window::add_scale_listener(const ScaleCallback& callback)
+	Subscription Window::add_scale_listener(ScaleCallback *callback)
 	{
-		return m_ScaleCallbacks.add(callback);
+		return m_ScaleCallbacks.subscribe(callback);
 	}
 
 	void burst::glfw::Window::_window_owner_guard() const
@@ -196,12 +196,5 @@ namespace burst::glfw {
 		if(nullptr == m_Data) {
 			throw burst::NullptrError("No window :)");
 		}
-	}
-
-	void Window::_reset()
-	{
-		m_Data = nullptr;
-		m_FullscreenCallbacks = nullptr;
-		m_ScaleCallbacks = nullptr;
 	}
 }

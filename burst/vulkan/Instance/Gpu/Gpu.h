@@ -2,7 +2,7 @@
 
 #include <vulkan/vulkan_raii.hpp>
 
-#include <burst/Common.h>
+#include <burst/Common/Types.h>
 
 #include "IQueueLocator.h"
 #include "../SurfaceKHR/SurfaceSupportOptions.h"

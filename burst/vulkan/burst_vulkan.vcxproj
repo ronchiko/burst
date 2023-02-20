@@ -20,9 +20,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vulkan.h" />
-    <ClInclude Include="CommandRecordContext.h" />
     <ClInclude Include="Commands\CommandBuffer.h" />
     <ClInclude Include="Commands\CommandPool.h" />
+    <ClInclude Include="Commands\CommandRecorder.h" />
     <ClInclude Include="Configuration.h" />
     <ClInclude Include="Const.h" />
     <ClInclude Include="Errors.h" />
@@ -30,6 +30,7 @@
     <ClInclude Include="Gfx\IImage.h" />
     <ClInclude Include="Instance\DebugMessenger.h" />
     <ClInclude Include="Instance\Device\Device.h" />
+    <ClInclude Include="Instance\Device\Queue.h" />
     <ClInclude Include="Instance\Gpu\Gpu.h" />
     <ClInclude Include="Instance\Gpu\IGpuAnalyzer.h" />
     <ClInclude Include="Instance\Gpu\IQueueLocator.h" />
@@ -40,40 +41,44 @@
     <ClInclude Include="Instance\SurfaceKHR\GpuSurface.h" />
     <ClInclude Include="Instance\SurfaceKHR\SurfaceKHR.h" />
     <ClInclude Include="Instance\SurfaceKHR\SurfaceSupportOptions.h" />
+    <ClInclude Include="Instance\SwapchainKHR\ISwapchainObserver.h" />
     <ClInclude Include="Instance\SwapchainKHR\SwapchainImage.h" />
     <ClInclude Include="Instance\SwapchainKHR\SwapchainKHR.h" />
     <ClInclude Include="Instance\SwapchainKHR\Usage.h" />
     <ClInclude Include="IVulkanWindow.h" />
     <ClInclude Include="Pipeline\Dynamic States\DynamicViewportHandler.h" />
+    <ClInclude Include="Pipeline\Framebuffer.h" />
     <ClInclude Include="Pipeline\IDynamicStateHandler.h" />
     <ClInclude Include="Gfx\ImageView.h" />
     <ClInclude Include="Pipeline\Pipeline.h" />
     <ClInclude Include="Pipeline\PipelineLoader.h" />
     <ClInclude Include="Pipeline\RenderPass\RenderPass.h" />
+    <ClInclude Include="Pipeline\RenderPass\RenderPassContext.h" />
     <ClInclude Include="Pipeline\Shaders\Embedded.h" />
     <ClInclude Include="Pipeline\Shaders\IShaderLoader.h" />
     <ClInclude Include="Pipeline\Shaders\Loaders\BuiltinShader.h" />
     <ClInclude Include="Pipeline\RenderPass\Subpass.h" />
+    <ClInclude Include="Renderer\FrameDrawer.h" />
     <ClInclude Include="Sync\Fence.h" />
-    <ClInclude Include="Framebuffer.h" />
-    <ClInclude Include="RenderContext.h" />
     <ClInclude Include="Renderer\Renderer.h" />
     <ClInclude Include="Sync\Semaphore.h" />
     <ClInclude Include="Pipeline\Shaders\Shader.h" />
     <ClInclude Include="Utils\Burst.Windows.h" />
+    <ClInclude Include="Utils\DeviceBound.h" />
     <ClInclude Include="Utils\Extensions.h" />
+    <ClInclude Include="Utils\SwapchainBound.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CommandRecordContext.cpp" />
     <ClCompile Include="Commands\CommandBuffer.cpp" />
     <ClCompile Include="Commands\CommandPool.cpp" />
+    <ClCompile Include="Commands\CommandRecorder.cpp" />
     <ClCompile Include="Configuration.cpp" />
     <ClCompile Include="Errors.cpp" />
-    <ClCompile Include="Framebuffer.cpp" />
     <ClCompile Include="Gfx\Dimensions.cpp" />
     <ClCompile Include="Gfx\ImageView.cpp" />
     <ClCompile Include="Instance\DebugMessenger.cpp" />
     <ClCompile Include="Instance\Device\Device.cpp" />
+    <ClCompile Include="Instance\Device\Queue.cpp" />
     <ClCompile Include="Instance\Gpu\Analyzers\BasicGpuAnalyzer.cpp" />
     <ClCompile Include="Instance\Gpu\Analyzers\BasicGpuAnalyzer.h" />
     <ClCompile Include="Instance\Gpu\Gpu.cpp" />
@@ -85,17 +90,21 @@
     <ClCompile Include="Instance\SurfaceKHR\SurfaceSupportOptions.cpp" />
     <ClCompile Include="Instance\SwapchainKHR\SwapchainImage.cpp" />
     <ClCompile Include="Instance\SwapchainKHR\SwapchainKHR.cpp" />
+    <ClCompile Include="Pipeline\Framebuffer.cpp" />
     <ClCompile Include="Pipeline\Pipeline.cpp" />
     <ClCompile Include="Pipeline\PipelineLoader.cpp" />
     <ClCompile Include="Pipeline\RenderPass\RenderPass.cpp" />
+    <ClCompile Include="Pipeline\RenderPass\RenderPassContext.cpp" />
     <ClCompile Include="Pipeline\Shaders\Embedded.cpp" />
     <ClCompile Include="Pipeline\Shaders\Loaders\BuiltinShader.cpp" />
     <ClCompile Include="Pipeline\RenderPass\Subpass.cpp" />
+    <ClCompile Include="Renderer\FrameDrawer.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
-    <ClCompile Include="RenderContext.cpp" />
     <ClCompile Include="Sync\Semaphore.cpp" />
     <ClCompile Include="Pipeline\Shaders\Shader.cpp" />
+    <ClCompile Include="Utils\DeviceBound.cpp" />
     <ClCompile Include="Utils\Extensions.cpp" />
+    <ClCompile Include="Utils\SwapchainBound.cpp" />
     <ClCompile Include="Vulkan.cpp" />
     <ClCompile Include="Sync\Fence.cpp" />
   </ItemGroup>
@@ -105,6 +114,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="cpp.hint" />
     <None Include="Instance\SurfaceKHR\SurfaceKHR.Win32.inl" />
     <None Include="Renderer\Device.inl" />
     <None Include="Renderer\Gpu.inl" />
@@ -200,7 +210,6 @@
     </Lib>
     <Lib>
       <AdditionalLibraryDirectories>C:\VulkanSDK\1.3.224.1\Lib;C:\Dev\Lib\glfw\glfw-3.3.8\bin\src\Debug;C:\VulkanSDK\1.3.224.1\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -248,7 +257,6 @@
     </Lib>
     <Lib>
       <AdditionalLibraryDirectories>C:\VulkanSDK\1.3.224.1\Lib;C:\Dev\Lib\glfw\glfw-3.3.8\bin\src\Debug;C:\VulkanSDK\1.3.224.1\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

@@ -4,6 +4,7 @@
 
 #include "../Gpu/Gpu.h"
 
+
 namespace burst::vulkan {
 
 	/**
@@ -80,6 +81,11 @@ namespace burst::vulkan {
 	Device::operator vk::Device() const
 	{
 		return *m_Device;
+	}
+
+	Queue Device::get_queue(u32 family_index, u32 index) const
+	{
+		return Queue((*m_Device).getQueue(family_index, index));
 	}
 
 	Device::Device(Gpu& gpu, Queues& queues, const Configuration& configuration)

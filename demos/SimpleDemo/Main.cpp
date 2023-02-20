@@ -8,6 +8,8 @@
 
 #include <burst/common/Flags.h>
 
+#include <Windows.h>
+
 const burst::ApplicationInfo INFO{
 	"Demo App",
 	burst::Version(1),

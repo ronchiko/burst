@@ -2,17 +2,18 @@
 
 #include <Burst/Common/IRenderer.h>
 
-#include "Configuration.h"
-#include "Instance/Instance.h"
-#include "Instance/Gpu/Gpu.h"
-#include "Instance/Device/Device.h"
-#include "Instance/SurfaceKHR/SurfaceKHR.h"
-#include "Instance/SwapchainKHR/SwapchainKHR.h"
+#include "../Configuration.h"
+#include "../Instance/Instance.h"
+#include "../Instance/Gpu/Gpu.h"
+#include "../Instance/Device/Device.h"
+#include "../Instance/SurfaceKHR/SurfaceKHR.h"
+#include "../Instance/SwapchainKHR/SwapchainKHR.h"
 
-#include "Pipeline/Pipeline.h"
+#include "../Pipeline/Pipeline.h"
 
-#include "Commands/CommandPool.h"
-#include "Commands/CommandBuffer.h"
+#include "../Commands/CommandPool.h"
+
+#include "FrameDrawer.h"
 
 #include "IVulkanWindow.h"
 
@@ -31,6 +32,9 @@ namespace burst::vulkan {
 		explicit Renderer(const ApplicationInfo& app,
 						  const Configuration& configuration,
 						  IVulkanWindow& window);
+
+		// We override destructor to wait before release the resources
+		virtual ~Renderer() override;
 
 		/**
 		 * Renders :)
@@ -54,24 +58,15 @@ namespace burst::vulkan {
 
 			Pipeline pipeline;
 
-			struct ImageQueue
-			{
-				Vector<Unique<IImage>> swapchain_images;
-				Vector<ImageView> image_views;
-				Vector<vk::raii::Framebuffer> framebuffers;
-
-				ImageQueue(Device&, Address<SwapchainKHR>, Pipeline&);
-			} image_queue;
-
 			CommandPool pool;
-			CommandBuffer command_buffer;
 
-			
 			explicit Context(const ApplicationInfo& app,
 							 const Configuration& configuration,
 							 IVulkanWindow& window);
 			
 		} m_Context; 
 
+		Array<FrameDrawer, 2> m_Drawers;
+		u32 m_CurrentDrawer;
 	};
 }

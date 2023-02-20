@@ -1,6 +1,7 @@
 #include "Fence.h"
 
 #include "Errors.h"
+#include "Instance/Device/Device.h"
 
 namespace burst::vulkan {
 
@@ -57,8 +58,8 @@ namespace burst::vulkan {
 						   return *fence.get().m_Fence;
 					   });
 
-		static_cast<vk::Device>(owner).waitForFences(
-			vulkan_fences, wait_all, timeout);
+		return static_cast<vk::Device>(owner).waitForFences(
+			vulkan_fences, wait_all, timeout) == vk::Result::eSuccess;
 	}
 
 	Fence::operator vk::Fence() const

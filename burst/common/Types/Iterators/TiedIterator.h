@@ -50,4 +50,8 @@ namespace burst {
 		Tx m_First;
 		Ty m_Second;
 	};
+
+	// Up to date check!
+	static_assert(burst::iterator<TiedIterator<dummy_iterator_t, dummy_iterator_t>>,
+				  "burst::TiedIterator must follow burst::iterator concept");
 }

@@ -81,9 +81,6 @@
     <ClInclude Include="Utils\File.h">
       <Filter>Header Files\Io</Filter>
     </ClInclude>
-    <ClInclude Include="Types\AbstractPointer.h">
-      <Filter>Header Files\Types</Filter>
-    </ClInclude>
     <ClInclude Include="Concepts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -168,6 +165,24 @@
     <ClInclude Include="Print.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Types\traits\function.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\traits\member_function.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Notifier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\traits\generic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\traits\iterable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\traits\container.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Error.cpp">
@@ -184,9 +199,6 @@
     </ClCompile>
     <ClCompile Include="Utils\File.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Types\AbstractPointer.cpp">
-      <Filter>Source Files\Types</Filter>
     </ClCompile>
     <ClCompile Include="Utils\Mainloop.cpp">
       <Filter>Source Files\Window</Filter>

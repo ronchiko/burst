@@ -5,21 +5,21 @@
 namespace burst::input {
 	class IKeyInputProvider {
 	public:
-		IFACE_DESTRUCTOR(IKeyInputProvider);
+		virtual ~IKeyInputProvider() = default;
 	
 		/**
 		 * Checks if key is being pressed
 		 */
-		IFACE_FUNC(bool is_pressed(Key));
+		virtual bool is_pressed(Key) = 0;
 		
 		/**
 		 * Checks if a key is being held
 		 */
-		IFACE_FUNC(bool is_held(Key));
+		virtual bool is_held(Key) = 0;
 
 		/**
 		 * Checks if key is being released
 		 */
-		IFACE_FUNC(bool is_released(Key));
+		virtual bool is_released(Key) = 0;
 	};
 }

@@ -4,15 +4,16 @@
 
 #include <burst/common/Print.h>
 
-#include "Instance/Instance.h"
 #include "Instance/Gpu/Gpu.h"
+#include "Instance/Instance.h"
 
 #include "Renderer/Renderer.h"
 #include "Utils/Extensions.h"
 
 namespace burst::vulkan {
 
-	static void log_available_extensions() {
+	static void log_available_extensions()
+	{
 		std::stringstream ss;
 		ss << "Available extenions: " << std::endl
 		   << pretty_iterable(all_extensions(), "* ", 5);
@@ -20,7 +21,7 @@ namespace burst::vulkan {
 		log::info(ss.str());
 	}
 
-		static void log_available_layers()
+	static void log_available_layers()
 	{
 		std::stringstream ss;
 		ss << "Available layers: " << std::endl
@@ -37,7 +38,8 @@ namespace burst::vulkan {
 		log_available_layers();
 
 
-		Unique<Renderer> renderer = std::make_unique<Renderer>(info, configuration, window);
+		Unique<Renderer> renderer =
+			std::make_unique<Renderer>(info, configuration, window);
 		return renderer;
 	}
 }

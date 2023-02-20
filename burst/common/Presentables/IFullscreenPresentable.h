@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Types/IToken.h"
+#include "../Types/Notifier.h"
 #include "IScalingPresentable.h"
 
 namespace burst {
@@ -19,14 +19,14 @@ namespace burst {
 	class IFullscreenPresentable : public IScalingPresentable
 	{
 	public:
-		IFACE_DESTRUCTOR(IFullscreenPresentable);
+		virtual ~IFullscreenPresentable() = default;
 
 		/**
 		 * Sets this presentable mode.
 		 * 
 		 * \param mode: The mode to set the presentable to
 		 */
-		IFACE_FUNC(void set_mode(FullscreenMode mode));
+		virtual void set_mode(FullscreenMode mode) = 0;
 	};
 
 	/**
@@ -35,14 +35,14 @@ namespace burst {
 	class IFullscreenPresentableSignaler : public IFullscreenPresentable
 	{
 	public:
-		using FullscreenCallback = void (*)(FullscreenMode mode);
+		using FullscreenCallback = void(FullscreenMode mode);
 
-		IFACE_DESTRUCTOR(IFullscreenPresentableSignaler);
+		virtual ~IFullscreenPresentableSignaler() = default;
 
 		/**
 		 * Adds a fullscreen listener.
 		 */
-		IFACE_FUNC(ITokenPtr add_fullscreen_listener(const FullscreenCallback& callback));
+		virtual Subscription add_fullscreen_listener(FullscreenCallback *callback) = 0;
 	};
 }
 

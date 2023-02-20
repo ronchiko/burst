@@ -216,6 +216,9 @@ namespace burst::vulkan {
 			/** pipeline_index = */ -1
 		};
 
+		// Recreate the render pass before framebuffer we pass it to the pipeline
+		render_pass.recreate_framebuffers(m_Device);
+
 		return Pipeline{
 			vk::raii::Pipeline(static_cast<vk::raii::Device&>(m_Device),
 							   VK_NULL_HANDLE,

@@ -2,15 +2,14 @@
 
 #include <memory>
 
-#include <Burst/Common.h>
-
-#include "burst/glfw/Error.h"
+#include <Burst/Common/Types.h>
+#include <Burst/Common/Presentables/IWindow.h>
 
 namespace burst::glfw {
 	/**
-	 * @brief Creates a new GLFW window
+	 * Creates a new GLFW window.
 	 */
-	std::unique_ptr<burst::IWindow> make_window(
-		u32 width, u32 height, const std::string& title
+	Unique<burst::IWindow> make_window(
+		u32 width, u32 height, const String& title
 	);
 }

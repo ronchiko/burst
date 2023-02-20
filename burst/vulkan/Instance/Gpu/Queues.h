@@ -3,7 +3,6 @@
 #include <Burst/Common/Types.h>
 #include <Burst/Common/Types/Behavior/Enum.h>
 #include <Burst/Common/Types/Behavior/EnumAccess.h>
-#include <Burst/Common/Types/CappedStack.h>
 
 namespace burst::vulkan {
 

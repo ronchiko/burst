@@ -9,21 +9,21 @@ namespace burst {
 	class IPresentable
 	{
 	public:
-		IFACE_DESTRUCTOR(IPresentable);
+		virtual ~IPresentable() = default;
 
 		/**
 		 * The width of the presentable object.
 		 */
-		IFACE_FUNC(u32 width() const);
+		virtual u32 width() const = 0;
 
 		/**
 		 * The height of the presentable object.
 		 */
-		IFACE_FUNC(u32 height() const);
+		virtual u32 height() const = 0;
 
 		/**
 		 * Updates this presentable object.
 		 */
-		IFACE_FUNC(void update());
+		virtual void update() = 0;
 	};
 }

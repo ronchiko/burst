@@ -1,6 +1,6 @@
 #pragma once
 
-#include <burst/Common.h>
+#include <burst/common/Application.h>
 
 #include <burst/vulkan/Configuration.h>
 #include <burst/vulkan/IVulkanWindow.h>

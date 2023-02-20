@@ -17,11 +17,9 @@ namespace burst::vulkan {
 			return s_Extensions;
 		}
 
-		auto extension_names = burst::convert<String, vk::ExtensionProperties>(
-			vk::enumerateInstanceExtensionProperties(),
-			[](const auto& e) { return e.extensionName; });
-
-		return s_Extensions = burst::iter_convert<Set<String>>(extension_names);
+		return s_Extensions = burst::convert<Set<String>>(
+				   vk::enumerateInstanceExtensionProperties(),
+				   [](const auto& e) { return e.extensionName; });
 	}
 
 	/**
@@ -35,11 +33,9 @@ namespace burst::vulkan {
 			return s_Layers;
 		}
 
-		auto layer_names = burst::convert<String, vk::LayerProperties>(
-			vk::enumerateInstanceLayerProperties(),
-			[](const auto& l) { return l.layerName; });
-	
-		return s_Layers = burst::iter_convert<Set<String>>(layer_names);
+		return s_Layers = burst::convert<Set<String>>(
+				   vk::enumerateInstanceLayerProperties(),
+				   [](const auto& l) { return l.layerName; });
 	}
 
 	/**
@@ -80,11 +76,13 @@ namespace burst::vulkan {
 		}
 	}
 
-	Set<String> all_layers() {
+	Set<String> all_layers()
+	{
 		return get_all_available_layers();
 	}
 
-	Set<String> all_extensions() {
+	Set<String> all_extensions()
+	{
 		return get_all_avialable_extensions();
 	}
 }

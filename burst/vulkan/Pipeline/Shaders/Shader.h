@@ -3,7 +3,8 @@
 #include <vulkan/vulkan.hpp>
 #include <vulkan/vulkan_raii.hpp>
 
-#include <burst/Common.h>
+#include <burst/Common/Types.h>
+#include <burst/Common/Types/Buffer.h>
 
 #include "../../Instance/Device/Device.h"
 

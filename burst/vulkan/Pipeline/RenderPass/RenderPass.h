@@ -2,18 +2,20 @@
 
 #include <vulkan/vulkan_raii.hpp>
 
-#include <burst/Common.h>
+#include <burst/Common/Types.h>
 
 #include "../../Configuration.h"
 #include "../../Instance/Device/Device.h"
 #include "../../Instance/SwapchainKHR/SwapchainKHR.h"
 
+#include "../Framebuffer.h"
 #include "../../Gfx/ImageView.h"
+#include "../../Utils/SwapchainBound.h"
 
 #include "Subpass.h"
 
 namespace burst::vulkan {
-	class RenderPass
+	class RenderPass : protected mix::SwapchainBound
 	{
 	public:
 		explicit RenderPass(const Configuration& configuration,
@@ -32,8 +34,15 @@ namespace burst::vulkan {
 		 * \param image_views: The image views to create the buffers from
 		 * \return A vector for framebuffers
 		 */
-		Vector<vk::raii::Framebuffer>
-		create_framebuffers(Device& device, const Vector<ImageView>& image_views) const;
+		void recreate_framebuffers(Device& device);
+
+		/**
+		 * Gets a framebuffer object at a given index.
+		 * 
+		 * \param index: The index of the framebuffer
+		 */
+		const Framebuffer& framebuffer_at(u32 index) const;
+
 
 	private:
 		/**
@@ -51,6 +60,11 @@ namespace burst::vulkan {
 		{
 			Vector<vk::AttachmentDescription> descriptions;
 			Vector<Subpass> subpasses;
+			Vector<vk::SubpassDependency> dependencies;
+
+			Vector<Unique<IImage>> images;
+			Vector<ImageView> views;
+			Vector<Framebuffer> framebuffers;
 		};
 
 		vk::raii::RenderPass m_RenderPass;

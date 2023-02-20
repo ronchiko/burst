@@ -1,6 +1,6 @@
 #pragma once
 
-#include <burst/Common.h>
+#include <burst/Common/Types.h>
 
 namespace burst::vulkan {
 	/**

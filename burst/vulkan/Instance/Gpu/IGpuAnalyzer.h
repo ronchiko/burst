@@ -1,6 +1,6 @@
 #pragma once
 
-#include <burst/Common.h>
+#include <burst/Common/Types.h>
 
 #include "Gpu.h"
 
@@ -21,13 +21,13 @@ namespace burst::vulkan {
 		static constexpr Score REJECT_GPU = 0;
 
 
-		IFACE_DESTRUCTOR(IGpuAnalyzer);
+		virtual ~IGpuAnalyzer() = default;
 
 		/**
 		 * Rates a GPU.
 		 * 
 		 * \param gpu: The gpu to score
 		 */
-		IFACE_FUNC(Score rate(const Gpu& gpu));
+		virtual Score rate(const Gpu& gpu) = 0;
 	};
 }

@@ -20,10 +20,10 @@ namespace burst {
 #else // Currently only windows is supported
 #error The engine does not support this OS
 #endif
-		IFACE_DESTRUCTOR(IWindow);
+		virtual ~IWindow() = default;
 		/**
 		 * Gets the window identifier for this window
 		 */
-		IFACE_FUNC(Identifier identifier() const);
+		virtual Identifier identifier() const = 0;
 	};
 }

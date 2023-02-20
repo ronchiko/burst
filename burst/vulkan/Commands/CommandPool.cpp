@@ -13,7 +13,7 @@ namespace burst::vulkan {
 	static vk::raii::CommandPool make_command_pool(Device& device,
 												   u32 queue_family_index){
 		vk::CommandPoolCreateInfo create_info{
-			vk::CommandPoolCreateFlags(), 
+			vk::CommandPoolCreateFlagBits::eResetCommandBuffer, 
 			queue_family_index
 		};
 

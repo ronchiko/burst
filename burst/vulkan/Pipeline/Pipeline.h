@@ -30,6 +30,12 @@ namespace burst::vulkan {
 		 * The render pass of this pipline.
 		 */
 		const RenderPass& render_pass() const;
+		RenderPass& render_pass();
+
+		/**
+		 * Convertor to vk::Pipeline.
+		 */
+		explicit operator vk::Pipeline() const;
 
 	private:
 		friend class burst::vulkan::PipelineLoader;

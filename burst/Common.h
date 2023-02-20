@@ -19,7 +19,6 @@
 
 // Custom types
 #include "common/Types/IToken.h"
-#include "common/Types/AbstractPointer.h"
 #include "common/Types/SignalList.h"
 #include "common/Types/CappedStack.h"
 #include "common/Types/Address.h"

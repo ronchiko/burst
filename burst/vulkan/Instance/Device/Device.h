@@ -4,6 +4,8 @@
 
 #include "../../Configuration.h"
 
+#include "Queue.h"
+
 namespace burst::vulkan {
 
 	class Gpu;
@@ -27,15 +29,6 @@ namespace burst::vulkan {
 						const Configuration& configuration);
 
 		/**
-		 * Checks if this device can be used for rendering.
-		 * 
-		 * \return: True is the device is capable of rendering
-		 */
-		constexpr bool is_rendering() const {
-			return m_IsRendering;
-		}
-
-		/**
 		 * Convertor to vk::raii::Device.
 		 */
 		explicit operator vk::raii::Device &();
@@ -44,6 +37,14 @@ namespace burst::vulkan {
 		 * Convertor to vk::Device.
 		 */
 		explicit operator vk::Device() const;
+
+		/**
+		 * Gets a queue from this device.
+		 * 
+		 * \param family_index: The family index of this queue (get from the Queues object)
+		 * \param index: The index of the queue inside that family
+		 */
+		Queue get_queue(u32 family_index, u32 index = 0) const;
 
 	private:
 		vk::raii::Device m_Device = nullptr;

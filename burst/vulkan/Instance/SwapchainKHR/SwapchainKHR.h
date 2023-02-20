@@ -1,12 +1,19 @@
 #pragma once
 
+#include <functional>
+
 #include <vulkan/vulkan_raii.hpp>
 
 #include <burst/common/Presentables/IWindow.h>
+#include <burst/common/Types/Notifier.h>
 
 #include "../../Configuration.h"
 #include "../../Gfx/IImage.h"
 
+#include "../../Sync/Semaphore.h"
+#include "../../Utils/DeviceBound.h"
+
+#include "ISwapchainObserver.h"
 
 namespace burst::vulkan {
 
@@ -14,9 +21,7 @@ namespace burst::vulkan {
 	class GpuSurfaceBinding;
 	class Queues;
 
-	class ImageView;
-
-	class SwapchainKHR
+	class SwapchainKHR : public mix::DeviceBound
 	{
 	public:
 		/**
@@ -27,7 +32,7 @@ namespace burst::vulkan {
 		 * \param window: The window this swapchain uses
 		 * \param queues: The gpu queues for this instance
 		 * \param config: The configuration to use
-		 * 
+		 *
 		 * \return: The newly created swapchain
 		 */
 		static SwapchainKHR create(Device& device,
@@ -53,10 +58,35 @@ namespace burst::vulkan {
 
 		/**
 		 * Creates a vector of images from this swapchain.
-		 * 
+		 *
 		 * \return The vector of images
 		 */
 		Vector<Unique<IImage>> create_images() const;
+
+		/**
+		 * Convertor to SwapchainKHR.
+		 */
+		explicit operator vk::SwapchainKHR() const;
+
+		/**
+		 * Acquires the next image in the swapchain.
+		 */
+		u32 acquire_next_image(Semaphore& wait_semaphore,
+							 u64 timeout = std::numeric_limits<u64>::max());
+
+		/**
+		 * Registers a new swapchain resize observer.
+		 *
+		 * \param observer: The observer to register
+		 * 
+		 * \returns: The subscription to this event.
+		 */
+		Subscription register_observer(ISwapchainObserver *observer);
+
+		/**
+		 * Notifies all observers that resize occured.
+		 */
+		void notify_resize_happend();
 
 	private:
 		struct Cache
@@ -70,17 +100,21 @@ namespace burst::vulkan {
 		};
 
 		static vk::raii::SwapchainKHR
-		create_swapchain_khr(Device& device,
-							 const SurfaceKHR& surface,
-							 const Cache& cache,
-							 const Configuration& config);
+		_create_swapchain_khr(Device& device,
+							  const SurfaceKHR& surface,
+							  const Cache& cache,
+							  const Configuration& config);
 
 		/**
 		 * Creates a swapchain from a vk::raii::SwapchainKHR.
 		 */
-		explicit SwapchainKHR(vk::raii::SwapchainKHR swapchain, Cache cache);
+		explicit SwapchainKHR(Device& device,
+							  vk::raii::SwapchainKHR swapchain,
+							  Cache cache);
 
 		vk::raii::SwapchainKHR m_Swapchain;
+		Notifier<ISwapchainObserver> m_Observers;
+
 		Cache m_Cache;
 	};
 }

@@ -2,60 +2,30 @@
 
 #include <GLFW/glfw3.h>
 
-#include <Burst/Common/Meta.h>
 #include <Burst/Common/Log.h>
-#include <Burst/Common/Types/AbstractPointer.h>
-#include <Burst/Common/Types/SignalList.h>
+#include <Burst/Common/Meta.h>
 #include <Burst/Common/Types/Behavior/MemoryComparable.h>
+#include <Burst/Common/Types/Notifier.h>
+#include <Burst/Common/Types/SignalList.h>
 
 #include "Error.h"
 
-struct _MonitorProviderCallback
-{
-	burst::glfw::MonitorProvider& provider;
 
-	void operator()(GLFWmonitor *monitor, int event)
-	{
-		provider.on_monitor_change(monitor, event);
-	}
-};
-
-using MonitorProviderCallback = burst::MemoryComparable<_MonitorProviderCallback>;
-
-static burst::SignalList<MonitorProviderCallback> g_MonitorCallbackList{};
-
-/**
- * The GLFW monitor event handler.
- */
-static void monitor_event_handler(GLFWmonitor *monitor, int event)
-{
-	g_MonitorCallbackList.invoke(monitor, event);
-}
-
-/**
- * Adds a new monitor event handler to monitor callback list, and initializes the callbacks if neccessary.
- */
-static burst::ITokenPtr add_monitor_provider(burst::glfw::MonitorProvider& provider)
-{
-	static bool s_ActivatedCallback = false;
-	if(!s_ActivatedCallback) {
-		glfwSetMonitorCallback(monitor_event_handler);
-	}
-
-	return g_MonitorCallbackList.add(_MonitorProviderCallback{ provider });
-}
+static burst::Notifier<burst::glfw::IMonitorProviderListener>
+	g_MonitorCallbackList{};
 
 /**
  * Finds the main monitor in a list of monitors.
  */
-static burst::u32 find_main_monitor(const burst::Vector<GLFWmonitor*> monitors) {
+static burst::u32 find_main_monitor(const burst::Vector<GLFWmonitor *> monitors)
+{
 	using namespace burst;
-	
+
 	u32 index = 0;
 	auto main = glfwGetPrimaryMonitor();
 
 	auto iter = std::find(monitors.begin(), monitors.end(), main);
-	if (monitors.end() == iter) {
+	if(monitors.end() == iter) {
 		throw glfw::GlfwError("Failed to find primary monitor");
 	}
 
@@ -63,6 +33,31 @@ static burst::u32 find_main_monitor(const burst::Vector<GLFWmonitor*> monitors) 
 }
 
 namespace burst::glfw {
+
+	/**
+	 * The GLFW monitor event handler.
+	 */
+	static void monitor_event_handler(GLFWmonitor *monitor, int event)
+	{
+		g_MonitorCallbackList.notify(
+			&IMonitorProviderListener::on_monitor_change, monitor, event);
+	}
+
+	/**
+	 * Adds a new monitor event handler to monitor callback list, and initializes the
+	 * callbacks if neccessary.
+	 */
+	static burst::Subscription
+	add_monitor_provider(IMonitorProviderListener *listener)
+	{
+		static bool s_ActivatedCallback = false;
+		if(!s_ActivatedCallback) {
+			glfwSetMonitorCallback(monitor_event_handler);
+		}
+
+		return g_MonitorCallbackList.subscribe(listener);
+	}
+
 	/**
 	 * Makes the monitors list.
 	 */
@@ -80,7 +75,7 @@ namespace burst::glfw {
 
 	MonitorProvider::MonitorProvider()
 		: m_Monitors(make_monitors_list())
-		, m_Token(add_monitor_provider(*this))
+		, m_glfwMonitorEventSubscription(add_monitor_provider(this))
 		, m_MainMonitor(find_main_monitor(m_Monitors))
 	{}
 
@@ -88,21 +83,22 @@ namespace burst::glfw {
 	{
 		comapre_exchange(index, monitor::MAIN_MONITOR, m_MainMonitor);
 
-		const auto* video = glfwGetVideoMode(m_Monitors[index]);
+		const auto *video = glfwGetVideoMode(m_Monitors[index]);
 		ASSERT(video != nullptr, "Failed to get video mode");
 
 		return { video->width, video->height };
 	}
 
-	void MonitorProvider::on_monitor_change(GLFWmonitor* monitor, int event) {
-		if (GLFW_CONNECTED == event) {
+	void MonitorProvider::on_monitor_change(GLFWmonitor *monitor, int event)
+	{
+		if(GLFW_CONNECTED == event) {
 			m_Monitors.push_back(monitor);
 			return;
 		}
 
 		// Erase the provided monitor
 		auto iter = std::find(m_Monitors.begin(), m_Monitors.end(), monitor);
-		if (m_Monitors.end() == iter) {
+		if(m_Monitors.end() == iter) {
 			return;
 		}
 
@@ -111,7 +107,8 @@ namespace burst::glfw {
 		m_MainMonitor = find_main_monitor(m_Monitors);
 	}
 
-	GLFWmonitor* MonitorProvider::get_raw_primary_monitor() const {
+	GLFWmonitor *MonitorProvider::get_raw_primary_monitor() const
+	{
 		return m_Monitors[m_MainMonitor];
 	}
 }

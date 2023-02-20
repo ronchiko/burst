@@ -2,9 +2,10 @@
 
 #include <vulkan/vulkan_raii.hpp>
 
-#include "../Instance/Device/Device.h"
+#include <burst/common/Types.h>
 
 namespace burst::vulkan {
+	class Device;
 
 	constexpr u64 TIMEOUT_MAX = UINT64_MAX;
 

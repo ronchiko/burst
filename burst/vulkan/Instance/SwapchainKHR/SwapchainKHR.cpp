@@ -1,13 +1,14 @@
 #include "SwapchainKHR.h"
 
+#include <burst/common/Log.h>
+
 #include "../../Configuration.h"
+#include "../../Errors.h"
 #include "../Device/Device.h"
 #include "../Gpu/Queues.h"
 #include "../SurfaceKHR/GpuSurface.h"
 
 #include "SwapchainImage.h"
-
-void VKAPI_PTR dummy(...) {}
 
 /**
  * Finds and returns an item in a vector or returns a fallback value.
@@ -91,10 +92,10 @@ namespace burst::vulkan {
 	}
 
 	vk::raii::SwapchainKHR
-	SwapchainKHR::create_swapchain_khr(Device& device,
-									   const SurfaceKHR& surface,
-									   const Cache& cache,
-									   const Configuration& config)
+	SwapchainKHR::_create_swapchain_khr(Device& device,
+										const SurfaceKHR& surface,
+										const Cache& cache,
+										const Configuration& config)
 	{
 		vk::SwapchainCreateInfoKHR info(
 			vk::SwapchainCreateFlagsKHR(0), // No flags
@@ -113,8 +114,7 @@ namespace burst::vulkan {
 			cache.present_mode,
 			true, // clipped
 			vk::SwapchainKHR{},
-			nullptr
-		);
+			nullptr);
 
 		// Prefer concurrent sharing if possible
 		// TODO: More then two queues
@@ -125,8 +125,7 @@ namespace burst::vulkan {
 			info.imageSharingMode = vk::SharingMode::eConcurrent;
 		}
 
-		auto swapchain =
-			static_cast<vk::Device>(device).createSwapchainKHR(info);
+		auto swapchain = static_cast<vk::Device>(device).createSwapchainKHR(info);
 
 
 		return vk::raii::SwapchainKHR(static_cast<vk::raii::Device&>(device),
@@ -181,15 +180,15 @@ namespace burst::vulkan {
 		};
 
 		auto swapchain =
-			create_swapchain_khr(device, surface.surface(), cache, config);
+			_create_swapchain_khr(device, surface.surface(), cache, config);
 
 		log::debug("Created new swapchain");
-		return SwapchainKHR(std::move(swapchain), std::move(cache));
+		return SwapchainKHR(device, std::move(swapchain), std::move(cache));
 	}
 
 	Vector<Unique<IImage>> SwapchainKHR::create_images() const
 	{
-		return convert<Unique<IImage>, VkImage>(
+		return convert<Vector<Unique<IImage>>>(
 			m_Swapchain.getImages(), [this](const VkImage& image) {
 				return Unique<IImage>(new SwapchainImage{
 					image,
@@ -202,8 +201,38 @@ namespace burst::vulkan {
 			});
 	}
 
-	SwapchainKHR::SwapchainKHR(vk::raii::SwapchainKHR swaphchain, Cache cache)
-		: m_Swapchain(std::move(swaphchain))
+	u32 SwapchainKHR::acquire_next_image(Semaphore& semaphore, u64 timeout)
+	{
+		auto result = device().acquireNextImageKHR(
+			*m_Swapchain, timeout, static_cast<vk::Semaphore>(semaphore));
+
+		if(result.result != vk::Result::eSuccess) {
+			throw VulkanError("Failed to acquire next image", result.result);
+		}
+
+		return result.value;
+	}
+
+	Subscription SwapchainKHR::register_observer(ISwapchainObserver *observer)
+	{
+		return m_Observers.subscribe(observer);
+	}
+
+	void SwapchainKHR::notify_resize_happend()
+	{
+		m_Observers.notify(&ISwapchainObserver::on_swapchain_resized, *this);
+	}
+
+	SwapchainKHR::operator vk::SwapchainKHR() const
+	{
+		return *m_Swapchain;
+	}
+
+	SwapchainKHR::SwapchainKHR(Device& device,
+							   vk::raii::SwapchainKHR swaphchain,
+							   Cache cache)
+		: mix::DeviceBound(device)
+		, m_Swapchain(std::move(swaphchain))
 		, m_Cache(cache)
 	{}
 }

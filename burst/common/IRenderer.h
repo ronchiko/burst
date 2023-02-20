@@ -11,9 +11,9 @@ namespace burst {
 	class IRenderer
 	{
 	public:
-		IFACE_DESTRUCTOR(IRenderer);
+		virtual ~IRenderer() = default;
 
-		IFACE_FUNC(void render());
+		virtual void render() = 0;
 	};
 
 }

@@ -2,7 +2,7 @@
 
 #include <vulkan/vulkan.hpp>
 
-#include <burst/Common.h>
+#include <burst/Common/Types.h>
 #include <burst/Vulkan.h>
 
 namespace burst::vulkan {

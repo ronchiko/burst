@@ -8,21 +8,21 @@ namespace burst::input {
 	 */
 	class IMouseInputProvider {
 	public:
-		IFACE_DESTRUCTOR(IMouseInputProvider);
+		virtual ~IMouseInputProvider() = default;
 
 		/**
 		 * Checks if mouse button is being pressed
 		 */
-		IFACE_FUNC(bool is_pressed(MouseButton button));
+		virtual bool is_pressed(MouseButton button) = 0;
 
 		/**
 		 * Checks if mouse button is being held
 		 */
-		IFACE_FUNC(bool is_held(MouseButton button));
+		virtual bool is_held(MouseButton button) = 0;
 
 		/**
 		 * Checks if mouse button is being released
 		 */
-		IFACE_FUNC(bool is_released(MouseButton));
+		virtual bool is_released(MouseButton) = 0;
 	};
 }

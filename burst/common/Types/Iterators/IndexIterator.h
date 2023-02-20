@@ -69,4 +69,7 @@ namespace burst {
 		T m_Index;
 		T m_Jump;
 	};
+
+	static_assert(burst::iterator<IndexIterator<u32>>,
+				  "Index iterator must be follow the iterator concept");
 }

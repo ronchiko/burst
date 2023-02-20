@@ -28,7 +28,7 @@ namespace burst::glfw {
 		g_Initialized = true;
 	}
 
-	Unique<IWindow> make_window(u32 width, u32 height, const std::string& title)
+	Unique<IWindow> make_window(u32 width, u32 height, const String& title)
 	{
 		initialize_glfw();
 

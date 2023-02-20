@@ -2,6 +2,8 @@
 
 #include "../../Types.h"
 
+#include "../../Concepts.h"
+
 namespace burst {
 
 	/**
@@ -11,7 +13,7 @@ namespace burst {
 	 * \tparam Enum: The enum type to be able to access from
 	 * \tparam Base: The base type to add this functionality to
 	 */
-	template<Castable<u32> E, Accessable<u32> Base>
+	template<burst::castable<u32> E, burst::accessable<u32> Base >
 	class EnumAccess : public Base
 	{
 	public:
@@ -40,7 +42,7 @@ namespace burst {
 	 * 
 	 * \see EnumAccess
 	 */
-	template<Castable<u32> E, Accessable<u32> Base>
+	template<burst::castable<u32> E, burst::accessable<u32> Base>
 	class MutableEnumAccess : public EnumAccess<E, Base>
 	{
 	public:

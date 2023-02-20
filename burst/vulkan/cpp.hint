@@ -1,0 +1,4 @@
+// Hint files help the Visual Studio IDE interpret Visual C++ identifiers
+
+#define NOT_COPIABLE(cls) cls(const cls&) = delete; cls& operator=(const cls&) = delete;
+#define NOT_MOVABLE(cls) cls(cls&&) = delete; cls& operator=(cls&&) = delete;

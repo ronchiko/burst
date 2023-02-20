@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../Types/IToken.h"
+#include "../Types/Notifier.h"
+
 #include "IPresentable.h"
 
 namespace burst {
@@ -11,15 +12,15 @@ namespace burst {
 	class IScalingPresentable : public IPresentable
 	{
 	public:
-		IFACE_DESTRUCTOR(IScalingPresentable);
-		
+		virtual ~IScalingPresentable() = default;
+
 		/**
 		 * Rescales this presentable.
-		 * 
+		 *
 		 * \param width: The width of the presentable
 		 * \param height: The height of the presentable
 		 */
-		IFACE_FUNC(void rescale(u32 width, u32 height));
+		virtual void rescale(u32 width, u32 height) = 0;
 	};
 
 	/**
@@ -28,15 +29,13 @@ namespace burst {
 	class IScalingPresentableSignaler : public IScalingPresentable
 	{
 	public:
-		using ScaleCallback = void (*)(u32, u32);
+		using ScaleCallback = void(u32, u32);
 
-		IFACE_DESTRUCTOR(IScalingPresentableSignaler);
-		
+		virtual ~IScalingPresentableSignaler() = default;
+
 		/**
 		 * Adds a scale listener.
 		 */
-		IFACE_FUNC(ITokenPtr add_scale_listener(const ScaleCallback& callback));
+		virtual Subscription add_scale_listener(ScaleCallback *callback) = 0;
 	};
 }
-
-

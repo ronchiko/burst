@@ -23,7 +23,6 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Optimize\Avx.h" />
-    <ClInclude Include="Types\AbstractPointer.h" />
     <ClInclude Include="Input\Providers\ICharacterInputProvider.h" />
     <ClInclude Include="Concepts.h" />
     <ClInclude Include="Logging\ConsoleLogger.h" />
@@ -41,6 +40,12 @@
     <ClInclude Include="Types\Iterators\TiedIterator.h" />
     <ClInclude Include="Types\Address.h" />
     <ClInclude Include="Print.h" />
+    <ClInclude Include="Types\Notifier.h" />
+    <ClInclude Include="Types\traits\container.h" />
+    <ClInclude Include="Types\traits\function.h" />
+    <ClInclude Include="Types\traits\generic.h" />
+    <ClInclude Include="Types\traits\iterable.h" />
+    <ClInclude Include="Types\traits\member_function.h" />
     <ClInclude Include="Utils\File.h" />
     <ClInclude Include="Presentables\IFullscreenPresentable.h" />
     <ClInclude Include="Input\Input.h" />
@@ -62,7 +67,6 @@
     <ClInclude Include="Utils\Monitor.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Types\AbstractPointer.cpp" />
     <ClCompile Include="Logging\ConsoleLogger.cpp" />
     <ClCompile Include="Error.cpp" />
     <ClCompile Include="Utils\File.cpp" />
@@ -132,9 +136,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClangTidyChecks>-*,readability-identifier-naming</ClangTidyChecks>
+    <CopyLocalDebugSymbols>true</CopyLocalDebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClangTidyChecks>-*,readability-identifier-naming</ClangTidyChecks>
+    <CopyLocalDebugSymbols>true</CopyLocalDebugSymbols>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -144,7 +150,6 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir);C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;$(SolutionDir);</AdditionalIncludeDirectories>
-      <AdditionalOptions>/arch:avx %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -155,6 +160,7 @@
     </Lib>
     <Lib>
       <AdditionalLibraryDirectories>C:\VulkanSDK\1.3.224.1\Lib;C:\Dev\Lib\glfw\glfw-3.3.8\bin\src\Debug;</AdditionalLibraryDirectories>
+      <AdditionalOptions>/arch:avx %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -167,7 +173,6 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir);C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;$(SolutionDir);</AdditionalIncludeDirectories>
-      <AdditionalOptions>/arch:avx %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -180,6 +185,7 @@
     </Lib>
     <Lib>
       <AdditionalLibraryDirectories>C:\VulkanSDK\1.3.224.1\Lib;C:\Dev\Lib\glfw\glfw-3.3.8\bin\src\Release;</AdditionalLibraryDirectories>
+      <AdditionalOptions>/arch:avx %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -190,7 +196,6 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir);C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;$(SolutionDir);C:\Dev\include\glm;C:\VulkanSDK\1.3.224.1\Include;C:\Dev\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>/arch:avx %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -203,6 +208,7 @@
     </Lib>
     <Lib>
       <AdditionalLibraryDirectories>C:\VulkanSDK\1.3.224.1\Lib;C:\Dev\Lib\glfw\glfw-3.3.8\bin\src\Debug;</AdditionalLibraryDirectories>
+      <AdditionalOptions>/arch:avx %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -215,7 +221,6 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir);C:\VulkanSDK\1.3.224.1\Include;C:\Dev\Lib\glfw\glfw-3.3.8\include;$(SolutionDir);</AdditionalIncludeDirectories>
-      <AdditionalOptions>/arch:avx %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -228,6 +233,7 @@
     </Lib>
     <Lib>
       <AdditionalLibraryDirectories>C:\VulkanSDK\1.3.224.1\Lib;C:\Dev\Lib\glfw\glfw-3.3.8\bin\src\Release;</AdditionalLibraryDirectories>
+      <AdditionalOptions>/arch:avx %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

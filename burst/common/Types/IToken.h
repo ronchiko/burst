@@ -10,7 +10,7 @@ namespace burst {
 	class IOwnershipToken
 	{
 	public:
-		IFACE_DESTRUCTOR(IOwnershipToken);
+		virtual ~IOwnershipToken() = default;
 	};
 
 	/**

@@ -42,7 +42,7 @@ namespace burst::vulkan {
 		for(const auto& req : window.get_requirements()) {
 			all_requirements.push_back(req);
 		}
-		
+
 		auto extensions = select_requirements(all_requirements,
 											  RequirementType::InstanceExtension);
 
@@ -54,7 +54,7 @@ namespace burst::vulkan {
 			vk::InstanceCreateFlags(0), &app_info, layers, extensions);
 
 		auto instance = vk::createInstance(create_info);
-		return vk::raii::Instance(vk::raii::Context{} , instance);
+		return vk::raii::Instance(vk::raii::Context{}, instance);
 	}
 
 	Instance::Instance(const ApplicationInfo& info,
@@ -74,10 +74,10 @@ namespace burst::vulkan {
 	{
 		auto gpus = m_Instance.enumeratePhysicalDevices();
 
-		return convert<Gpu, vk::raii::PhysicalDevice>(
-			gpus, [](const vk::raii::PhysicalDevice& device) {
-				return Gpu(std::move(device));
-			});
+		return convert<Vector<Gpu>>(gpus,
+									[](const vk::raii::PhysicalDevice& device) {
+										return Gpu(std::move(device));
+									});
 	}
 
 	Instance::operator vk::Instance() const
