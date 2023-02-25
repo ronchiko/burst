@@ -1,5 +1,7 @@
 #include "DebugMessenger.h"
 
+#include <burst/common/Log.h>
+
 #include "Instance.h"
 
 // Message handler for vulkan

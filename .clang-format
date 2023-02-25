@@ -7,7 +7,7 @@ UseCRLF: true
 UseTab: true
 
 MaxEmptyLinesToKeep: 2
-ColumnLimit: 85
+ColumnLimit: 100
 
 ---
 Language: Cpp
@@ -82,7 +82,7 @@ BraceWrapping:
   SplitEmptyNamespace: false
 
 ## BreakArrays: false
-## BreakBeforeConceptDeclarations: Always 
+BreakBeforeConceptDeclarations: Always 
 
 BreakInheritanceList: AfterComma
 BreakStringLiterals: false
@@ -104,9 +104,9 @@ IndentCaseLabels: false
 IndentExternBlock: Indent 
 IndentGotoLabels: false
 IndentPPDirectives: None
-# IndentRequiresClause: true
+IndentRequiresClause: true
 IndentWrappedFunctionNames: false
-# InsertBraces: true
+InsertBraces: true
 InsertTrailingCommas: None
 KeepEmptyLinesAtTheStartOfBlocks: false
 LambdaBodyIndentation: Signature
@@ -114,8 +114,8 @@ LambdaBodyIndentation: Signature
 NamespaceIndentation: All
 
 ReflowComments: true
-# RemoveSemicolon: true
-# RequiresClausePosition: WithPreceding
+# RemoveSemicolon: true 
+RequiresClausePosition: WithPreceding
 # RequiresExpressionIndentation: OuterScope
 SeparateDefinitionBlocks: Always
 ShortNamespaceLines: 1
@@ -140,4 +140,15 @@ SpacesInConditionalStatement: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
 
+# Penalties
+PenaltyExcessCharacter: 30
+PenaltyBreakAssignment: 90000
+PenaltyBreakBeforeFirstCallParameter: 0
+PenaltyBreakComment: 100
+PenaltyBreakFirstLessLess: 100
+PenaltyBreakOpenParenthesis: 9000
+PenaltyBreakString: 0
+PenaltyBreakTemplateDeclaration: 0
+PenaltyIndentedWhitespace: 0
+PenaltyReturnTypeOnItsOwnLine: 900
 --- 

@@ -10,16 +10,19 @@
 #include <GLFW/glfw3native.h>
 
 #include "Error.h"
-#include "MonitorProvider.h"
+#include "Providers/MonitorProvider.h"
+
+#include "Events/IKeyEventListener.h"
+#include "Events/IResizeEventListener.h"
 
 #define OPERATION_GUARD _window_owner_guard()
 
-extern void glfw_key_event_handler(GLFWwindow *, int, int, int, int);
 extern void glfw_advance_key_buffers();
 
 namespace burst::glfw {
 	using AutoWindow = std::unique_ptr<std::remove_pointer_t<GLFWwindow>,
 									   decltype(&glfwDestroyWindow)>;
+
 
 	struct Window::Data
 	{
@@ -32,7 +35,7 @@ namespace burst::glfw {
 	static AutoWindow
 	create_window(u32 width, u32 height, const String& title, bool resizable)
 	{
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
 		auto window =
@@ -41,7 +44,8 @@ namespace burst::glfw {
 			throw burst::glfw::GlfwError("Failed to create window");
 		}
 
-		glfwSetKeyCallback(window, glfw_key_event_handler);
+		glfwSetKeyCallback(window, glfw_key_event);
+		glfwSetFramebufferSizeCallback(window, glfw_resize_event);
 
 		return { window, glfwDestroyWindow };
 	}
@@ -62,6 +66,7 @@ namespace burst::glfw {
 		: m_Data(make_window_data({ width, height }, title, additional))
 		, m_ScaleCallbacks()
 		, m_FullscreenCallbacks()
+		, m_GlfwResizeSubscription(g_ResizeEventNotifier.subscribe(this))
 	{}
 
 	u32 Window::width() const
@@ -120,7 +125,7 @@ namespace burst::glfw {
 		OPERATION_GUARD;
 
 		glfwSetWindowSize(m_Data->window.get(), w, h);
-		m_ScaleCallbacks.notify(w, h);
+		m_ScaleCallbacks.notify(&IScalingPresentableListener::on_scale_changed, w, h);
 	}
 
 	void Window::set_mode(FullscreenMode mode)
@@ -153,6 +158,7 @@ namespace burst::glfw {
 			break;
 		case burst::FullscreenMode::Fullscreen:
 			try {
+				// We expect to have our monitor provider set as the main monitor provider
 				auto *glfw_provider =
 					force_upcast<glfw::MonitorProvider>(monitor::get_provider());
 
@@ -179,16 +185,29 @@ namespace burst::glfw {
 			throw GlfwError("Unsupported window mode");
 			break;
 		}
+
+		m_FullscreenCallbacks.notify(&IFullscreenPresentableListener::on_fullscreen_mode_changed,
+									 mode);
 	}
 
-	Subscription Window::add_fullscreen_listener(FullscreenCallback *callback)
+	Subscription Window::add_fullscreen_listener(IFullscreenPresentableListener *callback)
 	{
 		return m_FullscreenCallbacks.subscribe(callback);
 	}
 
-	Subscription Window::add_scale_listener(ScaleCallback *callback)
+	Subscription Window::add_scale_listener(IScalingPresentableListener *callback)
 	{
 		return m_ScaleCallbacks.subscribe(callback);
+	}
+
+	void Window::on_window_resized(GLFWwindow* window, int width, int height) {
+		if (window != m_Data->window.get()) {
+			return;
+		}
+
+		m_ScaleCallbacks.notify(&IScalingPresentableListener::on_scale_changed,
+								width,
+								height);
 	}
 
 	void burst::glfw::Window::_window_owner_guard() const

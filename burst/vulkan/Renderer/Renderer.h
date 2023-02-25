@@ -30,7 +30,7 @@ namespace burst::vulkan {
 		 * \param configuration: The configuration to use
 		 */
 		explicit Renderer(const ApplicationInfo& app,
-						  const Configuration& configuration,
+						  Shared<Configuration> configuration,
 						  IVulkanWindow& window);
 
 		// We override destructor to wait before release the resources
@@ -54,14 +54,14 @@ namespace burst::vulkan {
 
 			Device device;
 
-			Optional<SwapchainKHR> swapchain;
+			Unique<SwapchainKHR> swapchain;
 
 			Pipeline pipeline;
 
 			CommandPool pool;
 
 			explicit Context(const ApplicationInfo& app,
-							 const Configuration& configuration,
+							 Shared<Configuration> configuration,
 							 IVulkanWindow& window);
 			
 		} m_Context; 

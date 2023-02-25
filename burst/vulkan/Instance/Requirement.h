@@ -6,7 +6,7 @@ namespace burst::vulkan {
 	/**
 	 * The possible requirement types.
 	 */
-	ENUM RequirementType{
+	enum class RequirementType{
 		InstanceExtension,
 		DeviceExtension,
 		ValidationLayer,

@@ -2,15 +2,20 @@
 
 #include <burst/common/Log.h>
 
+#include "burst/vulkan/Vk.h"
+
 #include "Commands/CommandBuffer.h"
 #include "Instance/SwapchainKHR/SwapchainKHR.h"
-
 
 #include "Sync/Fence.h"
 #include "Sync/Semaphore.h"
 
-#define ARRAY_OF_1(name, element)                                                   \
-	::burst::Array<decltype(element), 1> name{ (element) }
+
+#define ARRAY_OF_1(name, element)                                                                  \
+	::burst::Array<decltype(element), 1> name                                                      \
+	{                                                                                              \
+		(element)                                                                                  \
+	}
 
 namespace burst::vulkan {
 	Queue::Queue(vk::Queue queue)
@@ -23,8 +28,7 @@ namespace burst::vulkan {
 		m_Submission.enqueue(static_cast<vk::Semaphore>(wait_for), stage);
 	}
 
-	void
-	Queue::sumbit(CommandBuffer& buffer, const Semaphore& signal, const Fence& fence)
+	void Queue::sumbit(CommandBuffer& buffer, const Semaphore& signal, const Fence& fence)
 	{
 		ARRAY_OF_1(buffers, static_cast<vk::CommandBuffer>(buffer));
 		ARRAY_OF_1(signals, static_cast<vk::Semaphore>(signal));
@@ -46,7 +50,16 @@ namespace burst::vulkan {
 		ARRAY_OF_1(swapchains, static_cast<vk::SwapchainKHR>(swapchain));
 		ARRAY_OF_1(indecies, index);
 
-		auto result = m_Queue.presentKHR(vk::PresentInfoKHR{wait_on_semaphores, swapchains, indecies});
+		VkPresentInfoKHR present_info = vk::PresentInfoKHR{ wait_on_semaphores, swapchains, indecies };
+
+		const auto result = VK_CALL(vkQueuePresentKHR(static_cast<vk::Queue>(m_Queue), &present_info));
+
+		// If we have one of these error codes, we need to recreate our swapchain
+		if(result == vk::Result::eErrorOutOfDateKHR || result == vk::Result::eSuboptimalKHR) {
+			swapchain.force_recreation();
+			return;
+		}
+
 		ASSERT(vk::Result::eSuccess == result, "Failed to present KHR");
 	}
 }

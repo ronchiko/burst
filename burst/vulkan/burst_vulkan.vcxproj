@@ -42,9 +42,11 @@
     <ClInclude Include="Instance\SurfaceKHR\SurfaceKHR.h" />
     <ClInclude Include="Instance\SurfaceKHR\SurfaceSupportOptions.h" />
     <ClInclude Include="Instance\SwapchainKHR\ISwapchainObserver.h" />
+    <ClInclude Include="Instance\SwapchainKHR\SwapchainCreator.h" />
     <ClInclude Include="Instance\SwapchainKHR\SwapchainImage.h" />
     <ClInclude Include="Instance\SwapchainKHR\SwapchainKHR.h" />
     <ClInclude Include="Instance\SwapchainKHR\Usage.h" />
+    <ClInclude Include="Vk.h" />
     <ClInclude Include="IVulkanWindow.h" />
     <ClInclude Include="Pipeline\Dynamic States\DynamicViewportHandler.h" />
     <ClInclude Include="Pipeline\Framebuffer.h" />
@@ -88,6 +90,7 @@
     <ClCompile Include="Instance\SurfaceKHR\GpuSurface.cpp" />
     <ClCompile Include="Instance\SurfaceKHR\SurfaceKHR.cpp" />
     <ClCompile Include="Instance\SurfaceKHR\SurfaceSupportOptions.cpp" />
+    <ClCompile Include="Instance\SwapchainKHR\SwapchainCreator.cpp" />
     <ClCompile Include="Instance\SwapchainKHR\SwapchainImage.cpp" />
     <ClCompile Include="Instance\SwapchainKHR\SwapchainKHR.cpp" />
     <ClCompile Include="Pipeline\Framebuffer.cpp" />

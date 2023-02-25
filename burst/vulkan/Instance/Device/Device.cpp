@@ -88,8 +88,8 @@ namespace burst::vulkan {
 		return Queue((*m_Device).getQueue(family_index, index));
 	}
 
-	Device::Device(Gpu& gpu, Queues& queues, const Configuration& configuration)
-		: m_Device(create_device(gpu, queues, configuration))
+	Device::Device(Gpu& gpu, Queues& queues, Shared<Configuration> configuration)
+		: m_Device(create_device(gpu, queues, *configuration))
 		, m_IsRendering(is_rendering_device(queues))
 	{}
 }

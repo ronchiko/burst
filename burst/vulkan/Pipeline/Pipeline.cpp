@@ -11,7 +11,7 @@ namespace burst::vulkan {
 
 	Pipeline Pipeline::create(burst::vulkan::Device& device,
 							  burst::vulkan::SwapchainKHR& swapchain,
-							  const Configuration& configuration)
+							  Shared<Configuration> configuration)
 	{
 		PipelineLoader loader(device, swapchain, configuration);
 
@@ -20,12 +20,16 @@ namespace burst::vulkan {
 
 	const RenderPass& Pipeline::render_pass() const
 	{
-		return m_RenderPass;
+		ASSERT(nullptr != m_RenderPass, "Use of unitialized render pass!");
+
+		return *m_RenderPass;
 	}
 
 	RenderPass& Pipeline::render_pass()
 	{
-		return m_RenderPass;
+		ASSERT(nullptr != m_RenderPass, "Use of unitialized render pass!");
+
+		return *m_RenderPass;
 	}
 
 	Pipeline::operator vk::Pipeline() const
@@ -34,7 +38,7 @@ namespace burst::vulkan {
 	}
 
 	Pipeline::Pipeline(vk::raii::Pipeline pipeline,
-					   RenderPass render_pass,
+					   Unique<RenderPass> render_pass,
 					   vk::raii::PipelineLayout layout,
 					   Data data)
 		: m_Pipeline(std::move(pipeline))

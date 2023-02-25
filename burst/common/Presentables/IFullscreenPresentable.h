@@ -30,19 +30,31 @@ namespace burst {
 	};
 
 	/**
+	 * Interface for listenening for fullscreen presentable events
+	 */ 
+	class IFullscreenPresentableListener
+	{
+	public:
+		virtual ~IFullscreenPresentableListener() = default;
+
+		/**
+		 * Invoked when a fullscreen method is changed
+		 */
+		virtual void on_fullscreen_mode_changed(FullscreenMode mode) = 0;
+	};
+
+	/**
 	 * A IFullscreenPresentable that can signals when its mode is changed.
 	 */
 	class IFullscreenPresentableSignaler : public IFullscreenPresentable
 	{
 	public:
-		using FullscreenCallback = void(FullscreenMode mode);
-
 		virtual ~IFullscreenPresentableSignaler() = default;
 
 		/**
 		 * Adds a fullscreen listener.
 		 */
-		virtual Subscription add_fullscreen_listener(FullscreenCallback *callback) = 0;
+		virtual Subscription add_fullscreen_listener(IFullscreenPresentableListener *callback) = 0;
 	};
 }
 

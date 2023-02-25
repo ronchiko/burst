@@ -8,14 +8,14 @@
 
 using namespace vk;
 
-constexpr ColorComponentFlags ALL_CHANNELS =
-	ColorComponentFlagBits::eR | ColorComponentFlagBits::eG |
-	ColorComponentFlagBits::eB | ColorComponentFlagBits::eA;
+constexpr ColorComponentFlags ALL_CHANNELS = ColorComponentFlagBits::eR |
+											 ColorComponentFlagBits::eG |
+											 ColorComponentFlagBits::eB |
+											 ColorComponentFlagBits::eA;
 
 namespace burst::vulkan {
 
-	constexpr static Pair<Viewport, Rect2D>
-	flat_viewport(const SwapchainKHR& swapchain)
+	constexpr static Pair<Viewport, Rect2D> flat_viewport(const SwapchainKHR& swapchain)
 	{
 		return {
 			Viewport{
@@ -35,7 +35,7 @@ namespace burst::vulkan {
 
 	PipelineLoader::PipelineLoader(burst::vulkan::Device& device,
 								   burst::vulkan::SwapchainKHR& swapchain,
-								   const Configuration& config)
+								   Shared<Configuration> config)
 		: m_Device(device)
 		, m_Swapchain(swapchain)
 		, m_Configuration(config)
@@ -46,14 +46,14 @@ namespace burst::vulkan {
 	{
 		Vector<PipelineShaderStageCreateInfo> loaded_shaders{};
 
-		for(const IShaderLoader *shader_loader : m_Configuration.pipeline.shaders) {
+		for(const IShaderLoader *shader_loader : m_Configuration->pipeline.shaders) {
 			auto shader = shader_loader->load(m_Device);
 
-			PipelineShaderStageCreateInfo shader_create_info(
-				PipelineShaderStageCreateFlags(),
-				static_cast<ShaderStageFlagBits>(shader.type()),
-				static_cast<ShaderModule>(shader),
-				"main");
+			PipelineShaderStageCreateInfo
+				shader_create_info(PipelineShaderStageCreateFlags(),
+								   static_cast<ShaderStageFlagBits>(shader.type()),
+								   static_cast<ShaderModule>(shader),
+								   "main");
 
 			loaded_shaders.push_back(shader_create_info);
 			m_Data.owned_shaders.push_back(std::move(shader));
@@ -66,14 +66,13 @@ namespace burst::vulkan {
 	{
 		Set<DynamicState> dynamic_states{};
 
-		for(const auto& handler : m_Configuration.pipeline.dynamic_states) {
+		for(const auto& handler : m_Configuration->pipeline.dynamic_states) {
 			auto states = handler->get_states();
 
 			dynamic_states.insert(states.begin(), states.end());
 		}
 
-		auto unique_dynamic_states =
-			iter_convert<Vector<DynamicState>>(dynamic_states);
+		auto unique_dynamic_states = iter_convert<Vector<DynamicState>>(dynamic_states);
 
 		m_Data.dynamic_states = unique_dynamic_states;
 		return PipelineDynamicStateCreateInfo(PipelineDynamicStateCreateFlags(),
@@ -87,19 +86,16 @@ namespace burst::vulkan {
 		m_Data.vertex_attributes = {};
 		m_Data.vertex_bindings = {};
 
-		return PipelineVertexInputStateCreateInfo(
-			PipelineVertexInputStateCreateFlags(),
-			m_Data.vertex_bindings,
-			m_Data.vertex_attributes);
+		return PipelineVertexInputStateCreateInfo(PipelineVertexInputStateCreateFlags(),
+												  m_Data.vertex_bindings,
+												  m_Data.vertex_attributes);
 	}
 
-	PipelineInputAssemblyStateCreateInfo
-	PipelineLoader::_create_input_assembly_state()
+	PipelineInputAssemblyStateCreateInfo PipelineLoader::_create_input_assembly_state()
 	{
-		return PipelineInputAssemblyStateCreateInfo(
-			PipelineInputAssemblyStateCreateFlags(),
-			m_Configuration.pipeline.topology,
-			false);
+		return PipelineInputAssemblyStateCreateInfo(PipelineInputAssemblyStateCreateFlags(),
+													m_Configuration->pipeline.topology,
+													false);
 	}
 
 	PipelineViewportStateCreateInfo PipelineLoader::_create_viewport_state()
@@ -114,42 +110,40 @@ namespace burst::vulkan {
 											   m_Data.scissors);
 	}
 
-	PipelineRasterizationStateCreateInfo
-	PipelineLoader::_create_rasterization_state()
+	PipelineRasterizationStateCreateInfo PipelineLoader::_create_rasterization_state()
 	{
-		return PipelineRasterizationStateCreateInfo(
-			PipelineRasterizationStateCreateFlags(),
-			/** depth_clamp_enable = */ false,
-			/** rasterizer_discard_enable = */ false,
-			m_Configuration.pipeline.rasterizer.polygon_mode,
-			m_Configuration.pipeline.rasterizer.cull_mode,
-			m_Configuration.pipeline.rasterizer.frontface,
-			/** depth_bias_enable = */ false,
-			/** depth_bias_constant_factor = */ 0.F,
-			/** depth_bias_clamp = */ 0.F,
-			/** depth_bias_slope_factor = */ 0.F,
-			m_Configuration.pipeline.rasterizer.line_width);
+		return PipelineRasterizationStateCreateInfo(PipelineRasterizationStateCreateFlags(),
+													/** depth_clamp_enable = */ false,
+													/** rasterizer_discard_enable = */ false,
+													m_Configuration->pipeline.rasterizer.polygon_mode,
+													m_Configuration->pipeline.rasterizer.cull_mode,
+													m_Configuration->pipeline.rasterizer.frontface,
+													/** depth_bias_enable = */ false,
+													/** depth_bias_constant_factor = */ 0.F,
+													/** depth_bias_clamp = */ 0.F,
+													/** depth_bias_slope_factor = */ 0.F,
+													m_Configuration->pipeline.rasterizer.line_width);
 	}
 
 	PipelineMultisampleStateCreateInfo PipelineLoader::_create_multisample_state()
 	{
-		return PipelineMultisampleStateCreateInfo(
-			PipelineMultisampleStateCreateFlags(),
-			m_Configuration.pipeline.multisample.sample_count,
-			m_Configuration.pipeline.multisample.sample_shading,
-			m_Configuration.pipeline.multisample.min_sample_shading,
-			/** sample_mask = */ nullptr,
-			/** alpha_to_coverage_enable = */ false,
-			/** alpha_to_one_enable = */ false);
+		return PipelineMultisampleStateCreateInfo(PipelineMultisampleStateCreateFlags(),
+												  m_Configuration->pipeline.multisample.sample_count,
+												  m_Configuration->pipeline.multisample.sample_shading,
+												  m_Configuration->pipeline.multisample
+													  .min_sample_shading,
+												  /** sample_mask = */ nullptr,
+												  /** alpha_to_coverage_enable = */ false,
+												  /** alpha_to_one_enable = */ false);
 	}
 
 	PipelineColorBlendStateCreateInfo PipelineLoader::_create_color_blend_state()
 	{
 		// Create attachment using configuration
 		Vector<PipelineColorBlendAttachmentState> attachments{};
-		attachments.reserve(m_Configuration.pipeline.color_attachments.size());
+		attachments.reserve(m_Configuration->pipeline.color_attachments.size());
 
-		for(const auto& attachment : m_Configuration.pipeline.color_attachments) {
+		for(const auto& attachment : m_Configuration->pipeline.color_attachments) {
 			attachments.push_back(PipelineColorBlendAttachmentState{
 				attachment.enable_blend,
 				attachment.color_blend.source_factor,
@@ -163,12 +157,11 @@ namespace burst::vulkan {
 		}
 
 		m_Data.color_blend_attachments = attachments;
-		return PipelineColorBlendStateCreateInfo(
-			PipelineColorBlendStateCreateFlags(),
-			/** enable_logic_operation = */ false,
-			/** logic_operation = */ LogicOp::eCopy,
-			m_Data.color_blend_attachments,
-			/** blend_constants = */ Array<f32, 4>());
+		return PipelineColorBlendStateCreateInfo(PipelineColorBlendStateCreateFlags(),
+												 /** enable_logic_operation = */ false,
+												 /** logic_operation = */ LogicOp::eCopy,
+												 m_Data.color_blend_attachments,
+												 /** blend_constants = */ Array<f32, 4>());
 	}
 
 	Pipeline PipelineLoader::create()
@@ -182,8 +175,9 @@ namespace burst::vulkan {
 		auto multisample_state = _create_multisample_state();
 		auto color_blend_state = _create_color_blend_state();
 
-		burst::vulkan::RenderPass render_pass(
-			m_Configuration, m_Device, m_Swapchain);
+		auto render_pass = std::make_unique<burst::vulkan::RenderPass>(m_Configuration,
+																	   m_Device,
+																	   m_Swapchain);
 
 		Vector<DescriptorSetLayout> sets_layouts{};
 		Vector<PushConstantRange> push_constants{};
@@ -194,35 +188,31 @@ namespace burst::vulkan {
 			push_constants,
 		};
 
-		auto layout = static_cast<vk::raii::Device&>(m_Device).createPipelineLayout(
-			layout_create_info);
+		auto layout = static_cast<vk::raii::Device&>(m_Device)
+						  .createPipelineLayout(layout_create_info);
 
-		GraphicsPipelineCreateInfo create_info{
-			PipelineCreateFlags(),
-			shaders,
-			&vertex_input,
-			&input_assembly,
-			nullptr,
-			&viewport_state,
-			&rasterization_state,
-			&multisample_state,
-			nullptr,
-			&color_blend_state,
-			&dynamic_states,
-			*layout,
-			static_cast<vk::RenderPass>(render_pass),
-			/** subpass = */ 0,
-			/** pipeline_handle = */ VK_NULL_HANDLE,
-			/** pipeline_index = */ -1
-		};
+		GraphicsPipelineCreateInfo create_info{ PipelineCreateFlags(),
+												shaders,
+												&vertex_input,
+												&input_assembly,
+												nullptr,
+												&viewport_state,
+												&rasterization_state,
+												&multisample_state,
+												nullptr,
+												&color_blend_state,
+												&dynamic_states,
+												*layout,
+												static_cast<vk::RenderPass>(*render_pass),
+												/** subpass = */ 0,
+												/** pipeline_handle = */ VK_NULL_HANDLE,
+												/** pipeline_index = */ -1 };
 
 		// Recreate the render pass before framebuffer we pass it to the pipeline
-		render_pass.recreate_framebuffers(m_Device);
+		render_pass->recreate_framebuffers(m_Device);
 
 		return Pipeline{
-			vk::raii::Pipeline(static_cast<vk::raii::Device&>(m_Device),
-							   VK_NULL_HANDLE,
-							   create_info),
+			vk::raii::Pipeline(static_cast<vk::raii::Device&>(m_Device), VK_NULL_HANDLE, create_info),
 			std::move(render_pass),
 			std::move(layout),
 			std::move(m_Data),

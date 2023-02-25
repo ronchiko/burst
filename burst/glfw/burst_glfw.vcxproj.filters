@@ -21,13 +21,22 @@
     <ClInclude Include="Error.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="KeyInputProvider.h">
+    <ClInclude Include="Providers\KeyInputProvider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Glfw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MonitorProvider.h">
+    <ClInclude Include="Providers\MonitorProvider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\IResizeEventListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\IKeyEventListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\IMonitorListener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -41,10 +50,10 @@
     <ClCompile Include="Glfw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="KeyInputProvider.cpp">
+    <ClCompile Include="Providers\KeyInputProvider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MonitorProvider.cpp">
+    <ClCompile Include="Providers\MonitorProvider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

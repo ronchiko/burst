@@ -29,7 +29,7 @@ namespace burst::vulkan {
 		return m_Device;
 	}
 
-	Gpu::operator vk::PhysicalDevice() {
+	Gpu::operator vk::PhysicalDevice() const {
 		return *m_Device;
 	}
 }

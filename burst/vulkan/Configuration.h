@@ -99,6 +99,6 @@ namespace burst::vulkan {
 		Swapchain swapchain = {};
 		Pipeline pipeline = {};
 
-		static Configuration create_default_configuration();
+		static Shared<Configuration> create_default_configuration();
 	};
 }

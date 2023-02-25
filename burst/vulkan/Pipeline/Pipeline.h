@@ -24,7 +24,7 @@ namespace burst::vulkan {
 		 */
 		static Pipeline create(Device& device,
 							   SwapchainKHR& swapchain,
-							   const Configuration& configuration);
+							   Shared<Configuration> configuration);
 
 		/**
 		 * The render pass of this pipline.
@@ -55,12 +55,12 @@ namespace burst::vulkan {
 		};
 
 		explicit Pipeline(vk::raii::Pipeline pipeline,
-						  RenderPass render_pass,
+						  Unique<RenderPass> render_pass,
 						  vk::raii::PipelineLayout layout,
 						  Data data);
 
 		vk::raii::Pipeline m_Pipeline;
-		RenderPass m_RenderPass;
+		Unique<RenderPass> m_RenderPass;
 		vk::raii::PipelineLayout m_Layout;
 		Data m_Data;
 	};

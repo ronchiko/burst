@@ -15,6 +15,13 @@ const burst::ApplicationInfo INFO{
 	burst::Version(1),
 };
 
+struct F : public burst::IScalingPresentableListener
+{
+	virtual void on_scale_changed(burst::u32 width, burst::u32 height) {
+		burst::log::debug("called f");
+	}
+};
+
 int main()
 {
 	using namespace burst;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <burst/common/Log.h>
+
 #include "../Gpu/Gpu.h"
 #include "SurfaceKHR.h"
 
@@ -31,13 +33,17 @@ namespace burst::vulkan {
 		 */
 		bool does_surface_support_khr(u32 index);
 
-		constexpr const SurfaceKHR& surface() const
+		inline const SurfaceKHR& surface() const
 		{
-			return m_Surface;
+			return _surface();
 		} 
 
 	private:
-		const SurfaceKHR& m_Surface;
-		const Gpu& m_Gpu;
+		// Safe getters
+		const SurfaceKHR& _surface() const;
+		const Gpu& _gpu() const;
+
+		Optional<Ref<const SurfaceKHR>> m_Surface;
+		Optional<Ref<const Gpu>> m_Gpu;
 	};
 }

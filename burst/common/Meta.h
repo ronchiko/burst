@@ -6,8 +6,8 @@
 #include <sstream>
 #include <vector>
 
-#include "Concepts.h"
 #include "Types.h"
+#include "Concepts.h"
 
 namespace burst {
 

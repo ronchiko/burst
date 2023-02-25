@@ -2,7 +2,9 @@
 
 #include <ranges>
 
-#include <burst/Common.h>
+#include <burst/Common/Types.h>
+#include <burst/Common/Application.h>
+#include <burst/Common/Engine.h>
 
 /**
  * Coverts a burst version to vulkan version.
@@ -58,9 +60,9 @@ namespace burst::vulkan {
 	}
 
 	Instance::Instance(const ApplicationInfo& info,
-					   const Configuration& config,
+					   Shared<Configuration> config,
 					   IVulkanWindow& window)
-		: m_Instance(create_instance(info, config, window))
+		: m_Instance(create_instance(info, *config, window))
 		, m_Messenger()
 	{
 #ifdef _DEBUG

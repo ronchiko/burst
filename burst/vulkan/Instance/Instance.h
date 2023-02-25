@@ -2,7 +2,8 @@
 
 #include <vulkan/vulkan_raii.hpp>
 
-#include <burst/Common.h>
+#include <burst/Common/Types.h>
+#include <burst/Common/Application.h>
 
 #include "../Configuration.h"
 #include "../IVulkanWindow.h"
@@ -24,7 +25,7 @@ namespace burst::vulkan {
 		 * \param info: The info about the creating application
 		 * \param config: The configuration of the application
 		 */
-		explicit Instance(const ApplicationInfo& info, const Configuration& config, IVulkanWindow& window);
+		explicit Instance(const ApplicationInfo& info, Shared<Configuration> config, IVulkanWindow& window);
 
 		/**
 		 * Gets a vector of all the GPUs vulkan detects for this instance.

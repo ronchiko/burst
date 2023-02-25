@@ -9,12 +9,12 @@ namespace burst::monitor {
 	class IMonitorProvider
 	{
 	public:
-		IFACE_DESTRUCTOR(IMonitorProvider);
+		virtual ~IMonitorProvider() = default;
 
 		/**
 		 * Provides the resolution of the monitor.
 		 */
-		IFACE_FUNC(Uint2 resolution(u32 index) const);
+		virtual Uint2 resolution(u32 index) const = 0;
 	};
 
 	/** Index of the main monitor */

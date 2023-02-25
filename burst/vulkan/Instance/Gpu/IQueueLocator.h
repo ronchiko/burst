@@ -36,9 +36,9 @@ namespace burst::vulkan {
 			, surface(surface)
 		{}
 
-		u32 index;					   // The index of the queue inspected
-		Ref<const Gpu> gpu;			   // The gpu of this object
-		Address<SurfaceKHR>& surface;  // The surface attached, might be unavailable
+		u32 index;					  // The index of the queue inspected
+		Ref<const Gpu> gpu;			  // The gpu of this object
+		Address<SurfaceKHR>& surface; // The surface attached, might be unavailable
 	};
 
 	/**
@@ -68,7 +68,7 @@ namespace burst::vulkan {
 			Failure
 		};
 
-		IFACE_DESTRUCTOR(IQueueLocator);
+		virtual ~IQueueLocator() = default;
 
 		/**
 		 * Finds a the target queue and adds it to the queues struct
@@ -78,7 +78,7 @@ namespace burst::vulkan {
 		 *
 		 * \returns: Status::Success, Status::Failure or Status::Postpone
 		 */
-		IFACE_FUNC(Status locate(const QueueFamilyProperties& properties,
-								 Queues& q));
+		virtual Status locate(const QueueFamilyProperties& properties,
+							  Queues& q) = 0;
 	};
 }

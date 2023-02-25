@@ -1,7 +1,8 @@
 #pragma once
 
-#include <burst/common/Meta.h>
-#include <burst/common/Logging/ILogger.h>
+#include "Types.h"
+#include "Meta.h"
+#include "Logging/ILogger.h"
 
 namespace burst::log {
 	/**

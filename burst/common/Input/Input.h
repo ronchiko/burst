@@ -14,7 +14,7 @@ namespace burst::input {
 	/**
 	 * The supported keys for burst.
 	 */
-	ENUM Key {
+	enum class Key {
 		A,
 		B,
 		C,
@@ -85,7 +85,7 @@ namespace burst::input {
 		ENUM_LAST
 	};
 
-	ENUM MouseButton {
+	enum class MouseButton {
 		LeftButton,
 		RightButton,
 		MiddleButton,

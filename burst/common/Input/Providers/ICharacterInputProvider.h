@@ -9,21 +9,21 @@ namespace burst::input {
 	 */
 	class ICharacterInputProvider {
 	public:
-		IFACE_DESTRUCTOR(ICharacterInputProvider);
+		virtual ~ICharacterInputProvider() = default;
 
 		/**
 		 * Gets the next awaited character
 		 */
-		IFACE_FUNC(int next());
+		virtual int next() = 0;
 
 		/**
 		 * Returns true if there is more characters to be consumed
 		 */
-		IFACE_FUNC(bool has_next());
+		virtual bool has_next() = 0;
 
 		/**
 		 * Flushes the rest of the characters in the provider
 		 */
-		IFACE_FUNC(void flush());
+		virtual void flush() = 0;
 	};
 }

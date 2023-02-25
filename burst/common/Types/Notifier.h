@@ -1,14 +1,19 @@
 #pragma once
 
 #include "../Types.h"
+#include "../Log.h"
 
-#include "traits/generic.h"
 #include "traits/function.h"
+#include "traits/generic.h"
 #include "traits/member_function.h"
 
 namespace burst {
 	/**
-	 * RAII object for containing a subcription for a notifier.
+	  RAII object for containing a subcription for a notifier.
+	  
+	  NOTICE:
+		This object is not trivially movable!, when moving an object with subscription
+	 	it needs to be reassigned because the address of the functions might change.
 	 */
 	struct Subscription
 	{
@@ -17,25 +22,28 @@ namespace burst {
 			: m_RemoveMethod(nullptr)
 		{}
 
+		explicit Subscription(nullptr_t)
+			: Subscription()
+		{}
+
 		explicit Subscription(std::function<void()> remove_function)
 			: m_RemoveMethod(remove_function)
 		{}
 
-		NOT_COPIABLE(Subscription);
-
-		Subscription(Subscription&& subscription) noexcept
-			: m_RemoveMethod(subscription.m_RemoveMethod)
-		{}
-
-		Subscription& operator=(Subscription&& subscription) noexcept
+		Subscription(Subscription&& other) noexcept
+			: m_RemoveMethod(other.m_RemoveMethod)
 		{
+			other.m_RemoveMethod = nullptr;
+		}
+
+		Subscription& operator=(Subscription&& other) noexcept {
 			_release();
-
-			m_RemoveMethod = subscription.m_RemoveMethod;
-			subscription.m_RemoveMethod = nullptr;
-
+			
+			std::exchange(m_RemoveMethod, other.m_RemoveMethod);
 			return *this;
 		}
+
+		NOT_COPIABLE(Subscription);
 
 		~Subscription()
 		{
@@ -73,6 +81,7 @@ namespace burst {
 		 * \param subscriber: The subscriber to add
 		 * \return: A subscription object, while this object exists the function will be registered.
 		 */
+		[[nodiscard]] 
 		Subscription subscribe(Subscriber *subscriber)
 		{
 			register_observer(subscriber);
@@ -90,7 +99,7 @@ namespace burst {
 		 */
 		void register_observer(Subscriber *observer)
 		{
-			m_Subcribers.insert(observer);
+			m_Subcribers.push_back(observer);
 		}
 
 		/**
@@ -100,11 +109,14 @@ namespace burst {
 		 */
 		void unregister_observer(Subscriber *observer)
 		{
-			m_Subcribers.erase(observer);
+			auto iterator = std::find(m_Subcribers.begin(), m_Subcribers.end(), observer);
+			WASSERT(m_Subcribers.end() != iterator, "Attempted to unregister a non existant subscriber")
+			
+			m_Subcribers.erase(iterator);
 		}
 
 	protected:
-		Set<Subscriber *> m_Subcribers;
+		Vector<Subscriber *> m_Subcribers;
 	};
 
 	template<typename T>
@@ -122,12 +134,10 @@ namespace burst {
 		template<typename... Args>
 		void notify(Args&...args)
 		{
-			static_assert(burst::function_traits<CallbackType>::argument_count ==
-							  sizeof...(args),
+			static_assert(burst::function_traits<CallbackType>::argument_count == sizeof...(args),
 						  "Argument count of function doesnt match");
 
-			for(const auto& observer :
-				NotificationList<CallbackType>::m_Subcribers) {
+			for(const auto& observer : NotificationList<CallbackType>::m_Subcribers) {
 				observer(args...);
 			}
 		}
@@ -140,19 +150,17 @@ namespace burst {
 	public:
 		/**
 		 * Invokes a function to the entire notification list.
-		 * 
+		 *
 		 * \param function: The function that to invoke
 		 * \param args...: The argument to pass
 		 */
 		template<burst::member_function Func, typename... Args>
 		void notify(Func function, Args&...args)
 		{
-			static_assert(burst::member_function_traits<Func>::argument_count ==
-							  sizeof...(args),
+			static_assert(burst::member_function_traits<Func>::argument_count == sizeof...(args),
 						  "Argument count of function doesnt match");
 
-			for(const auto& observer :
-				NotificationList<ObserverType>::m_Subcribers) {
+			for(const auto& observer : NotificationList<ObserverType>::m_Subcribers) {
 				(observer->*function)(args...);
 			}
 		}

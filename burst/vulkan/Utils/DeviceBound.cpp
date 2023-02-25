@@ -14,4 +14,8 @@ namespace burst::vulkan::mix {
 	vk::raii::Device& DeviceBound::owning_device() {
 		return static_cast<vk::raii::Device&>(m_Device);
 	}
+
+	Ref<burst::vulkan::Device> DeviceBound::burst_device() {
+		return m_Device;
+	}
 }

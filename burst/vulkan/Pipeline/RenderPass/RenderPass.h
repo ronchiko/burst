@@ -6,19 +6,21 @@
 
 #include "../../Configuration.h"
 #include "../../Instance/Device/Device.h"
+#include "../../Instance/SwapchainKHR/ISwapchainObserver.h"
 #include "../../Instance/SwapchainKHR/SwapchainKHR.h"
 
-#include "../Framebuffer.h"
 #include "../../Gfx/ImageView.h"
 #include "../../Utils/SwapchainBound.h"
+#include "../Framebuffer.h"
 
 #include "Subpass.h"
 
 namespace burst::vulkan {
-	class RenderPass : protected mix::SwapchainBound
+	class RenderPass final : protected mix::SwapchainBound,
+							 public ISwapchainObserver
 	{
 	public:
-		explicit RenderPass(const Configuration& configuration,
+		explicit RenderPass(Shared<Configuration> configuration,
 							burst::vulkan::Device& device,
 							burst::vulkan::SwapchainKHR& swapchain);
 
@@ -38,11 +40,17 @@ namespace burst::vulkan {
 
 		/**
 		 * Gets a framebuffer object at a given index.
-		 * 
+		 *
 		 * \param index: The index of the framebuffer
 		 */
 		const Framebuffer& framebuffer_at(u32 index) const;
 
+		/**
+		 * Invoked when a swapchain is resized.
+		 *
+		 * \param swapchain: The swapchain
+		 */
+		virtual void on_swapchain_resized(SwapchainKHR& swapchain) override;
 
 	private:
 		/**
@@ -68,6 +76,7 @@ namespace burst::vulkan {
 		};
 
 		vk::raii::RenderPass m_RenderPass;
+		Subscription m_SwapchainSubscription;
 		Data m_Data;
 	};
 }

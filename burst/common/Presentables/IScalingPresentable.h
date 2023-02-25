@@ -24,18 +24,34 @@ namespace burst {
 	};
 
 	/**
+	 * Interface for listening for scaling persentable events
+	 */
+	class IScalingPresentableListener
+	{
+	public:
+		virtual ~IScalingPresentableListener() = default;
+
+		/**
+		 * Invokes the on scale changed method
+		 * 
+		 * \param width: The new width
+		 * \param height: The new height
+		 */
+		virtual void on_scale_changed(u32 width, u32 height) = 0;
+	};
+
+	/**
 	 * A scaling presentable that signals when its rescaled.
 	 */
 	class IScalingPresentableSignaler : public IScalingPresentable
 	{
 	public:
-		using ScaleCallback = void(u32, u32);
 
 		virtual ~IScalingPresentableSignaler() = default;
 
 		/**
 		 * Adds a scale listener.
 		 */
-		virtual Subscription add_scale_listener(ScaleCallback *callback) = 0;
+		virtual Subscription add_scale_listener(IScalingPresentableListener *callback) = 0;
 	};
 }

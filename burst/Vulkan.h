@@ -11,6 +11,6 @@ namespace burst::vulkan {
 	 * Loads the default instance for vulkan
 	 */
 	Unique<IRenderer> create_vulkan_render(const ApplicationInfo& info,
-										   const Configuration& configuration,
+										   Shared<Configuration> configuration,
 										   IVulkanWindow& window);
 }

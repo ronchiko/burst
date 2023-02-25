@@ -3,8 +3,10 @@
 #include <burst/Common.h>
 
 #include "burst/glfw/Error.h"
-#include "burst/glfw/KeyInputProvider.h"
 #include "burst/glfw/Window.h"
+
+#include "burst/glfw/Providers/KeyInputProvider.h"
+#include "burst/glfw/Providers/MonitorProvider.h"
 
 namespace burst::glfw {
 
@@ -16,14 +18,19 @@ namespace burst::glfw {
 	static void initialize_glfw()
 	{
 		static bool g_Initialized = false;
-		if(g_Initialized) return;
+		if(g_Initialized) {
+			return;
+		}
 
 		if(glfwInit() != GLFW_TRUE) {
 			throw burst::glfw::GlfwError("Failed to initialize GLFW");
 		}
 
 		glfwSetErrorCallback(&glfw_error_hanlder);
+
+		// Set providers
 		burst::input::register_key_provider(std::make_unique<burst::glfw::KeyInputProvider>());
+		burst::monitor::set_provider(std::make_shared<MonitorProvider>());
 
 		g_Initialized = true;
 	}

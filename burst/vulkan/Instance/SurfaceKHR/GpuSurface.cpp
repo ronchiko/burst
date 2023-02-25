@@ -12,14 +12,27 @@ namespace burst::vulkan {
 	{
 		SurfaceSupportOptions options{};
 
-		options.capabilities = m_Gpu.m_Device.getSurfaceCapabilitiesKHR(m_Surface);
-		options.formats = m_Gpu.m_Device.getSurfaceFormatsKHR(m_Surface);
-		options.present_modes = m_Gpu.m_Device.getSurfacePresentModesKHR(m_Surface);
+		options.capabilities = _gpu().m_Device.getSurfaceCapabilitiesKHR(_surface());
+		options.formats = _gpu().m_Device.getSurfaceFormatsKHR(_surface());
+		options.present_modes = _gpu().m_Device.getSurfacePresentModesKHR(_surface());
 
 		return options;
 	}
 
 	bool GpuSurfaceBinding::does_surface_support_khr(u32 index) {
-		return m_Gpu.m_Device.getSurfaceSupportKHR(index, m_Surface);
+		return _gpu().m_Device.getSurfaceSupportKHR(index, _surface());
+	}
+
+	const SurfaceKHR& GpuSurfaceBinding::_surface() const {
+		ASSERT(m_Surface.has_value(), "Binding surface not initialized!");
+		
+		return m_Surface.value();
+	}
+
+	const Gpu& GpuSurfaceBinding::_gpu() const
+	{
+		ASSERT(m_Gpu.has_value(), "Binding surface not initialized!");
+
+		return m_Gpu.value();
 	}
 }

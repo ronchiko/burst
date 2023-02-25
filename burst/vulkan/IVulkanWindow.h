@@ -12,9 +12,10 @@ namespace burst::vulkan {
 	class IVulkanWindow : public IWindow
 	{
 	public:
+		virtual ~IVulkanWindow() = default;
 		/**
 		 * Gets the vulkan requirements for this window.
 		 */
-		IFACE_FUNC(Vector<Requirement> get_requirements() const);
+		virtual Vector<Requirement> get_requirements() const = 0;
 	};
 }

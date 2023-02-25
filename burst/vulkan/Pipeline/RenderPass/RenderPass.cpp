@@ -7,14 +7,15 @@ using namespace vk;
 
 namespace burst::vulkan {
 
-	RenderPass::RenderPass(const Configuration& configuration,
+	RenderPass::RenderPass(Shared<Configuration> configuration,
 						   Device& device,
 						   SwapchainKHR& swapchain)
 		: mix::SwapchainBound(swapchain)
 		, m_RenderPass(nullptr)
+		, m_SwapchainSubscription(m_Swapchain.register_observer(this))
 		, m_Data{}
 	{
-		_recreate_render_pass(configuration, swapchain, device);
+		_recreate_render_pass(*configuration, swapchain, device);
 	}
 
 	RenderPass::operator vk::RenderPass() const
@@ -25,18 +26,26 @@ namespace burst::vulkan {
 	void RenderPass::recreate_framebuffers(Device& device)
 	{
 		m_Data.images = m_Swapchain.create_images();
-		m_Data.views = convert<Vector<ImageView>>(
-			m_Data.images,
-			[&device](const auto& image) { return ImageView(device, *image); });
+		m_Data.views = convert<Vector<ImageView>>(m_Data.images, [&device](const auto& image) {
+			return ImageView(device, *image);
+		});
 
-		m_Data.framebuffers = convert<Vector<Framebuffer>>(
-			m_Data.views, [this, &device](const auto& view) {
-				return Framebuffer(device, *this, view);
-			});
+		m_Data.framebuffers = convert<Vector<Framebuffer>>(m_Data.views,
+														   [this, &device](const auto& view) {
+															   return Framebuffer(device,
+																				  *this,
+																				  view);
+														   });
 	}
 
-	const Framebuffer& RenderPass::framebuffer_at(u32 index) const {
+	const Framebuffer& RenderPass::framebuffer_at(u32 index) const
+	{
 		return m_Data.framebuffers[index];
+	}
+
+	void RenderPass::on_swapchain_resized(SwapchainKHR& swapchain)
+	{
+		recreate_framebuffers(swapchain.burst_device());
 	}
 
 	void RenderPass::_recreate_render_pass(const Configuration& configuration,
@@ -88,14 +97,13 @@ namespace burst::vulkan {
 		});
 
 
-		auto subpasses = convert<Vector<SubpassDescription>>(m_Data.subpasses, 
-			default_convertor<burst::vulkan::Subpass, SubpassDescription>);
-		RenderPassCreateInfo create_info{ RenderPassCreateFlags(),
-										  m_Data.descriptions,
-										  subpasses,
-										  m_Data.dependencies };
+		auto subpasses = convert<Vector<SubpassDescription>>(m_Data.subpasses,
+															 default_convertor<burst::vulkan::Subpass,
+																			   SubpassDescription>);
+		RenderPassCreateInfo create_info{
+			RenderPassCreateFlags(), m_Data.descriptions, subpasses, m_Data.dependencies
+		};
 
-		m_RenderPass =
-			raii::RenderPass(static_cast<raii::Device&>(device), create_info);
+		m_RenderPass = raii::RenderPass(static_cast<raii::Device&>(device), create_info);
 	}
 }

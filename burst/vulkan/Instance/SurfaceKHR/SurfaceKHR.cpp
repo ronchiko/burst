@@ -1,5 +1,7 @@
 #include "SurfaceKHR.h"
 
+#include <burst/common/Log.h>
+
 /**
  * Procedure declaration for the create_surface method.
  * For each OS this method needs to be implemented, it should follow this

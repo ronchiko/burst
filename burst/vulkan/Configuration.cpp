@@ -21,11 +21,11 @@ namespace burst::vulkan {
 	static Unique<IDynamicStateHandler> g_DynamicViewportHandler =
 		std::make_unique<DynamicViewportHandler>();
 
-	Configuration Configuration::create_default_configuration()
+	Shared<Configuration> Configuration::create_default_configuration()
 	{
 		using enum RequirementType;
 
-		return Configuration{
+		return Shared<Configuration>(new Configuration{
 			{
 				Requirement{ InstanceExtension, VK_KHR_SURFACE_EXTENSION_NAME },
 				Requirement{ DeviceExtension, VK_KHR_SWAPCHAIN_EXTENSION_NAME },
@@ -64,6 +64,6 @@ namespace burst::vulkan {
 					Configuration::Pipeline::ColorAttachment(),
 				},
 			}
-		};
+		});
 	}
 }

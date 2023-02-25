@@ -34,11 +34,9 @@ namespace burst::vulkan {
 	{
 		Vector<vk::Semaphore> semaphores{ *m_Semaphore };
 		Vector<u64> values{ 0 };
-		vk::SemaphoreWaitInfo wait_info{
-			vk::SemaphoreWaitFlags(),
-			semaphores,
-			values
-		};
+		vk::SemaphoreWaitInfo wait_info{ vk::SemaphoreWaitFlags(),
+										 semaphores,
+										 values };
 
 		CHECK(
 			vk::Result::eSuccess ==

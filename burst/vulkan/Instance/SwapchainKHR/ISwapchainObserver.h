@@ -16,6 +16,6 @@ namespace burst::vulkan {
 		 * 
 		 * \param swapchain: The swapchain that was resized
 		 */
-		virtual void on_swapchain_resized(const SwapchainKHR& swapchain) = 0;
+		virtual void on_swapchain_resized(SwapchainKHR& swapchain) = 0;
 	};
 }

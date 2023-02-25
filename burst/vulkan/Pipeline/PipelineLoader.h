@@ -19,7 +19,7 @@ namespace burst::vulkan {
 		 */
 		explicit PipelineLoader(burst::vulkan::Device& device,
 								burst::vulkan::SwapchainKHR& swapchain,
-								const Configuration& configuration);
+								Shared<Configuration> configuration);
 
 		/**
 		 * Constructs the actual pipeline.
@@ -69,7 +69,7 @@ namespace burst::vulkan {
 
 		burst::vulkan::Device& m_Device;
 		burst::vulkan::SwapchainKHR& m_Swapchain;
-		const burst::vulkan::Configuration& m_Configuration;
+		Shared<burst::vulkan::Configuration> m_Configuration;
 
 		Pipeline::Data m_Data;
 	};

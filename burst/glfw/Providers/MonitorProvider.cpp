@@ -6,13 +6,10 @@
 #include <Burst/Common/Meta.h>
 #include <Burst/Common/Types/Behavior/MemoryComparable.h>
 #include <Burst/Common/Types/Notifier.h>
-#include <Burst/Common/Types/SignalList.h>
 
 #include "Error.h"
+#include "Events/IMonitorListener.h"
 
-
-static burst::Notifier<burst::glfw::IMonitorProviderListener>
-	g_MonitorCallbackList{};
 
 /**
  * Finds the main monitor in a list of monitors.
@@ -35,27 +32,17 @@ static burst::u32 find_main_monitor(const burst::Vector<GLFWmonitor *> monitors)
 namespace burst::glfw {
 
 	/**
-	 * The GLFW monitor event handler.
-	 */
-	static void monitor_event_handler(GLFWmonitor *monitor, int event)
-	{
-		g_MonitorCallbackList.notify(
-			&IMonitorProviderListener::on_monitor_change, monitor, event);
-	}
-
-	/**
 	 * Adds a new monitor event handler to monitor callback list, and initializes the
 	 * callbacks if neccessary.
 	 */
-	static burst::Subscription
-	add_monitor_provider(IMonitorProviderListener *listener)
+	static Subscription add_monitor_provider(IMonitorListener *listener)
 	{
 		static bool s_ActivatedCallback = false;
 		if(!s_ActivatedCallback) {
-			glfwSetMonitorCallback(monitor_event_handler);
+			glfwSetMonitorCallback(glfw_monitor_event);
 		}
 
-		return g_MonitorCallbackList.subscribe(listener);
+		return g_MonitorEvent.subscribe(listener);
 	}
 
 	/**
@@ -89,12 +76,14 @@ namespace burst::glfw {
 		return { video->width, video->height };
 	}
 
-	void MonitorProvider::on_monitor_change(GLFWmonitor *monitor, int event)
+	void MonitorProvider::on_monitor_event(GLFWmonitor *monitor, int event)
 	{
 		if(GLFW_CONNECTED == event) {
 			m_Monitors.push_back(monitor);
 			return;
 		}
+
+		ASSERT(event == GLFW_DISCONNECTED, "Got unexpected event");
 
 		// Erase the provided monitor
 		auto iter = std::find(m_Monitors.begin(), m_Monitors.end(), monitor);

@@ -1,6 +1,9 @@
 #pragma once
 
-#include <Burst/Common/IRenderer.h>
+#include <burst/common/Const.h>
+#include <burst/common/Log.h>
+#include <burst/common/IRenderer.h>
+#include <burst/common/Types/Iterators/Functions.h>
 
 #include "../Configuration.h"
 

@@ -22,7 +22,7 @@ namespace burst::log {
 	class ILogger
 	{
 	public:
-		IFACE_DESTRUCTOR(ILogger);
+		virtual ~ILogger() = default;
 
 		/**
 		 * Logs a message.
@@ -30,6 +30,6 @@ namespace burst::log {
 		 * \param level: The severity of the message
 		 * \param message: The message to log
 		 */
-		IFACE_FUNC(void log(LogSeverity level, const String& message));
+		virtual void log(LogSeverity level, const std::string& message) = 0;
 	};
 }

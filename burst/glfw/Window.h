@@ -8,7 +8,10 @@
 #include <burst/Common/Types/Notifier.h>
 #include <burst/Common/Presentables/IFullscreenPresentable.h>
 
+#include "Events/IResizeEventListener.h"
+
 #include "burst/vulkan/IVulkanWindow.h"
+
 
 namespace burst::glfw {
 
@@ -23,7 +26,8 @@ namespace burst::glfw {
 	 */
 	class Window : public burst::vulkan::IVulkanWindow,
 				   public burst::IScalingPresentableSignaler,
-				   public burst::IFullscreenPresentableSignaler
+				   public burst::IFullscreenPresentableSignaler,
+				   public burst::glfw::IResizeEventListener
 	{
 	public:
 		static constexpr AdditionalWindowSettings DEFAULT_SETTINGS = {
@@ -59,9 +63,12 @@ namespace burst::glfw {
 		void set_mode(FullscreenMode mode);
 
 		/* --------- Signaling ---------------------------------- */
-		Subscription add_fullscreen_listener(FullscreenCallback *callback);
+		Subscription add_fullscreen_listener(IFullscreenPresentableListener *callback);
 
-		Subscription add_scale_listener(ScaleCallback *callback);
+		Subscription add_scale_listener(IScalingPresentableListener *callback);
+		
+		/* -------- Event listener ------------------------------ */
+		virtual void on_window_resized(GLFWwindow *window, int width, int height) override;
 
 	private:
 		void _window_owner_guard() const;
@@ -72,7 +79,9 @@ namespace burst::glfw {
 			Uint2 scale, const String& title, const AdditionalWindowSettings& more);
 
 		Unique<Data> m_Data;
-		Notifier<ScaleCallback> m_ScaleCallbacks;
-		Notifier<FullscreenCallback> m_FullscreenCallbacks;
+		Notifier<IScalingPresentableListener> m_ScaleCallbacks;
+		Notifier<IFullscreenPresentableListener> m_FullscreenCallbacks;
+
+		Subscription m_GlfwResizeSubscription;
 	};
 }

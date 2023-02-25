@@ -21,8 +21,11 @@
   <ItemGroup>
     <ClInclude Include="..\Glfw.h" />
     <ClInclude Include="Error.h" />
-    <ClInclude Include="KeyInputProvider.h" />
-    <ClInclude Include="MonitorProvider.h" />
+    <ClInclude Include="Events\IKeyEventListener.h" />
+    <ClInclude Include="Events\IMonitorListener.h" />
+    <ClInclude Include="Events\IResizeEventListener.h" />
+    <ClInclude Include="Providers\KeyInputProvider.h" />
+    <ClInclude Include="Providers\MonitorProvider.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -33,8 +36,8 @@
   <ItemGroup>
     <ClCompile Include="Error.cpp" />
     <ClCompile Include="Glfw.cpp" />
-    <ClCompile Include="KeyInputProvider.cpp" />
-    <ClCompile Include="MonitorProvider.cpp" />
+    <ClCompile Include="Providers\KeyInputProvider.cpp" />
+    <ClCompile Include="Providers\MonitorProvider.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -58,7 +58,7 @@ namespace burst::vulkan {
 		/**
 		 * Converts to vk::PhysicalDevice.
 		 */
-		explicit operator vk::PhysicalDevice();
+		explicit operator vk::PhysicalDevice() const;
 
 	private:
 		friend class GpuSurfaceBinding;

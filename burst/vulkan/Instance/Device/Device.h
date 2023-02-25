@@ -22,11 +22,12 @@ namespace burst::vulkan {
 		 * Create a new device.
 		 *
 		 * \param gpu: The gpu the device is bound to
+		 * \param queues: The gpu queues of the gpu
 		 * \param configuration: The configuration for the device
 		 */
 		explicit Device(Gpu& gpu,
 						Queues& queues,
-						const Configuration& configuration);
+						Shared<Configuration> configuration);
 
 		/**
 		 * Convertor to vk::raii::Device.

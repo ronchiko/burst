@@ -51,8 +51,9 @@ namespace burst::vulkan {
 	 * \param configuration: The renderer configuration
 	 * \param window: The window the surface is bound to
 	 */
-	static Optional<SurfaceKHR> create_surface_khr(
-		Instance& instance, const Configuration& configuration, IWindow& window)
+	static Optional<SurfaceKHR> create_surface_khr(Instance& instance,
+												   const Configuration& configuration,
+												   IWindow& window)
 	{
 		if(!configuration.instance.create_surface) {
 			return std::nullopt;
@@ -62,15 +63,14 @@ namespace burst::vulkan {
 	}
 
 	Renderer::Context::Context(const ApplicationInfo& app,
-							   const Configuration& configuration,
+							   Shared<Configuration> configuration,
 							   IVulkanWindow& window)
 		: instance(app, configuration, window)
-		, surface(create_surface_khr(instance, configuration, window))
-		, gpu(find_suitable_gpu(instance, configuration))
-		, queues(create_gpu_queues_object(gpu, configuration, surface))
+		, surface(create_surface_khr(instance, *configuration, window))
+		, gpu(find_suitable_gpu(instance, *configuration))
+		, queues(create_gpu_queues_object(gpu, *configuration, surface))
 		, device(gpu, queues, configuration)
-		, swapchain(create_swapchain_khr(
-			  device, gpu, surface, window, queues, configuration))
+		, swapchain(create_swapchain_khr(device, gpu, surface, window, queues, configuration))
 		, pipeline(Pipeline::create(device, *swapchain, configuration))
 		, pool(create_graphics_command_pool(device, queues))
 	{
@@ -78,7 +78,7 @@ namespace burst::vulkan {
 	}
 
 	Renderer::Renderer(const ApplicationInfo& app,
-					   const Configuration& configuration,
+					   Shared<Configuration> configuration,
 					   IVulkanWindow& window)
 		: m_Context(app, configuration, window)
 		, m_Drawers({
@@ -98,17 +98,15 @@ namespace burst::vulkan {
 
 	void Renderer::render()
 	{
-		if(!m_Context.surface.has_value() || !m_Context.swapchain.has_value()) {
+		if(!m_Context.surface.has_value() || nullptr == m_Context.swapchain) {
 			log::error("Trying to render on a non renderering surface");
 			return;
 		}
 
-		FrameContext draw_frame_context{
-			m_Context.pipeline, m_Context.swapchain.value()
-		};
+		FrameContext draw_frame_context{ m_Context.pipeline, *m_Context.swapchain };
 
 		m_Drawers[m_CurrentDrawer].draw(m_Context.device,
-										m_Context.swapchain.value(),
+										*m_Context.swapchain,
 										m_Context.pipeline.render_pass(),
 										&draw_frame,
 										&draw_frame_context);

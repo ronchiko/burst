@@ -31,7 +31,7 @@ namespace burst::vulkan {
 	}
 
 	Unique<IRenderer> create_vulkan_render(const ApplicationInfo& info,
-										   const Configuration& configuration,
+										   Shared<Configuration> configuration,
 										   IVulkanWindow& window)
 	{
 		log_available_extensions();
